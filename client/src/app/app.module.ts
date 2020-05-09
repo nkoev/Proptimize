@@ -3,18 +3,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FirebaseModule } from './shared/modules/firebase.module';
 import { SharedModule } from './shared/shared.module';
-import { CoreModule } from './modules/core.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CoreModule } from './modules/core/core.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    AppRoutingModule,
-    FirebaseModule,
-    SharedModule,
-    CoreModule,
-    BrowserAnimationsModule,
-  ],
+  imports: [AppRoutingModule, FirebaseModule, SharedModule, CoreModule],
   providers: [],
   bootstrap: [AppComponent],
 })
