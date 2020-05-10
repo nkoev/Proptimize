@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeDTO } from 'src/app/models/employee.dto';
-import { EmployeesModule } from '../../employees.module';
 import { UserService } from '../../services/user.service';
 import { UserDTO } from 'src/app/models/user.dto';
 
@@ -15,7 +14,7 @@ import { UserDTO } from 'src/app/models/user.dto';
 export class AddEmployeeComponent implements OnInit {
   employeeForm: FormGroup;
   skillsList = ['Java', 'JavaScript', 'BellyDancing'];
-  managersList = ['Boncho', 'Concho', 'Self-managed'];
+  managersList = ['Boncho', 'Concho', 'Paraponcho'];
 
   constructor(
     private fb: FormBuilder,
@@ -52,9 +51,10 @@ export class AddEmployeeComponent implements OnInit {
       ],
       isManager: false,
       isAdmin: false,
-      managedBy: null,
-      skills: [],
+      managedBy: [null, Validators.required],
+      skills: [null, Validators.required],
     });
+    this.setIsManagerValidators();
   }
 
   get firstName() {
@@ -80,27 +80,68 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    form.value.isManager
-      ? this.userService.addUser(this.toUserDTO(form))
-      : this.employeeService.addEmployee(this.toEmployeeDTO(form));
-    console.log(form.value);
+    if (form.valid) {
+      form.value.isManager
+        ? this.userService
+            .addUser(this.toUserDTO(form))
+            .then((res) => console.log(res.id))
+            .catch((err) => console.log(err))
+        : this.employeeService
+            .addEmployee(this.toEmployeeDTO(form))
+            .then((res) => console.log(res.id))
+            .catch((err) => console.log(err));
+    } else {
+      console.log('Invalid Form');
+    }
   }
 
-  toEmployeeDTO(form: FormGroup): EmployeeDTO {
+  private toEmployeeDTO(form: FormGroup): EmployeeDTO {
     const employee: EmployeeDTO = {
-      ...form.value,
+      firstName: form.value.firstName,
+      lastName: form.value.lastName,
+      position: form.value.position,
+      managedBy: form.value.managedBy,
+      skills: form.value.skills,
       availableHours: 8,
       projects: [],
     };
     return employee;
   }
 
-  toUserDTO(form: FormGroup): UserDTO {
+  private toUserDTO(form: FormGroup): UserDTO {
     const user: UserDTO = {
-      ...form.value,
+      password: Math.round(Math.random() * (99999 - 10000) + 10000),
+      firstName: form.value.firstName,
+      lastName: form.value.lastName,
+      position: form.value.position,
+      isAdmin: form.value.isAdmin,
       availableHours: 8,
       projects: [],
     };
     return user;
+  }
+
+  private setIsManagerValidators() {
+    const managedByControl = this.employeeForm.get('managedBy');
+    const skillsControl = this.employeeForm.get('skills');
+
+    this.employeeForm.get('isManager').valueChanges.subscribe((isManager) => {
+      if (isManager) {
+        managedByControl.setValidators(null);
+        managedByControl.disable();
+        skillsControl.setValidators(null);
+        skillsControl.disable();
+      }
+
+      if (!isManager) {
+        managedByControl.setValidators([Validators.required]);
+        managedByControl.enable();
+        skillsControl.setValidators([Validators.required]);
+        skillsControl.enable();
+      }
+
+      managedByControl.updateValueAndValidity();
+      skillsControl.updateValueAndValidity();
+    });
   }
 }

@@ -13,10 +13,7 @@ export class EmployeeService {
     this.employeesCol = this.afs.collection<EmployeeDTO>('employees');
   }
 
-  addEmployee(employee: EmployeeDTO) {
-    this.employeesCol
-      .add(employee)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+  addEmployee(employee: EmployeeDTO): Promise<any> {
+    return this.employeesCol.add(employee);
   }
 }

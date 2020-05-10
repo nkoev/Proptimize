@@ -23,7 +23,8 @@
     <br />
     <mat-form-field>
       <mat-label>Managed by</mat-label>
-      <mat-select [formControl]="managedBy" [disabled]="isManager.value">
+      <mat-select [formControl]="managedBy">
+        <mat-option value="self-managed">Self-managed</mat-option>
         <mat-option *ngFor="let manager of managersList" [value]="manager">{{
           manager
         }}</mat-option>
@@ -32,7 +33,7 @@
     <br />
     <mat-form-field>
       <mat-label>Skills</mat-label>
-      <mat-select [formControl]="skills" multiple [disabled]="isManager.value">
+      <mat-select [formControl]="skills" multiple>
         <mat-option *ngFor="let skill of skillsList" [value]="skill">{{
           skill
         }}</mat-option>

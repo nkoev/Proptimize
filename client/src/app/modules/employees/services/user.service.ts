@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestoreCollection,
   AngularFirestore,
-} from '@angular/fire/firestore/public_api';
+} from '@angular/fire/firestore';
 import { UserDTO } from 'src/app/models/user.dto';
 
 @Injectable({
@@ -15,10 +15,7 @@ export class UserService {
     this.usersCol = this.afs.collection<UserDTO>('users');
   }
 
-  addUser(user: UserDTO) {
-    this.usersCol
-      .add(user)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+  addUser(user: UserDTO): Promise<any> {
+    return this.usersCol.add(user);
   }
 }
