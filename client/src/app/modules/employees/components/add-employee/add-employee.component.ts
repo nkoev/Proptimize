@@ -15,6 +15,8 @@ export class AddEmployeeComponent implements OnInit {
   employeeForm: FormGroup;
   skillsList = ['Java', 'JavaScript', 'BellyDancing'];
   managersList = ['Boncho', 'Concho', 'Paraponcho'];
+  username: string;
+  password: string;
 
   constructor(
     private fb: FormBuilder,
@@ -25,30 +27,9 @@ export class AddEmployeeComponent implements OnInit {
 
   ngOnInit() {
     this.employeeForm = this.fb.group({
-      firstName: [
-        null,
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(20),
-        ],
-      ],
-      lastName: [
-        null,
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(20),
-        ],
-      ],
-      position: [
-        null,
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(20),
-        ],
-      ],
+      firstName: [null, [Validators.required, Validators.maxLength(20)]],
+      lastName: [null, [Validators.required, Validators.maxLength(20)]],
+      position: [null, [Validators.required, Validators.maxLength(20)]],
       isManager: false,
       isAdmin: false,
       managedBy: [null, Validators.required],
@@ -79,20 +60,18 @@ export class AddEmployeeComponent implements OnInit {
     return this.employeeForm.get('skills');
   }
 
-  onSubmit(form: FormGroup) {
-    if (form.valid) {
-      form.value.isManager
-        ? this.userService
-            .addUser(this.toUserDTO(form))
-            .then((res) => console.log(res.id))
-            .catch((err) => console.log(err))
-        : this.employeeService
-            .addEmployee(this.toEmployeeDTO(form))
-            .then((res) => console.log(res.id))
-            .catch((err) => console.log(err));
-    } else {
-      console.log('Invalid Form');
-    }
+  async onSubmit(form: FormGroup) {
+    form.invalid
+      ? console.log('Invalid Form')
+      : form.value.isManager
+      ? await this.userService
+          .addUser(this.toUserDTO(form))
+          .then((res) => {
+            this.username = res.username;
+            this.password = res.password;
+          })
+          .catch((err) => console.log(err.message))
+      : await this.employeeService.addEmployee(this.toEmployeeDTO(form));
   }
 
   private toEmployeeDTO(form: FormGroup): EmployeeDTO {
@@ -110,11 +89,11 @@ export class AddEmployeeComponent implements OnInit {
 
   private toUserDTO(form: FormGroup): UserDTO {
     const user: UserDTO = {
-      password: Math.round(Math.random() * (99999 - 10000) + 10000),
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       position: form.value.position,
       isAdmin: form.value.isAdmin,
+      subordinates: [],
       availableHours: 8,
       projects: [],
     };
