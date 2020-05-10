@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EmployeeService } from '../../services/employee.service';
+import { EmployeeDTO } from 'src/app/models/employee.dto';
+import { EmployeesModule } from '../../employees.module';
+import { UserService } from '../../services/user.service';
+import { UserDTO } from 'src/app/models/user.dto';
 
 @Component({
   selector: 'app-add-employee',
@@ -12,7 +17,12 @@ export class AddEmployeeComponent implements OnInit {
   skillsList = ['Java', 'JavaScript', 'BellyDancing'];
   managersList = ['Boncho', 'Concho', 'Self-managed'];
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private employeeService: EmployeeService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.employeeForm = this.fb.group({
@@ -43,7 +53,7 @@ export class AddEmployeeComponent implements OnInit {
       isManager: false,
       isAdmin: false,
       managedBy: null,
-      skills: null,
+      skills: [],
     });
   }
 
@@ -69,5 +79,28 @@ export class AddEmployeeComponent implements OnInit {
     return this.employeeForm.get('skills');
   }
 
-  onSubmit(form: FormGroup) {}
+  onSubmit(form: FormGroup) {
+    form.value.isManager
+      ? this.userService.addUser(this.toUserDTO(form))
+      : this.employeeService.addEmployee(this.toEmployeeDTO(form));
+    console.log(form.value);
+  }
+
+  toEmployeeDTO(form: FormGroup): EmployeeDTO {
+    const employee: EmployeeDTO = {
+      ...form.value,
+      availableHours: 8,
+      projects: [],
+    };
+    return employee;
+  }
+
+  toUserDTO(form: FormGroup): UserDTO {
+    const user: UserDTO = {
+      ...form.value,
+      availableHours: 8,
+      projects: [],
+    };
+    return user;
+  }
 }
