@@ -1,0 +1,100 @@
+/* ---------------------------- NAVIGATION CONTAINER START ---------------------------- */
+
+.sidenav-nav {
+    min-width: 12em;
+    max-width: 94%;
+    height: 100%;
+    border-top-right-radius: 45px;
+    border-bottom-left-radius: 15px;
+    background-color: rgb(55,58,77);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-options {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5em;
+}
+
+.nav-options .nav-option {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    
+    height: 3em;
+    padding-left: 1.5em;
+    cursor: pointer;
+}
+.nav-options .nav-option:hover {
+    border-left: 2px solid rgb(254,183,13);
+    background-color: rgb(67,70,89);
+    /* -webkit-box-shadow: inset 117px 0px 156px -123px rgb(254,183,13);
+    -moz-box-shadow: inset 117px 0px 156px -123px rgb(254,183,13);
+    box-shadow: inset 117px 0px 156px -123px rgb(254,183,13); */
+}
+.nav-options .nav-option:focus {
+    outline: none;
+}
+
+.nav-options .nav-option .nav-icon {
+    width: 1.3em;
+    height: 1.3em;
+    background-size: cover;
+}
+.nav-options .nav-option .nav-icon.dashboard {
+    background-image: url("../../../../assets/icons/dashboard.png");
+}
+.nav-options .nav-option .nav-icon.projects {
+    background-image: url("../../../../assets/icons/projects.png");
+}
+.nav-options .nav-option .nav-icon.employees {
+    background-image: url("../../../../assets/icons/employees-2.png");
+}
+.nav-options .nav-option .nav-icon.skills {
+    background-image: url("../../../../assets/icons/skills.png");
+}
+
+.nav-options .nav-option .nav-text {
+    font-size: 13px;
+    font-family: roboto;
+    color: whitesmoke;
+    margin-left: 0.5em;
+}
+
+/* ---------------------------- NAVIGATION CONTAINER END ---------------------------- */
+
+@media (max-width: 768px) {
+
+    .sidenav-nav {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-radius: 3px 3px 0px 0px;
+        height: min-content;
+    }
+
+    .nav-options {
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin-top: 0px;
+    }
+
+    .nav-options .nav-option {
+        padding-left: 0px;
+        margin-left: 0px;
+    }
+    .nav-options .nav-option:hover {
+        border-left: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .nav-text {
+        display: none;
+    }
+
+}

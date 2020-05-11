@@ -6,4 +6,4 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   imports: [BrowserAnimationsModule],
   exports: [BrowserAnimationsModule],
 })
-export class CoreModule {}
+export class CoreModule { }

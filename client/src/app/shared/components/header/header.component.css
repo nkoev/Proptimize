@@ -1,0 +1,49 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+
+    height: 100%;
+    margin: 0px 10px 0px 10px;
+}
+
+.right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.right .avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 2.8em;
+    width: 2.8em;
+    background-image: url('../../../../assets/backgorund/avatar-default.png');
+    background-size: cover;
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+.right .avatar .default {
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.right .logout {
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+}
+.right .logout .text {
+    font-size: 1.1em;
+    font-weight: 400;
+    margin-right: 5px;
+}
+.right .logout .icon{
+    height: 1em;
+    width: 1em;
+    background-image: url('../../../../assets/icons/logout.png');
+    background-size: cover;
+}

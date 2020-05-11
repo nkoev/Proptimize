@@ -4,18 +4,17 @@ import { AppComponent } from './app.component';
 import { FirebaseModule } from './shared/modules/firebase.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './modules/core.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, NotFoundComponent],
   imports: [
     AppRoutingModule,
     FirebaseModule,
     SharedModule,
     CoreModule,
-    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
