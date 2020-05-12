@@ -6,27 +6,32 @@ import {
 import { UserDTO } from 'src/app/models/user.dto';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
+import { Credentials } from 'src/app/models/credentials';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  usersCol: AngularFirestoreCollection;
+  private usersCol: AngularFirestoreCollection;
 
   constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {
     this.usersCol = this.afs.collection<UserDTO>('users');
   }
 
-  async addUser(user: UserDTO): Promise<any> {
+  async addUser(user: UserDTO): Promise<Credentials> {
     const username = this.createUsername(user.firstName);
     const password = this.createPassword();
 
     const cred = await this.afAuth.createUserWithEmailAndPassword(
-      `${username}@proptimize`,
+      `${username}@proptimize.com`,
       password
     );
     await this.usersCol.doc(cred.user.uid).set(user);
     return { username, password };
+  }
+
+  async getUserById(userId: string) {
+    return await this.usersCol.doc(userId).ref.get();
   }
 
   private createUsername(name: string): string {
