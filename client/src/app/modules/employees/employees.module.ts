@@ -11,6 +11,7 @@ import { AddEmployeeComponent } from './components/add-employee/add-employee.com
     DetailEmployeeComponent,
     AddEmployeeComponent,
   ],
+  entryComponents: [AddEmployeeComponent],
   imports: [SharedModule, EmployeesRoutingModule],
 })
 export class EmployeesModule {}

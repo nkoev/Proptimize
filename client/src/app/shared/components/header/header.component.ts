@@ -8,9 +8,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  initials: string;
   constructor(private auth: AuthService, private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.auth.loggedUser$.subscribe((res) => {
+      if (res) {
+        this.initials = res.email[0].toUpperCase();
+      }
+    });
+  }
 
   logout() {
     this.auth

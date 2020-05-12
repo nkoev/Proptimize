@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -6,4 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   imports: [BrowserAnimationsModule],
   exports: [BrowserAnimationsModule],
 })
-export class CoreModule { }
+export class CoreModule {
+  constructor(@Optional() @SkipSelf() parent: CoreModule) {
+    if (parent) {
+      throw new Error('Core module has already been initiated');
+    }
+  }
+}

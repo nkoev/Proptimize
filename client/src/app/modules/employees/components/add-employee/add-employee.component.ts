@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeDTO } from 'src/app/models/employee.dto';
 import { UserService } from '../../services/user.service';
 import { UserDTO } from 'src/app/models/user.dto';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-employee',
@@ -20,9 +20,9 @@ export class AddEmployeeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
     private employeeService: EmployeeService,
-    private userService: UserService
+    private userService: UserService,
+    private dialogRef: MatDialogRef<AddEmployeeComponent>
   ) {}
 
   ngOnInit() {
@@ -69,6 +69,7 @@ export class AddEmployeeComponent implements OnInit {
           .then((res) => {
             this.username = res.username;
             this.password = res.password;
+            this.dialogRef.close();
           })
           .catch((err) => console.log(err.message))
       : await this.employeeService.addEmployee(this.toEmployeeDTO(form));
