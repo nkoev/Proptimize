@@ -1,0 +1,48 @@
+<div style="margin-left: 20%;">
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit(employeeForm)">
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" />
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" />
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+      <mat-label>Position</mat-label>
+      <input matInput type="password" formControlName="position" />
+    </mat-form-field>
+    <br />
+    <mat-checkbox formControlName="isManager">Manager</mat-checkbox>
+    <br />
+    <mat-checkbox formControlName="isAdmin" *ngIf="isManager.value"
+      >Admin</mat-checkbox
+    >
+    <br />
+    <mat-form-field>
+      <mat-label>Managed by</mat-label>
+      <mat-select [formControl]="managedBy">
+        <mat-option value="self-managed">Self-managed</mat-option>
+        <mat-option *ngFor="let manager of managersList" [value]="manager">{{
+          manager
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br />
+    <mat-form-field>
+      <mat-label>Skills</mat-label>
+      <mat-select [formControl]="skills" multiple>
+        <mat-option *ngFor="let skill of skillsList" [value]="skill">{{
+          skill
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br />
+    <button type="submit" mat-raised-button>
+      Submit
+    </button>
+  </form>
+  {{ username }}{{ password }}
+</div>

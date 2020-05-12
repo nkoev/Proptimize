@@ -2,28 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from './modules/material.module';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
-  declarations: [
-    NavigationComponent,
-    HeaderComponent
-  ],
-  imports: [
-    CommonModule,
-    AppMaterialModule,
-    RouterModule,
-    FormsModule
-  ],
+  declarations: [NavigationComponent, HeaderComponent],
+  imports: [CommonModule, AppMaterialModule, RouterModule, ReactiveFormsModule],
   exports: [
     CommonModule,
     AppMaterialModule,
     RouterModule,
-    FormsModule,
+    ReactiveFormsModule,
     NavigationComponent,
-    HeaderComponent
+    HeaderComponent,
   ],
 })
-export class SharedModule { }
+export class SharedModule {}
