@@ -1,4 +1,4 @@
-<div style="margin-left: 20%;">
+<div class="form-container">
   <form [formGroup]="employeeForm" (ngSubmit)="onSubmit(employeeForm)">
     <mat-form-field>
       <mat-label>First Name</mat-label>
@@ -16,7 +16,7 @@
     </mat-form-field>
     <br />
     <mat-checkbox formControlName="isManager">Manager</mat-checkbox>
-    <br />
+    &nbsp;
     <mat-checkbox formControlName="isAdmin" *ngIf="isManager.value"
       >Admin</mat-checkbox
     >

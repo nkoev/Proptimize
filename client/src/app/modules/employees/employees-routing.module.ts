@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AllEmployeesComponent } from './pages/all-employees/all-employees.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/all', pathMatch: 'full' },
+  { path: '', redirectTo: 'all', pathMatch: 'full' },
   { path: 'all', component: AllEmployeesComponent },
 ];
 

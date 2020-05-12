@@ -1,7 +1,16 @@
 .login-container {
-  position: fixed;
-  width: 40%;
-  top: 20%;
-  left: 30%;
   text-align: center;
+}
+
+mat-form-field {
+  max-width: 100%;
+}
+
+#login-button {
+  background-color: lavender;
+  max-width: 100%;
+}
+
+#login-button:hover {
+  background-color: lavenderblush;
 }

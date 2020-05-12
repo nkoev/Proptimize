@@ -3,13 +3,12 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-all-employees',
   templateUrl: './all-employees.component.html',
-  styleUrls: ['./all-employees.component.css']
+  styleUrls: ['./all-employees.component.css'],
 })
 export class AllEmployeesComponent implements OnInit {
+  today = new Date();
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

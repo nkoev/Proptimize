@@ -34,7 +34,10 @@ export class LoginFormComponent implements OnInit {
   login() {
     this.auth
       .login(this.username.value, this.password.value)
-      .then(() => console.log('logged in'))
+      .then(() => {
+        console.log('logged in');
+        this.router.navigate(['dashboard']);
+      })
       .catch(() => console.log('login failed'));
   }
 }

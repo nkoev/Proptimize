@@ -1,2 +1,24 @@
-<p>all-employees works!</p>
-<app-add-employee></app-add-employee>
+<div class="top-container">
+  <div class="card-container">
+    <div class="card-header">
+      <app-header></app-header>
+    </div>
+
+    <div class="card-content">
+      <div class="navigation">
+        <app-navigation></app-navigation>
+      </div>
+
+      <div class="content">
+        <div class="header">
+          <div class="title">EMPLOYEES</div>
+          <div class="date">{{ today | date }}</div>
+        </div>
+
+        <div class="main">
+          <app-add-employee></app-add-employee>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
