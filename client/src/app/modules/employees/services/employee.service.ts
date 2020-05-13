@@ -16,4 +16,8 @@ export class EmployeeService {
   addEmployee(employee: EmployeeDTO): Promise<any> {
     return this.employeesCol.add(employee);
   }
+
+  getAllEmployees() {
+    return this.employeesCol.snapshotChanges();
+  }
 }

@@ -16,9 +16,19 @@
         </div>
 
         <div class="main">
-          <button mat-raised-button (click)="addEmployee()">
-            Add new employee
-          </button>
+          <mat-list class="list">
+            <mat-list-item class="item" *ngFor="let employee of employees"
+              >{{ employee.firstName }}&nbsp;{{
+                employee.lastName
+              }}</mat-list-item
+            >
+          </mat-list>
+
+          <div class="footer">
+            <button mat-raised-button (click)="addEmployee()">
+              Add new employee
+            </button>
+          </div>
         </div>
       </div>
     </div>

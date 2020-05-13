@@ -32,9 +32,9 @@ export class AddEmployeeComponent implements OnInit {
       firstName: [null, [Validators.required, Validators.maxLength(20)]],
       lastName: [null, [Validators.required, Validators.maxLength(20)]],
       position: [null, [Validators.required, Validators.maxLength(20)]],
+      managedBy: [null, Validators.required],
       isManager: false,
       isAdmin: false,
-      managedBy: [null, Validators.required],
       skills: [null, Validators.required],
     });
     this.setIsManagerValidators();
@@ -113,15 +113,15 @@ export class AddEmployeeComponent implements OnInit {
 
     this.employeeForm.get('isManager').valueChanges.subscribe((isManager) => {
       if (isManager) {
-        managedByControl.setValidators(null);
-        managedByControl.disable();
+        // managedByControl.setValidators(null);
+        // managedByControl.disable();
         skillsControl.setValidators(null);
         skillsControl.disable();
       }
 
       if (!isManager) {
-        managedByControl.setValidators([Validators.required]);
-        managedByControl.enable();
+        // managedByControl.setValidators([Validators.required]);
+        // managedByControl.enable();
         skillsControl.setValidators([Validators.required]);
         skillsControl.enable();
       }
