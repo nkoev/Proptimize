@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeDTO } from 'src/app/models/employee.dto';
 import { UserService } from '../../services/user.service';
 import { UserDTO } from 'src/app/models/user.dto';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MatDialog,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.component';
 
 @Component({
@@ -13,9 +17,9 @@ import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.c
   styleUrls: ['./add-employee.component.css'],
 })
 export class AddEmployeeComponent implements OnInit {
+  skillsList: string[];
+  managersList: string[];
   employeeForm: FormGroup;
-  skillsList = ['Java', 'JavaScript', 'BellyDancing'];
-  managersList = ['Boncho', 'Concho', 'Paraponcho'];
   username: string;
   password: string;
 
@@ -24,8 +28,12 @@ export class AddEmployeeComponent implements OnInit {
     private employeeService: EmployeeService,
     private userService: UserService,
     private dialogRef: MatDialogRef<AddEmployeeComponent>,
-    private matDialog: MatDialog
-  ) {}
+    private matDialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) private data
+  ) {
+    this.skillsList = this.data.skillsList;
+    this.managersList = this.data.managersList;
+  }
 
   ngOnInit() {
     this.employeeForm = this.fb.group({
@@ -113,15 +121,11 @@ export class AddEmployeeComponent implements OnInit {
 
     this.employeeForm.get('isManager').valueChanges.subscribe((isManager) => {
       if (isManager) {
-        // managedByControl.setValidators(null);
-        // managedByControl.disable();
         skillsControl.setValidators(null);
         skillsControl.disable();
       }
 
       if (!isManager) {
-        // managedByControl.setValidators([Validators.required]);
-        // managedByControl.enable();
         skillsControl.setValidators([Validators.required]);
         skillsControl.enable();
       }

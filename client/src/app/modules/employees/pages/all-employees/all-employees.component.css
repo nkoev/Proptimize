@@ -77,13 +77,14 @@
 
 .item {
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+
+  background-color: rgba(55, 58, 77, 0.5);
   border-radius: 8px;
   margin-top: 1%;
 }
 
 .item:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(55, 58, 77, 0.2);
   cursor: pointer;
 }
 

@@ -17,7 +17,9 @@
 
         <div class="main">
           <mat-list class="list">
-            <mat-list-item class="item" *ngFor="let employee of employees"
+            <mat-list-item
+              class="item"
+              *ngFor="let employee of filteredEmployees"
               >{{ employee.firstName }}&nbsp;{{
                 employee.lastName
               }}</mat-list-item
@@ -25,7 +27,15 @@
           </mat-list>
 
           <div class="footer">
-            <button mat-raised-button (click)="addEmployee()">
+            <app-employees-filtering-form
+              [skillsList]="skillsList"
+              (filterEvent)="filterEmployees($event)"
+              #filter
+            ></app-employees-filtering-form>
+            <button
+              mat-raised-button
+              (click)="addEmployee(); filter.clearForm()"
+            >
               Add new employee
             </button>
           </div>

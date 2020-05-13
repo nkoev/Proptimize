@@ -5,6 +5,7 @@ import { AllEmployeesComponent } from './pages/all-employees/all-employees.compo
 import { DetailEmployeeComponent } from './pages/detail-employee/detail-employee.component';
 import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
 import { CredentialsMemoComponent } from './components/credentials-memo/credentials-memo.component';
+import { EmployeesFilteringFormComponent } from './components/employees-filtering-form/employees-filtering-form.component';
 
 @NgModule({
   declarations: [
@@ -12,8 +13,8 @@ import { CredentialsMemoComponent } from './components/credentials-memo/credenti
     DetailEmployeeComponent,
     AddEmployeeComponent,
     CredentialsMemoComponent,
+    EmployeesFilteringFormComponent,
   ],
-  entryComponents: [AddEmployeeComponent],
   imports: [SharedModule, EmployeesRoutingModule],
 })
 export class EmployeesModule {}
