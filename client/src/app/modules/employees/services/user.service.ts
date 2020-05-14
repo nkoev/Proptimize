@@ -13,9 +13,11 @@ import { Credentials } from 'src/app/models/credentials';
 })
 export class UserService {
   private usersCol: AngularFirestoreCollection;
+  allUsers$;
 
   constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {
     this.usersCol = this.afs.collection<UserDTO>('users');
+    this.allUsers$ = this.usersCol.snapshotChanges();
   }
 
   async addUser(user: UserDTO): Promise<Credentials> {
@@ -26,12 +28,22 @@ export class UserService {
       `${username}@proptimize.com`,
       password
     );
+    if (user.managedBy !== 'Self-managed') {
+      await this.addInSubordinates(user);
+    }
     await this.usersCol.doc(cred.user.uid).set(user);
     return { username, password };
   }
 
   async getUserById(userId: string) {
     return await this.usersCol.doc(userId).ref.get();
+  }
+
+  private async addInSubordinates(user) {
+    const managerDoc = this.usersCol.doc(user.managedBy.id).ref;
+    const currentSubs = (await managerDoc.get()).data().subordinates;
+    const subordinates = [...currentSubs, user.firstName];
+    managerDoc.set({ subordinates }, { merge: true });
   }
 
   private createUsername(name: string): string {

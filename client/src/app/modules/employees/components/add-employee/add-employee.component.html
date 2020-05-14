@@ -19,9 +19,11 @@
       <mat-label>Managed by</mat-label>
       <mat-select [formControl]="managedBy">
         <mat-option value="self-managed">Self-managed</mat-option>
-        <mat-option *ngFor="let manager of managersList" [value]="manager">{{
-          manager
-        }}</mat-option>
+        <mat-option *ngFor="let manager of managersList" [value]="manager"
+          >{{ manager.data().firstName }}&nbsp;{{
+            manager.data().lastName
+          }}</mat-option
+        >
       </mat-select>
     </mat-form-field>
     <br />

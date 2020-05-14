@@ -18,7 +18,7 @@ import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.c
 })
 export class AddEmployeeComponent implements OnInit {
   skillsList: string[];
-  managersList: string[];
+  managersList;
   employeeForm: FormGroup;
   username: string;
   password: string;
@@ -108,6 +108,7 @@ export class AddEmployeeComponent implements OnInit {
       lastName: form.value.lastName,
       position: form.value.position,
       isAdmin: form.value.isAdmin,
+      managedBy: form.value.managedBy,
       subordinates: [],
       availableHours: 8,
       projects: [],
