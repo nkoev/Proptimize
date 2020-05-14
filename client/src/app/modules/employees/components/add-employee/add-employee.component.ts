@@ -10,6 +10,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.component';
+import { DocumentData } from '@google-cloud/firestore';
 
 @Component({
   selector: 'app-add-employee',
@@ -20,8 +21,6 @@ export class AddEmployeeComponent implements OnInit {
   skillsList: string[];
   managersList;
   employeeForm: FormGroup;
-  username: string;
-  password: string;
 
   constructor(
     private fb: FormBuilder,
@@ -74,19 +73,23 @@ export class AddEmployeeComponent implements OnInit {
     form.invalid
       ? console.log('Invalid Form')
       : form.value.isManager
-      ? await this.userService
-          .addUser(this.toUserDTO(form))
-          .then((res) => {
-            this.matDialog.open(CredentialsMemoComponent, {
-              data: { username: res.username, password: res.password },
-            });
-            this.dialogRef.close();
-          })
-          .catch((err) => console.log(err.message))
+      ? this.registerUser(form)
       : await this.employeeService
           .addEmployee(this.toEmployeeDTO(form))
           .then(() => this.dialogRef.close())
           .catch((err) => console.log(err.message));
+  }
+
+  private registerUser(form: FormGroup) {
+    this.userService.registerUser(this.toUserDTO(form)).subscribe(
+      (res) => {
+        this.matDialog.open(CredentialsMemoComponent, {
+          data: { username: res.username, password: res.password },
+        });
+        this.dialogRef.close();
+      },
+      (err) => console.log(err.message)
+    );
   }
 
   private toEmployeeDTO(form: FormGroup): EmployeeDTO {
