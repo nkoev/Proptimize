@@ -10,6 +10,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.component';
+import { DocumentReference } from '@google-cloud/firestore';
 
 @Component({
   selector: 'app-add-employee',
@@ -18,7 +19,7 @@ import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.c
 })
 export class AddEmployeeComponent implements OnInit {
   skillsList: string[];
-  managersList;
+  managersList: DocumentReference[];
   employeeForm: FormGroup;
 
   constructor(
@@ -27,7 +28,8 @@ export class AddEmployeeComponent implements OnInit {
     private userService: UserService,
     private dialogRef: MatDialogRef<AddEmployeeComponent>,
     private matDialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) private data
+    @Inject(MAT_DIALOG_DATA)
+    private data: { skillsList: string[]; managersList: DocumentReference[] }
   ) {
     this.skillsList = this.data.skillsList;
     this.managersList = this.data.managersList;
@@ -73,10 +75,14 @@ export class AddEmployeeComponent implements OnInit {
       ? console.log('Invalid Form')
       : form.value.isManager
       ? this.registerUser(form)
-      : await this.employeeService
-          .addEmployee(this.toEmployeeDTO(form))
-          .then(() => this.dialogRef.close())
-          .catch((err) => console.log(err.message));
+      : this.addEmployee(form);
+  }
+
+  private addEmployee(form: FormGroup) {
+    this.employeeService
+      .addEmployee(this.toEmployeeDTO(form))
+      .then(() => this.dialogRef.close())
+      .catch((err) => console.log(err.message));
   }
 
   private registerUser(form: FormGroup) {
