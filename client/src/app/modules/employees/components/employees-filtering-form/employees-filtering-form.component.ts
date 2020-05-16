@@ -1,15 +1,24 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-employees-filtering-form',
   templateUrl: './employees-filtering-form.component.html',
   styleUrls: ['./employees-filtering-form.component.css'],
 })
-export class EmployeesFilteringFormComponent implements OnInit {
+export class EmployeesFilteringFormComponent implements OnInit, OnDestroy {
   @Input() skillsList: string[];
   @Output() filterEvent = new EventEmitter<any>();
   filteringForm: FormGroup;
+  private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder) {}
 
@@ -20,7 +29,14 @@ export class EmployeesFilteringFormComponent implements OnInit {
       lastName: null,
       subordinates: false,
     });
-    this.filterEventListener();
+    const sub1 = this.filteringForm.valueChanges.subscribe((form) => {
+      this.filterEvent.next(form);
+    });
+    this.subscriptions.push(sub1);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   get skills() {
@@ -34,12 +50,6 @@ export class EmployeesFilteringFormComponent implements OnInit {
   }
   get subordinates() {
     return this.filteringForm.get('subordinates');
-  }
-
-  private filterEventListener() {
-    this.filteringForm.valueChanges.subscribe((form) => {
-      this.filterEvent.next(form);
-    });
   }
 
   clearForm() {

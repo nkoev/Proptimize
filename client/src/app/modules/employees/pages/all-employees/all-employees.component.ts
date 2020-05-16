@@ -16,12 +16,22 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./all-employees.component.css'],
 })
 export class AllEmployeesComponent implements OnInit, OnDestroy {
-  skillsList = ['Java', 'JavaScript', 'BellyDancing'];
+  skillsList = [
+    'Java',
+    'JavaScript',
+    'BellyDancing',
+    'Java',
+    'JavaScript',
+    'BellyDancing',
+    'Java',
+    'JavaScript',
+    'BellyDancing',
+  ];
   managersList: DocumentReference[];
   today = new Date();
   employees: DocumentData[];
   filteredEmployees: DocumentData[];
-  loggedUserData: DocumentData;
+  loggedUser: DocumentData;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -36,10 +46,8 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
       this.employees = changes.map((change) => change.payload.doc.data());
       this.filteredEmployees = this.employees;
     });
-    const sub2 = this.auth.loggedUser$.subscribe((res) =>
-      this.userService
-        .getUserById(res.uid)
-        .then((doc) => (this.loggedUserData = doc.data()))
+    const sub2 = this.auth.loggedUser$.subscribe(
+      (res) => (this.loggedUser = res)
     );
     const sub3 = this.userService.allUsers$.subscribe(
       (changes) =>
@@ -48,7 +56,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub1, sub2, sub3);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
@@ -61,23 +69,23 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   filterEmployees(event: any) {
     this.filteredEmployees = this.employees;
     if (event.skills?.length) {
-      this.filteredEmployees = this.employees.filter((employee) =>
+      this.filteredEmployees = this.filteredEmployees.filter((employee) =>
         employee.skills.some((skill) => event.skills.includes(skill))
       );
     }
     if (event.firstName) {
-      this.filteredEmployees = this.employees.filter((employee) =>
+      this.filteredEmployees = this.filteredEmployees.filter((employee) =>
         employee.firstName.toLowerCase().includes(event.firstName.toLowerCase())
       );
     }
     if (event.lastName) {
-      this.filteredEmployees = this.employees.filter((employee) =>
+      this.filteredEmployees = this.filteredEmployees.filter((employee) =>
         employee.lastName.toLowerCase().includes(event.lastName.toLowerCase())
       );
     }
     if (event.subordinates) {
-      this.filteredEmployees = this.employees.filter((employee) =>
-        this.loggedUserData.subordinates.includes(employee.managedBy)
+      this.filteredEmployees = this.filteredEmployees.filter(
+        (employee) => employee.managedBy === this.loggedUser.uid
       );
     }
   }

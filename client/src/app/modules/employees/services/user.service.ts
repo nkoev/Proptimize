@@ -4,8 +4,6 @@ import {
   AngularFirestore,
 } from '@angular/fire/firestore';
 import { UserDTO } from 'src/app/models/user.dto';
-import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
 import { Credentials } from 'src/app/models/credentials';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -19,7 +17,7 @@ export class UserService {
   private usersCol: AngularFirestoreCollection;
   private username: string;
   private password: string;
-  allUsers$;
+  allUsers$: Observable<DocumentData[]>;
 
   constructor(private afs: AngularFirestore, private http: HttpClient) {
     this.usersCol = this.afs.collection<UserDTO>('users');
@@ -42,27 +40,11 @@ export class UserService {
         }
       )
       .pipe(
-        tap((res) => this.addUser(res.uid, user)),
-        tap(() => {
-          if (user.managedBy !== 'Self-managed') {
-            this.addInSubordinates(user);
-          }
-        }),
+        tap((res) => this.usersCol.doc(res.uid).set(user)),
         map(() => {
           return { username: this.username, password: this.password };
         })
       );
-  }
-
-  private async addUser(uid: string, user: UserDTO): Promise<any> {
-    return await this.usersCol.doc(uid).set(user);
-  }
-
-  private async addInSubordinates(user: UserDTO): Promise<any> {
-    const managerDoc = this.usersCol.doc(user.managedBy.id).ref;
-    const currentSubs = (await managerDoc.get()).data().subordinates;
-    const subordinates = [...currentSubs, user];
-    return await managerDoc.set({ subordinates }, { merge: true });
   }
 
   private createUsername(name: string): string {

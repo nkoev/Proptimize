@@ -2,10 +2,13 @@
   <span class="bold-indigo">Filter:</span>
   <mat-form-field>
     <mat-label>Skills</mat-label>
-    <mat-select [formControl]="skills" multiple>
+    <mat-select #sl [formControl]="skills" multiple>
       <mat-option *ngFor="let skill of skillsList" [value]="skill">{{
         skill
       }}</mat-option>
+      <button mat-raised-button class="apply-options-bttn" (click)="sl.close()">
+        Apply
+      </button>
     </mat-select>
   </mat-form-field>
   &nbsp;

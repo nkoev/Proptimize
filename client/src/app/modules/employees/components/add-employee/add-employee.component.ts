@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeDTO } from 'src/app/models/employee.dto';
@@ -10,7 +10,6 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.component';
-import { DocumentData } from '@google-cloud/firestore';
 
 @Component({
   selector: 'app-add-employee',
@@ -97,7 +96,7 @@ export class AddEmployeeComponent implements OnInit {
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       position: form.value.position,
-      managedBy: form.value.managedBy,
+      managedBy: form.value.managedBy.id,
       skills: form.value.skills,
       availableHours: 8,
       projects: [],
@@ -111,8 +110,7 @@ export class AddEmployeeComponent implements OnInit {
       lastName: form.value.lastName,
       position: form.value.position,
       isAdmin: form.value.isAdmin,
-      managedBy: form.value.managedBy,
-      subordinates: [],
+      managedBy: form.value.managedBy.id,
       availableHours: 8,
       projects: [],
     };
