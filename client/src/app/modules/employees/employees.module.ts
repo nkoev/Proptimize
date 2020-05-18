@@ -6,6 +6,7 @@ import { DetailEmployeeComponent } from './pages/detail-employee/detail-employee
 import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
 import { CredentialsMemoComponent } from './components/credentials-memo/credentials-memo.component';
 import { EmployeesFilteringFormComponent } from './components/employees-filtering-form/employees-filtering-form.component';
+import { OrgchartComponent } from './components/orgchart/orgchart.component';
 
 @NgModule({
   declarations: [

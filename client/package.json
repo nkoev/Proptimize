@@ -24,6 +24,7 @@
     "@angular/router": "^9.1.4",
     "@types/file-saver": "^2.0.1",
     "@types/typescript": "^2.0.0",
+    "angular-google-charts": "^1.1.4",
     "file-saver": "^2.0.2",
     "firebase": "^7.14.3",
     "firebase-admin": "^8.12.1",
