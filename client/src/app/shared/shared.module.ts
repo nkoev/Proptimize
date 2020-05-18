@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppMaterialModule } from './modules/material.module';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { HeaderComponent } from './components/header/header.component';
+import { SlidePanelComponent } from './components/slide-panel/slide-panel.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
-  declarations: [NavigationComponent, HeaderComponent],
-  imports: [CommonModule, AppMaterialModule, RouterModule, ReactiveFormsModule],
+  declarations: [NavigationComponent, HeaderComponent, SlidePanelComponent],
+  imports: [CommonModule, AppMaterialModule, RouterModule, ReactiveFormsModule, FormsModule, ReactiveFormsModule, InfiniteScrollModule],
   exports: [
     CommonModule,
     AppMaterialModule,
@@ -16,6 +18,8 @@ import { HeaderComponent } from './components/header/header.component';
     ReactiveFormsModule,
     NavigationComponent,
     HeaderComponent,
+    SlidePanelComponent,
+    InfiniteScrollModule,
   ],
 })
-export class SharedModule {}
+export class SharedModule { }

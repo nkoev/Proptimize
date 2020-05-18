@@ -40,6 +40,7 @@
     align-items: center;
 
     width: 100%;
+    /* width: 78vw; */
     height: 100%;
 }
 .content .header {
@@ -56,6 +57,50 @@
     font-size: 1.4em;
 }
 
+.main {
+    width: 95%;
+    height: 75vh;
+    /* height: 95%; */
+
+    margin-top: 0.2em;
+}
+
+/* ----------------- SLIDE PANEL START ----------------- */
+:host {
+    display: block;
+}
+
+app-slide-panel {
+    /* max-width: 500px; */
+    /* width: 100%; */
+    width: 76vw;
+    height: 96%;
+}
+app-slide-panel div {
+        font: 20px sans-serif;
+        height: 100%;
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+}
+
+::deep my-slide-panel .panes {
+    /* border: 6px dashed #4990E2; */
+    box-sizing: border-box;
+}
+
+[leftPane]  { 
+    background-color: #FFF897;
+    display: flex;
+    flex-direction: column; 
+}
+
+[rightPane] { 
+    background-color: #6CE6CB; 
+}
+
+/* ----------------- SLIDE PANEL END ----------------- */
 
 /*  MEDIA */
 @media (max-width: 768px) {
@@ -63,5 +108,10 @@
     .card-content {
         display: flex;
         flex-direction: column;
+    }
+
+    app-slide-panel {
+        width: 88vw;
+        height: 96%;
     }
 }
