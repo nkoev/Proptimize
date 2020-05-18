@@ -1,0 +1,14 @@
+.projects-container {
+    height: 65vh;
+    /* height: 100%; */
+    width: 75vw;
+    overflow-y: scroll;
+}
+
+/*  MEDIA */
+@media (max-width: 768px) {
+
+    .projects-container{
+        width: 85vw;
+    }
+}

@@ -1,0 +1,16 @@
+<div class="projects-container">
+
+    <div>
+        <mat-list *ngFor="let project of projects | async">
+            <mat-list-item> {{project.name}} </mat-list-item>
+        </mat-list>
+    </div>
+
+
+    <div infiniteScroll [infiniteScrollDistance]="7" [infiniteScrollThrottle]="1000"
+        [infiniteScrollContainer]="selector" [fromRoot]="true" (scrolled)="onScroll()">
+    </div>
+
+    <!-- <div *ngIf="!finished"> LOADING </div> -->
+
+</div>
