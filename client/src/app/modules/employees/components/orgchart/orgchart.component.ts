@@ -12,7 +12,6 @@ export class OrgChartComponent implements OnInit {
   type = 'OrgChart';
   options = { allowHtml: true };
   data = [];
-  loaded = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -46,7 +45,6 @@ export class OrgChartComponent implements OnInit {
           employee.data().managedBy,
         ]);
       });
-      this.loaded = true;
     });
   }
 }
