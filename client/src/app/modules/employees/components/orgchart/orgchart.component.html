@@ -1,1 +1,10 @@
-<!-- <google-chart #chart [title]="title" [type]="type"> </google-chart> -->
+<!-- <div *ngIf="loaded"> -->
+<google-chart
+  #chart
+  [title]="title"
+  [type]="type"
+  [data]="data"
+  [options]="options"
+>
+</google-chart>
+<!-- </div> -->

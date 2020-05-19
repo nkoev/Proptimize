@@ -21,10 +21,16 @@ export class UserService {
 
   constructor(private afs: AngularFirestore, private http: HttpClient) {
     this.usersCol = this.afs.collection<UserDTO>('users');
-    this.allUsers$ = this.usersCol.snapshotChanges();
+    this.allUsers$ = this.usersCol
+      .snapshotChanges()
+      .pipe(map((changes) => changes.map((change) => change.payload.doc)));
   }
 
-  async getUserById(userId: string): Promise<any> {
+  async getAllUsers() {
+    return await this.usersCol.ref.get();
+  }
+
+  async getUserById(userId: string) {
     return await this.usersCol.doc(userId).ref.get();
   }
 

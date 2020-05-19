@@ -2,13 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEmployeeComponent } from '../../components/add-employee/add-employee.component';
 import { EmployeeService } from '../../services/employee.service';
-import {
-  DocumentData,
-  DocumentReference,
-} from '@angular/fire/firestore/interfaces';
+import { DocumentData } from '@angular/fire/firestore/interfaces';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
+import { OrgChartComponent } from '../../components/orgchart/orgchart.component';
 
 @Component({
   selector: 'app-all-employees',
@@ -27,11 +25,11 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     'JavaScript',
     'BellyDancing',
   ];
-  managersList: DocumentReference[];
-  today = new Date();
+  managers: DocumentData[];
   employees: DocumentData[];
   filteredEmployees: DocumentData[];
   loggedUser: DocumentData;
+  today = new Date();
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -42,16 +40,17 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const sub1 = this.employeeService.getAllEmployees().subscribe((changes) => {
-      this.employees = changes.map((change) => change.payload.doc.data());
-      this.filteredEmployees = this.employees;
-    });
-    const sub2 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res)
+    const sub1 = this.userService.allUsers$.subscribe(
+      (users) => (this.managers = users)
     );
-    const sub3 = this.userService.allUsers$.subscribe(
-      (changes) =>
-        (this.managersList = changes.map((change) => change.payload.doc))
+    const sub2 = this.employeeService.$allEmployees.subscribe((employees) => {
+      this.employees = employees;
+      this.filteredEmployees = this.employees.map((employee) =>
+        employee.data()
+      );
+    });
+    const sub3 = this.auth.loggedUser$.subscribe(
+      (res) => (this.loggedUser = res)
     );
     this.subscriptions.push(sub1, sub2, sub3);
   }
@@ -62,12 +61,18 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
 
   addEmployee() {
     this.matDialog.open(AddEmployeeComponent, {
-      data: { skillsList: this.skillsList, managersList: this.managersList },
+      data: { skillsList: this.skillsList, managers: this.managers },
+    });
+  }
+
+  showOrgChart() {
+    this.matDialog.open(OrgChartComponent, {
+      data: { managers: this.managers, employees: this.employees },
     });
   }
 
   filterEmployees(event: any) {
-    this.filteredEmployees = this.employees;
+    this.filteredEmployees = this.employees.map((employee) => employee.data());
     if (event.skills?.length) {
       this.filteredEmployees = this.filteredEmployees.filter((employee) =>
         employee.skills.some((skill) => event.skills.includes(skill))
