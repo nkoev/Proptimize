@@ -1,8 +1,23 @@
 .projects-container {
-    height: 65vh;
+    height: 57vh;
     /* height: 100%; */
     width: 75vw;
     overflow-y: scroll;
+    /* font-size: 8px; */
+}
+
+.mat-list-base .mat-list-item.mat-2-line, .mat-list-base .mat-list-option.mat-2-line {
+    height: 50px;
+    /* font-size: 0.em; */
+}
+
+ /* MEDIA */
+@media (min-width: 768px) and (max-width: 1300px) {
+    .projects-container {
+        width: 75vw;
+        height: 50vh;
+        align-self: flex-start;
+    }
 }
 
 /*  MEDIA */
@@ -10,5 +25,6 @@
 
     .projects-container{
         width: 85vw;
+        height: 50vh;
     }
 }

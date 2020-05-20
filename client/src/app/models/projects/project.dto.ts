@@ -8,4 +8,5 @@ export interface ProjectDTO {
     createdAt: Date;
     updatedAt: Date;
     status: ProjectStatusType;
+    skills: string[];
 }

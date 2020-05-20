@@ -2,7 +2,13 @@
 
     <div>
         <mat-list *ngFor="let project of projects | async">
-            <mat-list-item> {{project.name}} </mat-list-item>
+            <mat-list-item>
+                <h3 matLine> {{project.name}} </h3>
+                <p matLine>
+                    <span>By: {{ project.reporter.firstName }} {{project.reporter.lastName }} </span>
+                    <span class="demo-2"> -- {{project.status}} </span>
+                </p>
+            </mat-list-item>
         </mat-list>
     </div>
 

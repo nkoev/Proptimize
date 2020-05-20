@@ -19,16 +19,21 @@
                 <div class="main">
                     <app-slide-panel [activePane]="isLeftVisible ? 'left' : 'right'">
                         <div leftPane>
-                            <!-- <div style="height: 3em; background-color: aqua;"></div> -->
-                            <app-projects-list [projects]="projects">
+                            <div class="add-project-btn">
+                                <button mat-raised-button (click)="addProject()">New Project</button>
+                            </div>
+                            <app-projects-list [projects]="projects" [isLeftVisible]="isLeftVisible"
+                                (click)="isLeftVisible = !isLeftVisible">
                             </app-projects-list>
+                            <app-projects-filtering-form [skillsList]="skillsList" [statusList]="statusList"
+                                (filterEvent)="filterProjects($event)" #filter>
+                            </app-projects-filtering-form>
                         </div>
+
                         <div rightPane>
-                            <app-single-project></app-single-project>
+                            <app-single-project (toggleEvent)="togglePanes($event)"></app-single-project>
                         </div>
                     </app-slide-panel>
-
-                    <button (click)="isLeftVisible = !isLeftVisible">Toggle panes</button>
                 </div>
             </div>
         </div>

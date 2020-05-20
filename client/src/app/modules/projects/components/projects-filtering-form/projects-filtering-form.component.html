@@ -1,0 +1,43 @@
+<form [formGroup]="filteringForm">
+    <!-- <span class="bold-indigo">Filter:</span> -->
+    <mat-form-field id="field-1">
+        <mat-label>Name</mat-label><input matInput formControlName="name" />
+    </mat-form-field>
+    &nbsp;
+    <mat-form-field id="field-2">
+        <mat-label>Reporter</mat-label><input matInput formControlName="reporter" />
+    </mat-form-field>
+    &nbsp;
+    <mat-form-field id="field-3">
+        <mat-label>Status</mat-label>
+        <mat-select #sl [(ngModel)]="selectedStatus" [formControl]="status" multiple>
+            <mat-option *ngFor="let status of statusList" [value]="status">{{
+          status
+        }}</mat-option>
+            <button mat-raised-button class="apply-options-bttn" (click)="clearStatus()">
+                Clear All
+            </button>
+        </mat-select>
+    </mat-form-field>
+    &nbsp;
+    <mat-form-field id="field-4">
+        <mat-label>Skills</mat-label>
+        <mat-select #sl [(ngModel)]="selectedSkills" [formControl]="skills" multiple>
+            <mat-option *ngFor="let skill of skillsList" [value]="skill">{{
+          skill
+        }}</mat-option>
+            <button mat-raised-button class="apply-options-bttn" (click)="clearSkills()">
+                Clear All
+            </button>
+        </mat-select>
+    </mat-form-field>
+    &nbsp;
+    <div id="field-5">
+        <mat-checkbox formControlName="myProjects">My projects</mat-checkbox>
+        &nbsp;
+
+        <button id="apply" mat-raised-button class="apply-options-bttn" (click)="applyFilters(); sl.close()">
+            <span>Apply All</span>
+        </button>
+    </div>
+</form>

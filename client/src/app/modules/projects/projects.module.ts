@@ -6,10 +6,11 @@ import { AddProjectComponent } from './components/add-project/add-project.compon
 import { ProjectsListComponent } from './components/projects-list/projects-list.component';
 import { SingleProjectComponent } from './components/single-project/single-project.component';
 import { FormsModule } from '@angular/forms';
+import { ProjectsFilteringFormComponent } from './components/projects-filtering-form/projects-filtering-form.component';
 
 
 @NgModule({
-  declarations: [ProjectsComponent, AddProjectComponent, ProjectsListComponent, SingleProjectComponent],
+  declarations: [ProjectsComponent, AddProjectComponent, ProjectsListComponent, SingleProjectComponent, ProjectsFilteringFormComponent],
   imports: [
     ProjectsRoutingModule,
     SharedModule,

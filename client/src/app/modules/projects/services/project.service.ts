@@ -31,86 +31,6 @@ export class ProjectService {
     return this.getProjectsData();
   }
 
-  getByStatus(status: string) {
-    this.projectsColl = this.afs.collection<ProjectDTO>('projects', ref => ref.orderBy('status', 'desc'));
-    return this.getProjectsData();
-  }
-
-  getMovies(start, end, orderBy: string) {
-    this.projectsColl = this.afs.collection<ProjectDTO>('projects', ref => {
-      console.log(start);
-      return ref.limit(4).orderBy(orderBy).startAt(start).endBefore(end);
-    });
-
-    return this.projectsColl.valueChanges();
-  }
-
-  getMoviesNew(limit: number, orderBy: string, last?: string, end?: string, status?: string, skill?: string) {
-    this.projectsColl = this.afs.collection<ProjectDTO>('projects', ref => {
-      if (last && end) {
-        if (status && skill) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('status', '==', status)
-            .where('skills', 'array-contains', skill)
-            .startAt(last).endBefore(end);
-        } else if (status) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('status', '==', status)
-            .startAt(last).endBefore(end);
-        } else if (skill) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('skills', 'array-contains', skill)
-            .startAt(last).endBefore(end);
-        } else {
-          return ref.orderBy(orderBy).limit(limit).startAt(last).endBefore(end);
-        }
-
-      } else if (last) {
-        if (status && skill) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('status', '==', status)
-            .where('skills', 'array-contains', skill)
-            .startAt(last);
-        } else if (status) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('status', '==', status)
-            .startAt(last);
-        } else if (skill) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('skills', 'array-contains', skill)
-            .startAt(last);
-        } else {
-          console.log('tuka');
-          return ref.orderBy(orderBy).limit(limit).startAt(last);
-        }
-
-      } else {
-        if (status && skill) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('status', '==', status)
-            .where('skills', 'array-contains', skill);
-        } else if (status) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('status', '==', status);
-        } else if (skill) {
-          return ref.orderBy(orderBy).limit(limit)
-            .where('skills', 'array-contains', skill);
-        } else {
-          return ref.orderBy(orderBy).limit(limit);
-        }
-      }
-
-    });
-
-    return this.projectsColl.snapshotChanges().pipe(
-      map(changes => changes.map(a => {
-        const data = a.payload.doc.data() as ProjectDTO;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      }))
-    );
-  }
-
   addProject(project: ProjectCreateDTO): Promise<any> {
     const newProject: ProjectDTO = {
       reporter: {
@@ -124,6 +44,7 @@ export class ProjectService {
       createdAt: new Date(),
       updatedAt: new Date(),
       status: ProjectStatusType.InProgress,
+      skills: ['tarator'],
     }
 
     return this.projectsColl.add(newProject);

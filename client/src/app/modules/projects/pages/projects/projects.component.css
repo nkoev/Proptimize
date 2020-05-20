@@ -60,7 +60,6 @@
 .main {
     width: 95%;
     height: 75vh;
-    /* height: 95%; */
 
     margin-top: 0.2em;
 }
@@ -72,7 +71,6 @@
 
 app-slide-panel {
     /* max-width: 500px; */
-    /* width: 100%; */
     width: 76vw;
     height: 96%;
 }
@@ -81,19 +79,18 @@ app-slide-panel div {
         height: 100%;
     
         display: flex;
-        align-items: center;
-        justify-content: center;
+        /* align-items: center; */
+        /* justify-content: center; */
 }
 
 ::deep my-slide-panel .panes {
-    /* border: 6px dashed #4990E2; */
     box-sizing: border-box;
 }
 
 [leftPane]  { 
-    background-color: #FFF897;
     display: flex;
     flex-direction: column; 
+    /* background-color: #FFF897; */
 }
 
 [rightPane] { 
@@ -101,6 +98,59 @@ app-slide-panel div {
 }
 
 /* ----------------- SLIDE PANEL END ----------------- */
+
+.add-project-btn {
+    height: 5em;
+    width: 73vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+.add-project-btn button {
+    line-height: 1.7;
+}
+
+
+/*  MEDIA */
+@media (min-width: 768px) and (max-width: 1300px) {
+
+    .main {
+        width: 95%;
+        height: 73vh;
+    
+        margin-top: 0.2em;
+    }
+
+    app-slide-panel {
+        width: 76vw;
+        height: 96%;
+    }
+
+    .add-project-btn {
+        width: 75vw;
+    }
+}
+
+/*  MEDIA */
+@media (min-width: 768px) and (max-width: 1150px) {
+    .main {
+        width: 95%;
+        height: 73vh;
+    
+        margin-top: 0.2em;
+    }
+
+    app-slide-panel {
+        width: 70vw;
+        height: 96%;
+    }
+
+    .add-project-btn {
+        width: 69vw;
+    }
+}
+
 
 /*  MEDIA */
 @media (max-width: 768px) {
@@ -113,5 +163,9 @@ app-slide-panel div {
     app-slide-panel {
         width: 88vw;
         height: 96%;
+    }
+
+    .add-project-btn {
+        width: 85vw;
     }
 }

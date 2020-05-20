@@ -11,6 +11,7 @@ import * as _ from "lodash";
 export class ProjectsListComponent implements OnInit {
 
   @Input() projects: Observable<ProjectDTO[]>;
+  @Input() isLeftVisible: boolean;
   // @Input() finished: boolean;
   // @Output() updateProjects = new EventEmitter<any>();
 
@@ -23,9 +24,11 @@ export class ProjectsListComponent implements OnInit {
 
   ngAfterViewInit() {
     // this.projects.subscribe(data => console.log(data));
+    console.log(this.isLeftVisible);
   }
 
   onScroll() {
     console.log('scrolled');
   }
+
 }
