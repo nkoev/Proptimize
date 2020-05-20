@@ -16,6 +16,11 @@
         </div>
 
         <div class="main">
+          <mat-radio-group aria-label="Select an option">
+            <mat-radio-button checked value="1">employees</mat-radio-button
+            >&nbsp;
+            <mat-radio-button value="2">managers</mat-radio-button>
+          </mat-radio-group>
           <mat-list class="list">
             <mat-list-item
               class="item"
@@ -40,7 +45,7 @@
             </button>
             &nbsp;
             <button mat-raised-button (click)="showOrgChart(); (filter)">
-              Organization chart
+              Company structure
             </button>
           </div>
         </div>
