@@ -10,7 +10,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.component';
-import { DocumentReference } from '@google-cloud/firestore';
+import { DocumentReference, DocumentData } from '@google-cloud/firestore';
 
 @Component({
   selector: 'app-add-employee',
@@ -19,7 +19,7 @@ import { DocumentReference } from '@google-cloud/firestore';
 })
 export class AddEmployeeComponent implements OnInit {
   skillsList: string[];
-  managersList: DocumentReference[];
+  managersList: DocumentData[];
   employeeForm: FormGroup;
 
   constructor(
@@ -29,10 +29,10 @@ export class AddEmployeeComponent implements OnInit {
     private dialogRef: MatDialogRef<AddEmployeeComponent>,
     private matDialog: MatDialog,
     @Inject(MAT_DIALOG_DATA)
-    private data: { skillsList: string[]; managersList: DocumentReference[] }
+    private data: { skillsList: string[]; managers: DocumentReference[] }
   ) {
     this.skillsList = this.data.skillsList;
-    this.managersList = this.data.managersList;
+    this.managersList = this.data.managers;
   }
 
   ngOnInit() {
@@ -70,7 +70,7 @@ export class AddEmployeeComponent implements OnInit {
     return this.employeeForm.get('skills');
   }
 
-  async onSubmit(form: FormGroup) {
+  onSubmit(form: FormGroup) {
     form.invalid
       ? console.log('Invalid Form')
       : form.value.isManager
@@ -102,11 +102,14 @@ export class AddEmployeeComponent implements OnInit {
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       position: form.value.position,
-      managedBy: form.value.managedBy.id,
       skills: form.value.skills,
       availableHours: 8,
       projects: [],
+      managedBy: null,
     };
+    if (form.value.managedBy !== 'self-managed') {
+      employee.managedBy = form.value.managedBy.id;
+    }
     return employee;
   }
 
@@ -116,10 +119,13 @@ export class AddEmployeeComponent implements OnInit {
       lastName: form.value.lastName,
       position: form.value.position,
       isAdmin: form.value.isAdmin,
-      managedBy: form.value.managedBy.id,
       availableHours: 8,
       projects: [],
+      managedBy: null,
     };
+    if (form.value.managedBy !== 'self-managed') {
+      user.managedBy = form.value.managedBy.id;
+    }
     return user;
   }
 
