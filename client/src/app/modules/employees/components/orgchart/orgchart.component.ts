@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DocumentData } from '@google-cloud/firestore';
+import { DocumentData } from '@angular/fire/firestore/interfaces';
 
 @Component({
   selector: 'app-orgchart',
