@@ -14,6 +14,7 @@ import { OrgChartComponent } from '../../components/orgchart/orgchart.component'
   styleUrls: ['./all-employees.component.css'],
 })
 export class AllEmployeesComponent implements OnInit, OnDestroy {
+  activePane = 'left';
   skillsList = [
     'Java',
     'JavaScript',
@@ -27,6 +28,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   ];
   managers: DocumentData[];
   employees: DocumentData[];
+  filteredManagers: DocumentData[];
   filteredEmployees: DocumentData[];
   loggedUser: DocumentData;
   today = new Date();
@@ -40,9 +42,10 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const sub1 = this.userService.allUsers$.subscribe(
-      (users) => (this.managers = users)
-    );
+    const sub1 = this.userService.allUsers$.subscribe((users) => {
+      this.managers = users;
+      this.filteredManagers = this.managers.map((manager) => manager.data());
+    });
     const sub2 = this.employeeService.$allEmployees.subscribe((employees) => {
       this.employees = employees;
       this.filteredEmployees = this.employees.map((employee) =>
@@ -52,6 +55,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     const sub3 = this.auth.loggedUser$.subscribe(
       (res) => (this.loggedUser = res)
     );
+    google.charts.load('current', { packages: ['orgchart'] });
     this.subscriptions.push(sub1, sub2, sub3);
   }
 
@@ -69,6 +73,10 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     this.matDialog.open(OrgChartComponent, {
       data: { managers: this.managers, employees: this.employees },
     });
+  }
+
+  showDetailEmployee(event) {
+    this.activePane = 'right';
   }
 
   filterEmployees(event: any) {

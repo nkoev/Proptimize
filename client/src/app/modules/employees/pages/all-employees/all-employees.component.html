@@ -16,27 +16,24 @@
         </div>
 
         <div class="main">
-          <mat-radio-group aria-label="Select an option">
-            <mat-radio-button checked value="1">employees</mat-radio-button
-            >&nbsp;
-            <mat-radio-button value="2">managers</mat-radio-button>
-          </mat-radio-group>
-          <mat-list class="list">
-            <mat-list-item
-              class="item"
-              *ngFor="let employee of filteredEmployees"
-              >{{ employee.firstName }}&nbsp;{{
-                employee.lastName
-              }}</mat-list-item
-            >
-          </mat-list>
-
+          <app-slide-panel [activePane]="activePane">
+            <div leftPane>
+              <app-employees-list
+                [filteredEmployees]="filteredEmployees"
+                [filteredManagers]="filteredManagers"
+                (showEmployee)="showDetailEmployee($event)"
+              ></app-employees-list>
+              <app-employees-filtering-form
+                [skillsList]="skillsList"
+                (filterEvent)="filterEmployees($event)"
+                #filter
+              ></app-employees-filtering-form>
+            </div>
+            <div rightPane>
+              <app-detail-employee></app-detail-employee>
+            </div>
+          </app-slide-panel>
           <div class="footer">
-            <app-employees-filtering-form
-              [skillsList]="skillsList"
-              (filterEvent)="filterEmployees($event)"
-              #filter
-            ></app-employees-filtering-form>
             <button
               mat-raised-button
               (click)="addEmployee(); filter.clearForm()"

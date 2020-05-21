@@ -7,7 +7,6 @@ import { environment } from './environments/environment';
 if (environment.production) {
   enableProdMode();
 }
-google.charts.load('current', { packages: ['orgchart'] });
 platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .catch((err) => console.error(err));
