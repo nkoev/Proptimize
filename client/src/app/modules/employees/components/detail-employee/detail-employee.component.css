@@ -1,1 +1,19 @@
+.list {
+  padding: 0px !important;
+  width: auto;
+  height: 19em;
+  overflow-y: auto;
+}
 
+.item {
+  height: 2em !important;
+  width: 100%;
+  background-color: rgba(55, 58, 77, 0.5);
+  border-radius: 8px;
+  margin-bottom: 1%;
+}
+
+.item:hover {
+  background-color: rgba(55, 58, 77, 0.2);
+  cursor: pointer;
+}

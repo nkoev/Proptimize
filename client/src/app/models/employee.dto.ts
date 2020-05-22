@@ -5,5 +5,9 @@ export class EmployeeDTO {
   managedBy: any;
   skills: any[];
   availableHours: number;
-  projects: { skill: any; hours: number; project: string }[];
+  projects: {
+    name: string;
+    id: string;
+    skills: { name: string; hours: number }[];
+  }[];
 }

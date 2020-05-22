@@ -30,7 +30,11 @@
               ></app-employees-filtering-form>
             </div>
             <div rightPane>
-              <app-detail-employee></app-detail-employee>
+              <app-detail-employee
+                *ngIf="activePane === 'right'"
+                [employee]="showEmployee"
+                (backEvent)="backToList($event)"
+              ></app-detail-employee>
             </div>
           </app-slide-panel>
           <div class="footer">

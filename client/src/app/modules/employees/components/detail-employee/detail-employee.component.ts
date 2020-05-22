@@ -1,4 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  AfterViewInit,
+} from '@angular/core';
+import { EmployeeDTO } from 'src/app/models/employee.dto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-detail-employee',
@@ -6,7 +15,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detail-employee.component.css'],
 })
 export class DetailEmployeeComponent implements OnInit {
-  constructor() {}
+  @Input() employee: EmployeeDTO;
+  @Output() backEvent = new EventEmitter<any>();
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
+
+  goToProject(projectId: string) {
+    this.router.navigate(['/projects', projectId]);
+  }
 }

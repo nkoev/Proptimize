@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
 import { OrgChartComponent } from '../../components/orgchart/orgchart.component';
+import { EmployeeDTO } from 'src/app/models/employee.dto';
 
 @Component({
   selector: 'app-all-employees',
@@ -15,6 +16,7 @@ import { OrgChartComponent } from '../../components/orgchart/orgchart.component'
 })
 export class AllEmployeesComponent implements OnInit, OnDestroy {
   activePane = 'left';
+  showEmployee: EmployeeDTO;
   skillsList = [
     'Java',
     'JavaScript',
@@ -77,6 +79,14 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
 
   showDetailEmployee(event) {
     this.activePane = 'right';
+    this.showEmployee = event;
+  }
+
+  backToList(skill?: string) {
+    this.activePane = 'left';
+    if (skill) {
+      this.filterEmployees({ skills: [skill] });
+    }
   }
 
   filterEmployees(event: any) {
