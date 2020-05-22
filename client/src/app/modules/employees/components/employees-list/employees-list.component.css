@@ -1,7 +1,6 @@
 .list {
   padding: 0px !important;
-  width: auto;
-  height: 19em;
+  height: 46vh;
   overflow-y: auto;
 }
 

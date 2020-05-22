@@ -1,6 +1,6 @@
 .top-container {
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   display: grid;
   grid-template-columns: minmax(0%, 3%) minmax(90%, 100%) minmax(0%, 3%);
   grid-template-rows: 5% auto 5%;
@@ -60,11 +60,15 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 
   width: 95%;
-  height: 30em;
+  height: 90%;
   overflow-y: auto;
+}
+
+app-slide-panel {
+  height: 100%;
 }
 
 .footer {
