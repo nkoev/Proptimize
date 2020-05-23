@@ -8,7 +8,6 @@ import { DocumentData } from '@angular/fire/firestore/interfaces';
   styleUrls: ['./orgchart.component.css'],
 })
 export class OrgChartComponent implements OnInit {
-  title = 'Hello';
   type = 'OrgChart';
   options = { allowHtml: true };
   data = [];

@@ -69,10 +69,16 @@
 
 app-slide-panel {
   height: 100%;
+  overflow-y: unset;
 }
 
 .footer {
   margin-bottom: 1%;
+  text-align: center;
+}
+
+button {
+  max-width: 44vw;
 }
 
 /*  MEDIA */
@@ -80,5 +86,8 @@ app-slide-panel {
   .card-content {
     display: flex;
     flex-direction: column;
+  }
+  .footer {
+    display: none;
   }
 }

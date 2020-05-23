@@ -1,25 +1,34 @@
-<form [formGroup]="filteringForm">
-  <span class="bold-indigo">Filter:</span>
-  <mat-form-field>
-    <mat-label>Skills</mat-label>
-    <mat-select #sl [formControl]="skills" multiple>
-      <mat-option *ngFor="let skill of skillsList" [value]="skill">{{
-        skill
-      }}</mat-option>
-      <button mat-raised-button class="apply-options-bttn" (click)="sl.close()">
-        Apply
-      </button>
-    </mat-select>
-  </mat-form-field>
-  &nbsp;
-  <mat-form-field
-    ><mat-label>First name</mat-label
-    ><input matInput formControlName="firstName"
-  /></mat-form-field>
-  &nbsp;
-  <mat-form-field
-    ><mat-label>Last name</mat-label><input matInput formControlName="lastName"
-  /></mat-form-field>
-  &nbsp;
-  <mat-checkbox formControlName="subordinates">My team</mat-checkbox>
-</form>
+<div>
+  <form [formGroup]="filteringForm">
+    <span class="bold-indigo">Filter:</span>
+    <mat-form-field>
+      <mat-label>Skills</mat-label>
+      <mat-select #sl [formControl]="skills" multiple>
+        <mat-option *ngFor="let skill of skillsList" [value]="skill">{{
+          skill
+        }}</mat-option>
+        <button
+          mat-raised-button
+          class="apply-options-bttn"
+          (click)="sl.close()"
+        >
+          Apply
+        </button>
+      </mat-select>
+    </mat-form-field>
+    &nbsp;
+    <mat-form-field
+      ><mat-label>First name</mat-label
+      ><input matInput formControlName="firstName"
+    /></mat-form-field>
+    &nbsp;
+    <mat-form-field
+      ><mat-label>Last name</mat-label
+      ><input matInput formControlName="lastName"
+    /></mat-form-field>
+    &nbsp;
+    <mat-checkbox formControlName="subordinates">My team</mat-checkbox>
+    &nbsp;
+    <button mat-button (click)="clearForm()">Clear</button>
+  </form>
+</div>

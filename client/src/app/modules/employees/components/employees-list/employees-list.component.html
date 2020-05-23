@@ -1,8 +1,14 @@
 <div class="radio-group">
   <mat-radio-group aria-label="Select an option">
-    <mat-radio-button (change)="type = 'employees'">employees</mat-radio-button
+    <mat-radio-button
+      (change)="type = 'employees'"
+      (change)="filteringFormComp.skills.enable()"
+      >employees</mat-radio-button
     >&nbsp;
-    <mat-radio-button (change)="type = 'managers'" value="1"
+    <mat-radio-button
+      (change)="type = 'managers'"
+      (change)="filteringFormComp.skills.disable()"
+      value="1"
       >managers</mat-radio-button
     >
   </mat-radio-group>

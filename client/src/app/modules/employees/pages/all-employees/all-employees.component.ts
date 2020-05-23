@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEmployeeComponent } from '../../components/add-employee/add-employee.component';
 import { EmployeeService } from '../../services/employee.service';
@@ -8,6 +8,7 @@ import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
 import { OrgChartComponent } from '../../components/orgchart/orgchart.component';
 import { EmployeeDTO } from 'src/app/models/employee.dto';
+import { EmployeesFilteringFormComponent } from '../../components/employees-filtering-form/employees-filtering-form.component';
 
 @Component({
   selector: 'app-all-employees',
@@ -34,6 +35,8 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   filteredEmployees: DocumentData[];
   loggedUser: DocumentData;
   today = new Date();
+  @ViewChild(EmployeesFilteringFormComponent)
+  filteringFormComp: EmployeesFilteringFormComponent;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -85,12 +88,14 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   backToList(skill?: string) {
     this.activePane = 'left';
     if (skill) {
-      this.filterEmployees({ skills: [skill] });
+      this.filteringFormComp.setSkillsField(skill);
     }
   }
 
   filterEmployees(event: any) {
     this.filteredEmployees = this.employees.map((employee) => employee.data());
+    this.filteredManagers = this.managers.map((manager) => manager.data());
+
     if (event.skills?.length) {
       this.filteredEmployees = this.filteredEmployees.filter((employee) =>
         employee.skills.some((skill) => event.skills.includes(skill))
@@ -100,15 +105,24 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
       this.filteredEmployees = this.filteredEmployees.filter((employee) =>
         employee.firstName.toLowerCase().includes(event.firstName.toLowerCase())
       );
+      this.filteredManagers = this.filteredManagers.filter((manager) =>
+        manager.firstName.toLowerCase().includes(event.firstName.toLowerCase())
+      );
     }
     if (event.lastName) {
       this.filteredEmployees = this.filteredEmployees.filter((employee) =>
         employee.lastName.toLowerCase().includes(event.lastName.toLowerCase())
       );
+      this.filteredManagers = this.filteredManagers.filter((manager) =>
+        manager.lastName.toLowerCase().includes(event.lastName.toLowerCase())
+      );
     }
     if (event.subordinates) {
       this.filteredEmployees = this.filteredEmployees.filter(
         (employee) => employee.managedBy === this.loggedUser.uid
+      );
+      this.filteredManagers = this.filteredManagers.filter(
+        (manager) => manager.managedBy === this.loggedUser.uid
       );
     }
   }
