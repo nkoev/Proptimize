@@ -3,7 +3,7 @@ import {
   AngularFirestoreCollection,
   AngularFirestore,
 } from '@angular/fire/firestore';
-import { UserDTO } from 'src/app/models/user.dto';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DocumentData } from '@google-cloud/firestore';

@@ -7,8 +7,9 @@ import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
 import { OrgChartComponent } from '../../components/orgchart/orgchart.component';
-import { EmployeeDTO } from 'src/app/models/employee.dto';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { EmployeesFilteringFormComponent } from '../../components/employees-filtering-form/employees-filtering-form.component';
+import { SkillService } from 'src/app/modules/skills/skill.service';
 
 @Component({
   selector: 'app-all-employees',
@@ -18,17 +19,7 @@ import { EmployeesFilteringFormComponent } from '../../components/employees-filt
 export class AllEmployeesComponent implements OnInit, OnDestroy {
   activePane = 'left';
   showEmployee: EmployeeDTO;
-  skillsList = [
-    'Java',
-    'JavaScript',
-    'BellyDancing',
-    'Java',
-    'JavaScript',
-    'BellyDancing',
-    'Java',
-    'JavaScript',
-    'BellyDancing',
-  ];
+  skillsList: string[];
   managers: DocumentData[];
   employees: DocumentData[];
   filteredManagers: DocumentData[];
@@ -43,7 +34,8 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     private matDialog: MatDialog,
     private employeeService: EmployeeService,
     private auth: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private skillService: SkillService
   ) {}
 
   ngOnInit(): void {
@@ -60,8 +52,11 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     const sub3 = this.auth.loggedUser$.subscribe(
       (res) => (this.loggedUser = res)
     );
+    const sub4 = this.skillService
+      .getSkills()
+      .subscribe((res) => (this.skillsList = res));
     google.charts.load('current', { packages: ['orgchart'] });
-    this.subscriptions.push(sub1, sub2, sub3);
+    this.subscriptions.push(sub1, sub2, sub3, sub4);
   }
 
   ngOnDestroy(): void {

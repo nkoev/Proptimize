@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { map } from 'rxjs/operators';
 export class SkillService {
   constructor(private afs: AngularFirestore) {}
 
-  getSkills() {
+  getSkills(): Observable<string[]> {
     return this.afs
       .collection('skills')
       .snapshotChanges()
@@ -17,7 +18,7 @@ export class SkillService {
       );
   }
 
-  async addSkill(skill: { name: string }) {
+  async addSkill(skill: { name: string }): Promise<any> {
     return await this.afs.collection('skills').add(skill);
   }
 }

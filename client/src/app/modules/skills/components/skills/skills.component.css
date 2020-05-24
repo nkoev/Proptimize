@@ -66,8 +66,10 @@
 }
 
 .list {
+  margin-top: 5%;
+  margin-bottom: 5%;
   padding: 0px !important;
-  height: 60vh;
+  height: 58vh;
   overflow-y: auto;
 }
 

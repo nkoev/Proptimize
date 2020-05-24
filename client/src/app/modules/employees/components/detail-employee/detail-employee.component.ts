@@ -6,7 +6,7 @@ import {
   EventEmitter,
   AfterViewInit,
 } from '@angular/core';
-import { EmployeeDTO } from 'src/app/models/employee.dto';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { Router } from '@angular/router';
 
 @Component({

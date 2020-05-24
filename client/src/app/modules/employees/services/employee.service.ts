@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/firestore/public_api';
-import { EmployeeDTO } from 'src/app/models/employee.dto';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DocumentData } from '@google-cloud/firestore';

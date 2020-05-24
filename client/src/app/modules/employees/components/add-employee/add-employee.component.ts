@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
-import { EmployeeDTO } from 'src/app/models/employee.dto';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { UserService } from '../../services/user.service';
-import { UserDTO } from 'src/app/models/user.dto';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentReference, DocumentData } from '@google-cloud/firestore';
 
