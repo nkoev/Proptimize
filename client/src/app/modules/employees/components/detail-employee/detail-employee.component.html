@@ -2,6 +2,7 @@
 <br />
 {{ employee.position }}
 <br />
+<div *ngIf="!employee.skills">Skills: N/A</div>
 <div *ngIf="employee.skills">
   Skills:
   <span *ngFor="let skill of employee.skills" (click)="backEvent.emit(skill)">{{

@@ -39,6 +39,7 @@
           </app-slide-panel>
           <div class="footer">
             <button
+              *ngIf="loggedUser?.isAdmin"
               mat-raised-button
               (click)="addEmployee(); filter.clearForm()"
             >

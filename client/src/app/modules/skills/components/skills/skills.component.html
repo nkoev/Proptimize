@@ -1,24 +1,35 @@
 <div class="top-container">
-    <div class="card-container">
-
-        <div class="card-header">
-            <app-header></app-header>
-        </div>
-
-        <div class="card-content">
-            <div class="navigation">
-                <app-navigation></app-navigation>
-            </div>
-
-            <div class="content">
-                <div class="header">
-                    <div class="title">SKILLS</div>
-                    <div class="date">{{today | date}}</div>
-                </div>
-
-                <div class="main"> ADD CONTENT </div>
-            </div>
-        </div>
-
+  <div class="card-container">
+    <div class="card-header">
+      <app-header></app-header>
     </div>
+
+    <div class="card-content">
+      <div class="navigation">
+        <app-navigation></app-navigation>
+      </div>
+
+      <div class="content">
+        <div class="header">
+          <div class="title">SKILLS</div>
+          <div class="date">{{ today | date }}</div>
+        </div>
+
+        <div class="main">
+          <mat-list class="list">
+            <mat-list-item class="item" *ngFor="let skill of skills">
+              {{ skill }}</mat-list-item
+            >
+          </mat-list>
+          <mat-form-field
+            ><mat-label>Skill</mat-label><input matInput [formControl]="skill"
+          /></mat-form-field>
+          &nbsp;
+          <button mat-raised-button (click)="addSkill()">
+            Add new skill
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
