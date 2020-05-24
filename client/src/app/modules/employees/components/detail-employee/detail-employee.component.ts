@@ -22,6 +22,6 @@ export class DetailEmployeeComponent implements OnInit {
   ngOnInit(): void {}
 
   goToProject(projectId: string) {
-    this.router.navigate(['/projects', projectId]);
+    this.router.navigate(['/projects', { queryParams: { id: projectId } }]);
   }
 }

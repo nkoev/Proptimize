@@ -47,3 +47,9 @@
   background-image: url("../../../../assets/icons/logout.png");
   background-size: cover;
 }
+
+.left {
+  display: flex;
+  align-items: center;
+  width: 20%;
+}
