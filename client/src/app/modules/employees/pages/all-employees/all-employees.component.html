@@ -19,7 +19,6 @@
           <app-slide-panel [activePane]="activePane">
             <div leftPane>
               <app-employees-list
-                [filteringFormComp]="filteringFormComp"
                 [filteredEmployees]="filteredEmployees"
                 [filteredManagers]="filteredManagers"
                 (showEmployee)="showDetailEmployee($event)"
