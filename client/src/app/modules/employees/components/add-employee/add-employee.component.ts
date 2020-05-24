@@ -115,6 +115,7 @@ export class AddEmployeeComponent implements OnInit {
 
   private toUserDTO(form: FormGroup): UserDTO {
     const user: UserDTO = {
+      uid: undefined,
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       position: form.value.position,

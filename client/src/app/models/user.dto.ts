@@ -1,4 +1,5 @@
 export class UserDTO {
+  uid: string;
   firstName: string;
   lastName: string;
   position: string;

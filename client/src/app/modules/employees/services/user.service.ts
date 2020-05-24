@@ -46,7 +46,7 @@ export class UserService {
         }
       )
       .pipe(
-        tap((res) => this.usersCol.doc(res.uid).set(user)),
+        tap((res) => this.usersCol.doc(res.uid).set({ ...user, uid: res.uid })),
         map(() => {
           return { username: this.username, password: this.password };
         })

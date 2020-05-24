@@ -15,7 +15,7 @@
       <div class="nav-text">Employees</div>
     </div>
 
-    <div class="nav-option" routerLink="/skills">
+    <div *ngIf="loggedUser?.isAdmin" class="nav-option" routerLink="/skills">
       <div class="nav-icon skills"></div>
       <div class="nav-text">Skills</div>
     </div>

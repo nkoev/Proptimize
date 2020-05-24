@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.auth.loggedUser$.subscribe((res) => {
       if (res) {
-        this.initials = res.email[0].toUpperCase();
+        this.initials = res.firstName[0].toUpperCase();
       }
     });
   }
