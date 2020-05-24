@@ -1,20 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormControl,
-} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeDTO } from 'src/app/models/employee.dto';
 import { UserService } from '../../services/user.service';
 import { UserDTO } from 'src/app/models/user.dto';
-import {
-  MatDialogRef,
-  MatDialog,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentReference, DocumentData } from '@google-cloud/firestore';
 
 @Component({
@@ -32,7 +22,6 @@ export class AddEmployeeComponent implements OnInit {
     private employeeService: EmployeeService,
     private userService: UserService,
     private dialogRef: MatDialogRef<AddEmployeeComponent>,
-    private matDialog: MatDialog,
     @Inject(MAT_DIALOG_DATA)
     private data: { skillsList: string[]; managers: DocumentReference[] }
   ) {
@@ -93,11 +82,9 @@ export class AddEmployeeComponent implements OnInit {
 
   private registerUser(form: FormGroup) {
     this.userService.registerUser(this.toUserDTO(form)).subscribe(
-      (res) => {
-        this.matDialog.open(CredentialsMemoComponent, {
-          data: { username: res.username, password: res.password },
-        });
+      () => {
         this.dialogRef.close();
+        console.log('Successful registration');
       },
       (err) => console.log(err.message)
     );
@@ -122,6 +109,7 @@ export class AddEmployeeComponent implements OnInit {
   private toUserDTO(form: FormGroup): UserDTO {
     const user: UserDTO = {
       uid: undefined,
+      email: form.value.email,
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       position: form.value.position,

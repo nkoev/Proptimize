@@ -5,6 +5,7 @@ import { UserDTO } from 'src/app/models/user.dto';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: CoreModule,
@@ -18,17 +19,14 @@ export class AuthService {
         if (user) {
           return this.afs.doc<UserDTO>(`users/${user.uid}`).valueChanges();
         } else {
-          return null as Observable<null>;
+          return of(null);
         }
       })
     );
   }
 
   async login(username: string, password: string) {
-    return await this.afAuth.signInWithEmailAndPassword(
-      `${username}@proptimize.com`,
-      password
-    );
+    return await this.afAuth.signInWithEmailAndPassword(username, password);
   }
 
   async logout() {

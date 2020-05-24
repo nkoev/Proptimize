@@ -3,7 +3,6 @@ import { EmployeesRoutingModule } from './employees-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AllEmployeesComponent } from './pages/all-employees/all-employees.component';
 import { AddEmployeeComponent } from './components/add-employee/add-employee.component';
-import { CredentialsMemoComponent } from './components/credentials-memo/credentials-memo.component';
 import { EmployeesFilteringFormComponent } from './components/employees-filtering-form/employees-filtering-form.component';
 import { OrgChartComponent } from './components/orgchart/orgchart.component';
 import { GoogleChartsModule } from 'angular-google-charts';
@@ -15,7 +14,6 @@ import { DetailEmployeeComponent } from './components/detail-employee/detail-emp
     AllEmployeesComponent,
     DetailEmployeeComponent,
     AddEmployeeComponent,
-    CredentialsMemoComponent,
     EmployeesFilteringFormComponent,
     OrgChartComponent,
     EmployeesListComponent,
