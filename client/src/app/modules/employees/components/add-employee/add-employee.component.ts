@@ -1,5 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeDTO } from 'src/app/models/employee.dto';
 import { UserService } from '../../services/user.service';
@@ -44,6 +49,7 @@ export class AddEmployeeComponent implements OnInit {
       isManager: false,
       isAdmin: false,
       skills: [null, Validators.required],
+      email: null,
     });
     this.setIsManagerValidators();
   }
@@ -131,21 +137,21 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   private setIsManagerValidators() {
-    const managedByControl = this.employeeForm.get('managedBy');
+    const emailControl = this.employeeForm.get('email');
     const skillsControl = this.employeeForm.get('skills');
 
     this.employeeForm.get('isManager').valueChanges.subscribe((isManager) => {
       if (isManager) {
         skillsControl.setValidators(null);
-        skillsControl.disable();
+        emailControl.setValidators([Validators.required, Validators.email]);
       }
 
       if (!isManager) {
         skillsControl.setValidators([Validators.required]);
-        skillsControl.enable();
+        emailControl.setValidators(null);
       }
 
-      managedByControl.updateValueAndValidity();
+      emailControl.updateValueAndValidity();
       skillsControl.updateValueAndValidity();
     });
   }
