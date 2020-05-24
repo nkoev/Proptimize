@@ -19,13 +19,13 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      username: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required]],
     });
   }
 
-  get username() {
-    return this.loginForm.get('username');
+  get email() {
+    return this.loginForm.get('email');
   }
   get password() {
     return this.loginForm.get('password');
@@ -33,7 +33,7 @@ export class LoginFormComponent implements OnInit {
 
   login() {
     this.auth
-      .login(this.username.value, this.password.value)
+      .login(this.email.value, this.password.value)
       .then(() => {
         console.log('logged in');
         this.router.navigate(['dashboard']);

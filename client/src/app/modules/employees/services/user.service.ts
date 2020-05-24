@@ -7,7 +7,8 @@ import { UserDTO } from 'src/app/models/user.dto';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DocumentData } from '@google-cloud/firestore';
-import { map, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,11 @@ export class UserService {
   private usersCol: AngularFirestoreCollection;
   allUsers$: Observable<DocumentData[]>;
 
-  constructor(private afs: AngularFirestore, private http: HttpClient) {
+  constructor(
+    private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private http: HttpClient
+  ) {
     this.usersCol = this.afs.collection<UserDTO>('users');
     this.allUsers$ = this.usersCol
       .snapshotChanges()
@@ -41,7 +46,10 @@ export class UserService {
         }
       )
       .pipe(
-        tap((res) => this.usersCol.doc(res.uid).set({ ...user, uid: res.uid }))
+        tap((res) => this.afAuth.sendPasswordResetEmail(res.email)),
+        switchMap((res) =>
+          this.usersCol.doc(res.uid).set({ ...user, uid: res.uid })
+        )
       );
   }
 }
