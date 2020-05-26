@@ -1,1 +1,110 @@
-<p>add-project works!</p>
+<div class="form-container">
+    <form [formGroup]="projectForm">
+        <h2>Project Info</h2>
+
+        <div class="info-container">
+            <mat-form-field class="name">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" />
+            </mat-form-field>
+            <br />
+
+            <mat-form-field class="target-in-days">
+                <mat-label>Target In Days</mat-label>
+                <input min="1" max="100" type="number" matInput formControlName="targetInDays" />
+            </mat-form-field>
+            <br />
+
+            <mat-form-field class="description">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+            </mat-form-field>
+            <br />
+        </div>
+
+        <div class="skills-container">
+            <h3>Skills</h3> <button (click)="addSkill($event)">Add Skill</button>
+            <div formArrayName="skills" *ngFor="let skill of projectForm['controls'].skills['controls']; let i=index">
+                <div formGroupName={{i}} class="single-skill">
+
+                    <!-- The repeated skill template START-->
+
+                    <mat-form-field>
+                        <mat-label>Skill</mat-label>
+                        <mat-select #sl formControlName="skill"
+                            (selectionChange)="getSkilledEmployees($event.value, i)">
+                            <mat-option *ngFor="let skill of skillsList" [value]="skill"
+                                [disabled]="this.skillsListD.includes(skill)">
+                                {{skill}} </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Target in Hours:</mat-label>
+                        <input matInput min="0" max="1000" type="number" formControlName="targetInHours">
+                    </mat-form-field>
+
+                    <button (click)="removeSkill(i, $event)">Delete Skill</button>
+
+                    <h4>Employees</h4> <button (click)="addEmployee($event, i)" [disabled]="canAddEmployee(i)">Add
+                        Employee</button>
+                    <div formArrayName="employees"
+                        *ngFor="let employee of skill['controls'].employees['controls']; let j=index">
+                        <div formGroupName={{j}} class="employee-container">
+
+                            <!-- The repeated employee template START-->
+
+                            <mat-form-field>
+                                <mat-label>Employee</mat-label>
+                                <mat-select #sl2 formControlName="employee"
+                                    (selectionChange)="onEmployeeSelect($event.value, i, j)">
+                                    <mat-option *ngFor="let employee of employeesListFiltered[i]" [value]="employee"
+                                        [disabled]="this.selectedEmployeesList[i].includes(employee)">
+                                        {{employee.firstName }} {{employee.lastName }} </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="this.canAlocateHours(i, j)" (click)="getHoursPrev(i, j)">
+                                <mat-label>Daily Input:</mat-label>
+                                <mat-select #sl3 formControlName="hoursPerSkill"
+                                    (selectionChange)="onHoursSelect($event.value, i, j)">
+                                    <mat-option *ngFor="let hour of hours" [value]="hour"
+                                        [disabled]="hoursDisabled(i, j, hour)">
+                                        {{hour}}</mat-option>
+                                </mat-select>
+                                <!-- <input matInput min="1" max="8" type="number" formControlName="hoursPerSkill"> -->
+                            </mat-form-field>
+
+                            <button (click)="removeEmployee(i, j)">Delete Employee</button>
+
+                            <!-- The repeated employee template END -->
+
+                        </div>
+                    </div>
+
+                    <!-- The repeated skill template END-->
+
+                </div>
+            </div>
+        </div>
+
+        <mat-action-row>
+            <button mat-raised-button type="button" class="close-btn" (click)="this.dialogRef.close()"> Cancel </button>
+            <button mat-raised-button type="button" class="submit-btn" (click)="onApply(projectForm)"> Apply </button>
+        </mat-action-row>
+
+        <div #charts *ngIf="showChart === 1"></div>
+        <div *ngIf="showChart === 2">
+            <p>You have not added any skills to this project.
+                You might want to add some now or you can do that later. </p>
+        </div>
+        <div *ngIf="showChart === 3">
+            <p> You have not added any employees to this project.
+                You might want to add some now or you can do that later. </p>
+        </div>
+
+        <mat-action-row *ngIf="canSubmit">
+            <button mat-raised-button type="button" class="submit-btn" (click)="onSubmit(projectForm)"> Save </button>
+        </mat-action-row>
+    </form>
+</div>

@@ -32,7 +32,7 @@ export class ProjectService {
   }
 
   addProject(project: ProjectCreateDTO): Promise<any> {
-    const newProject: ProjectDTO = {
+    const newProject: any = {
       reporter: {
         id: 'CU8zQQjjnIY3Q76ovnFP',
         firstName: 'Stamat',

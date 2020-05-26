@@ -1,0 +1,105 @@
+.form-container {
+    min-height: 40vh;
+    max-height: 70vh;
+    width: 60vw;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.info-container {
+    display: grid;
+    grid-template-columns: 7fr 2fr;
+    grid-template-rows: 5vh 8vh;
+    grid-template-areas: "name target"
+                         "description description";
+}
+
+.skills-container {
+    background-color: lightgrey;
+    border-radius: 5px;
+    padding: 0.8em;
+    margin-bottom: 1em;
+    width: 55vw;
+
+    overflow-y: auto;
+}
+
+.name {
+    grid-area: name;
+    width: 45vw;
+}
+.description {
+    grid-area: description;
+    width: 57vw;
+    margin-top: 0.5em;
+}
+.description textarea {
+    resize: none;
+    height: 8vh;
+}
+.target-in-days {
+    grid-area: target;
+    width: 10vw;
+}
+
+.single-skill {
+    background-color: moccasin;
+    border-radius: 5px;
+    margin-bottom: 1em;
+    padding: 0.5em;
+}
+
+mat-action-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    margin-bottom: 1em;
+}
+
+.employee-container {
+    background-color: peachpuff;
+    border-radius: 5px;
+    padding: 0.6em;
+    margin-bottom: 1em;
+}
+
+/*  MEDIA */
+@media (min-width: 768px) and (max-width: 1150px) { 
+    
+    .form-container {
+        width: 65vw;
+    }
+
+    .skills-container {
+        width: 62vw;
+    }
+}
+
+/*  MEDIA */
+@media (max-width: 767px) {
+    
+    .form-container {
+        width: 90vw;
+    }
+
+    .skills-container {
+        width: 60vw;
+    }
+    
+    .info-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .name {
+        width: 60vw;
+    }
+    .description {
+        width: 60vw;
+    }
+    .target-in-days {
+        width: 60vw;
+    }
+}

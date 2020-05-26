@@ -1,8 +1,8 @@
 <div class="projects-container">
 
     <div>
-        <mat-list *ngFor="let project of projects | async">
-            <mat-list-item>
+        <mat-list *ngFor="let project of (projects | async); let i = index">
+            <mat-list-item (click)="onProjectSelect(i)">
                 <h3 matLine> {{project.name}} </h3>
                 <p matLine>
                     <span>By: {{ project.reporter.firstName }} {{project.reporter.lastName }} </span>

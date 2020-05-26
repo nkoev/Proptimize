@@ -22,8 +22,8 @@
                             <div class="add-project-btn">
                                 <button mat-raised-button (click)="addProject()">New Project</button>
                             </div>
-                            <app-projects-list [projects]="projects" [isLeftVisible]="isLeftVisible"
-                                (click)="isLeftVisible = !isLeftVisible">
+                            <app-projects-list [projects]="projects" (click)="togglePanes(false)"
+                                (selectProjectEvent)="getSingleProject($event)">
                             </app-projects-list>
                             <app-projects-filtering-form [skillsList]="skillsList" [statusList]="statusList"
                                 (filterEvent)="filterProjects($event)" #filter>

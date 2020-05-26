@@ -8,9 +8,18 @@ import { HeaderComponent } from './components/header/header.component';
 import { SlidePanelComponent } from './components/slide-panel/slide-panel.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
+
 @NgModule({
   declarations: [NavigationComponent, HeaderComponent, SlidePanelComponent],
-  imports: [CommonModule, AppMaterialModule, RouterModule, ReactiveFormsModule, FormsModule, ReactiveFormsModule, InfiniteScrollModule],
+  imports: [
+    CommonModule,
+    AppMaterialModule,
+    RouterModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    InfiniteScrollModule,
+  ],
   exports: [
     CommonModule,
     AppMaterialModule,

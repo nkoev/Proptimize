@@ -11,9 +11,7 @@ import * as _ from "lodash";
 export class ProjectsListComponent implements OnInit {
 
   @Input() projects: Observable<ProjectDTO[]>;
-  @Input() isLeftVisible: boolean;
-  // @Input() finished: boolean;
-  // @Output() updateProjects = new EventEmitter<any>();
+  @Output() selectProjectEvent = new EventEmitter<any>();
 
   selector = '.projects-container';
   lastKeypress = 0;
@@ -22,13 +20,14 @@ export class ProjectsListComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  ngAfterViewInit() {
-    // this.projects.subscribe(data => console.log(data));
-    console.log(this.isLeftVisible);
-  }
-
   onScroll() {
     console.log('scrolled');
+  }
+
+  onProjectSelect(idx: number) {
+    let selectedProject: ProjectDTO;
+    this.projects.subscribe(data => selectedProject = data[idx]);
+    this.selectProjectEvent.emit(selectedProject);
   }
 
 }

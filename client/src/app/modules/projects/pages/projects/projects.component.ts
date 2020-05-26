@@ -1,11 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { tap, take } from 'rxjs/operators';
 import * as _ from "lodash";
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { DocumentData } from '@angular/fire/firestore/interfaces';
+import { MatDialog } from '@angular/material/dialog';
+import { AddProjectComponent } from '../../components/add-project/add-project.component';
+import { Router, ActivatedRoute } from '@angular/router';
+import { EmployeeService } from 'src/app/modules/employees/services/employee.service';
 
 @Component({
   selector: 'app-projects',
@@ -19,15 +22,18 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   projectsData: ProjectDTO[];
   projects$: BehaviorSubject<ProjectDTO[]> = new BehaviorSubject([]);
   projects: Observable<ProjectDTO[]> = this.projects$.asObservable();
+  singleProject: ProjectDTO;
   loggedUser: DocumentData;
   private subscriptions: Subscription[] = [];
+  private flag = true;
 
   skillsList = [
-    'hakuna',
-    'matata',
-    'bira',
-    'shisha'
+    'BellyDancing',
+    'JavaScript',
+    'Java',
   ];
+  employeesListData = new BehaviorSubject([]);
+  employeesList = this.employeesListData.asObservable();
   statusList = [
     'In Progress',
     'Closed',
@@ -35,7 +41,11 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   constructor(
     private projectService: ProjectService,
+    private employeeService: EmployeeService,
     private auth: AuthService,
+    private matDialog: MatDialog,
+    private router: Router,
+    private readonly route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -43,11 +53,24 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       console.log(data);
       this.projectsData = data;
       this.projects$.next(data);
+
+      const sub3 = this.route.queryParams.subscribe((params) => {
+        const projectId = params['id'];
+        if (projectId && this.projectsData) {
+          this.singleProject = this.projects$.getValue().filter(p => p.id === projectId)[0];
+          console.log(this.singleProject);
+          this.togglePanes(false);
+        }
+      });
     });
 
     const sub2 = this.auth.loggedUser$.subscribe(
       (res) => (this.loggedUser = res)
     );
+
+    const sub4 = this.employeeService.$allEmployees.subscribe((employees) => {
+      this.employeesListData.next(employees.map(employee => employee.data()));
+    });
 
     this.subscriptions.push(sub1, sub2);
   }
@@ -93,10 +116,19 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   addProject() {
-    this.projectService.addProject({ name: 'Project #1', description: 'This should be a description', targetInDays: 5 });
+    this.matDialog.open(AddProjectComponent, {
+      data: { skillsList: this.skillsList, employeesList: this.employeesList },
+    });
   }
 
-  togglePanes(event: any) {
+  togglePanes(event: boolean) {
     this.isLeftVisible = event;
+    event
+      ? this.router.navigate(['/' + 'projects'])
+      : this.router.navigate(['/' + 'projects'], { queryParams: { id: this.singleProject.id } })
+  }
+
+  getSingleProject(project: any) {
+    this.singleProject = project;
   }
 }

@@ -14,7 +14,7 @@
  /* MEDIA */
 @media (min-width: 768px) and (max-width: 1300px) {
     .projects-container {
-        width: 75vw;
+        width: 71vw;
         height: 50vh;
         align-self: flex-start;
     }
