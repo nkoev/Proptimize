@@ -6,6 +6,7 @@ import { UserService } from '../../services/user.service';
 import { UserDTO } from 'src/app/models/employees/user.dto';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentReference, DocumentData } from '@google-cloud/firestore';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-add-employee',
@@ -21,7 +22,8 @@ export class AddEmployeeComponent implements OnInit {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private userService: UserService,
-    private dialogRef: MatDialogRef<AddEmployeeComponent>,
+    public dialogRef: MatDialogRef<AddEmployeeComponent>,
+    private notificator: NotificationService,
     @Inject(MAT_DIALOG_DATA)
     private data: { skillsList: string[]; managers: DocumentReference[] }
   ) {
@@ -64,6 +66,9 @@ export class AddEmployeeComponent implements OnInit {
   get skills() {
     return this.employeeForm.get('skills');
   }
+  get email() {
+    return this.employeeForm.get('email');
+  }
 
   onSubmit(form: FormGroup) {
     form.invalid
@@ -76,17 +81,28 @@ export class AddEmployeeComponent implements OnInit {
   private addEmployee(form: FormGroup) {
     this.employeeService
       .addEmployee(this.toEmployeeDTO(form))
-      .then(() => this.dialogRef.close())
-      .catch((err) => console.log(err.message));
+      .then(() => {
+        this.dialogRef.close();
+        this.notificator.success('Employee added successfully!');
+      })
+      .catch((err) => {
+        this.notificator.error('Add employee failed.');
+        console.log(err.message);
+      });
   }
 
   private registerUser(form: FormGroup) {
     this.userService.registerUser(this.toUserDTO(form)).subscribe(
       () => {
         this.dialogRef.close();
-        console.log('Successful registration');
+        this.notificator.success(
+          'Successful registration!. Password reset email was sent.'
+        );
       },
-      (err) => console.log(err.message)
+      (err) => {
+        this.notificator.error('Registration failed.');
+        console.log(err.message);
+      }
     );
   }
 

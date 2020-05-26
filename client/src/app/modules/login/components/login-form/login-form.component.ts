@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
+import { NotificationService } from 'src/app/modules/core/services/notification.service';
 
 @Component({
   selector: 'app-login-form',
@@ -14,7 +15,8 @@ export class LoginFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private notificator: NotificationService
   ) {}
 
   ngOnInit() {
@@ -31,13 +33,28 @@ export class LoginFormComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  login() {
+  onSubmit(form: FormGroup) {
+    form.invalid ? this.notifyErrors() : this.login();
+  }
+
+  private notifyErrors() {
+    if (this.password.errors?.required) {
+      this.notificator.warn(' Please, enter your password.');
+    }
+    if (this.email.errors?.required || this.email.errors?.email) {
+      this.notificator.warn(' Please, provide valid email address.');
+    }
+  }
+
+  private login() {
     this.auth
       .login(this.email.value, this.password.value)
       .then(() => {
-        console.log('logged in');
         this.router.navigate(['dashboard']);
       })
-      .catch(() => console.log('login failed'));
+      .catch((err) => {
+        this.notificator.error('Please, check your email and password.');
+        console.log(err.message);
+      });
   }
 }

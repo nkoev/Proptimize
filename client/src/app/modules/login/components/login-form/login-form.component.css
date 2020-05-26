@@ -5,12 +5,3 @@
 mat-form-field {
   max-width: 100%;
 }
-
-#login-button {
-  background-color: lavender;
-  max-width: 100%;
-}
-
-#login-button:hover {
-  background-color: lavenderblush;
-}

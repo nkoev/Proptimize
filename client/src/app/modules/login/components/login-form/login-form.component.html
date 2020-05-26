@@ -1,6 +1,6 @@
 <div class="login-container">
   <mat-card>
-    <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
       <mat-form-field>
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" required />
@@ -11,7 +11,7 @@
         <input type="password" matInput formControlName="password" required />
       </mat-form-field>
       <br />
-      <button id="login-button" mat-raised-button type="submit">
+      <button class="indigo-bttn" mat-raised-button type="submit">
         Login
       </button>
     </form>
