@@ -36,6 +36,10 @@ export class UserService {
     return await this.usersCol.doc(userId).ref.get();
   }
 
+  async updateUser(userId: string, data: Partial<UserDTO>): Promise<void> {
+    return await this.usersCol.doc(userId).update(data);
+  }
+
   registerUser(user: UserDTO): Observable<any> {
     return this.http
       .post<DocumentData>(

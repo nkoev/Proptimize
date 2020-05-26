@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { Router } from '@angular/router';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 
 @Component({
   selector: 'app-header',
@@ -8,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  avatarUrl: string;
   initials: string;
   constructor(private auth: AuthService, private router: Router) {}
 
@@ -15,6 +17,7 @@ export class HeaderComponent implements OnInit {
     this.auth.loggedUser$.subscribe((res) => {
       if (res) {
         this.initials = res.firstName[0].toUpperCase();
+        this.avatarUrl = res.avatarUrl;
       }
     });
   }

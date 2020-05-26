@@ -53,7 +53,7 @@ export class LoginFormComponent implements OnInit {
         this.router.navigate(['dashboard']);
       })
       .catch((err) => {
-        this.notificator.error('Please, check your email and password.');
+        this.notificator.error('Invalid email or password.');
         console.log(err.message);
       });
   }

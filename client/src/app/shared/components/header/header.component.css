@@ -24,7 +24,13 @@
   border-radius: 50%;
   margin-right: 7px;
 }
-
+.right .avatar .image {
+  margin: 1em;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  align-self: center;
+}
 .right .avatar .default {
   font-size: 1.5em;
   font-weight: 500;
