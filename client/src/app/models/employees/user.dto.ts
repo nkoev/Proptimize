@@ -1,4 +1,6 @@
 export class UserDTO {
+  email: string;
+  uid: string;
   firstName: string;
   lastName: string;
   position: string;

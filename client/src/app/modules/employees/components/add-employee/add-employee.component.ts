@@ -1,16 +1,12 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
-import { EmployeeDTO } from 'src/app/models/employee.dto';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { UserService } from '../../services/user.service';
-import { UserDTO } from 'src/app/models/user.dto';
-import {
-  MatDialogRef,
-  MatDialog,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { CredentialsMemoComponent } from '../credentials-memo/credentials-memo.component';
+import { UserDTO } from 'src/app/models/employees/user.dto';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentReference, DocumentData } from '@google-cloud/firestore';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-add-employee',
@@ -26,8 +22,8 @@ export class AddEmployeeComponent implements OnInit {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private userService: UserService,
-    private dialogRef: MatDialogRef<AddEmployeeComponent>,
-    private matDialog: MatDialog,
+    public dialogRef: MatDialogRef<AddEmployeeComponent>,
+    private notificator: NotificationService,
     @Inject(MAT_DIALOG_DATA)
     private data: { skillsList: string[]; managers: DocumentReference[] }
   ) {
@@ -44,6 +40,7 @@ export class AddEmployeeComponent implements OnInit {
       isManager: false,
       isAdmin: false,
       skills: [null, Validators.required],
+      email: null,
     });
     this.setIsManagerValidators();
   }
@@ -69,6 +66,9 @@ export class AddEmployeeComponent implements OnInit {
   get skills() {
     return this.employeeForm.get('skills');
   }
+  get email() {
+    return this.employeeForm.get('email');
+  }
 
   onSubmit(form: FormGroup) {
     form.invalid
@@ -81,19 +81,28 @@ export class AddEmployeeComponent implements OnInit {
   private addEmployee(form: FormGroup) {
     this.employeeService
       .addEmployee(this.toEmployeeDTO(form))
-      .then(() => this.dialogRef.close())
-      .catch((err) => console.log(err.message));
+      .then(() => {
+        this.dialogRef.close();
+        this.notificator.success('Employee added successfully!');
+      })
+      .catch((err) => {
+        this.notificator.error('Add employee failed.');
+        console.log(err.message);
+      });
   }
 
   private registerUser(form: FormGroup) {
     this.userService.registerUser(this.toUserDTO(form)).subscribe(
-      (res) => {
-        this.matDialog.open(CredentialsMemoComponent, {
-          data: { username: res.username, password: res.password },
-        });
+      () => {
         this.dialogRef.close();
+        this.notificator.success(
+          'Successful registration!. Password reset email was sent.'
+        );
       },
-      (err) => console.log(err.message)
+      (err) => {
+        this.notificator.error('Registration failed.');
+        console.log(err.message);
+      }
     );
   }
 
@@ -115,6 +124,8 @@ export class AddEmployeeComponent implements OnInit {
 
   private toUserDTO(form: FormGroup): UserDTO {
     const user: UserDTO = {
+      uid: undefined,
+      email: form.value.email,
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       position: form.value.position,
@@ -130,21 +141,21 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   private setIsManagerValidators() {
-    const managedByControl = this.employeeForm.get('managedBy');
+    const emailControl = this.employeeForm.get('email');
     const skillsControl = this.employeeForm.get('skills');
 
     this.employeeForm.get('isManager').valueChanges.subscribe((isManager) => {
       if (isManager) {
         skillsControl.setValidators(null);
-        skillsControl.disable();
+        emailControl.setValidators([Validators.required, Validators.email]);
       }
 
       if (!isManager) {
         skillsControl.setValidators([Validators.required]);
-        skillsControl.enable();
+        emailControl.setValidators(null);
       }
 
-      managedByControl.updateValueAndValidity();
+      emailControl.updateValueAndValidity();
       skillsControl.updateValueAndValidity();
     });
   }

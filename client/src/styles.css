@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+/* 
+orange #feb70d
+indigo #373a4d
+*/
 
 html,
 body {
@@ -15,4 +19,13 @@ body {
 }
 .orgchart-name {
   font-weight: bold;
+}
+
+.indigo-bttn {
+  background-color: rgba(55, 58, 77, 0.5);
+  color: white;
+}
+
+.indigo-bttn:hover {
+  background-color: rgba(55, 58, 77);
 }

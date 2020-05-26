@@ -1,0 +1,27 @@
+<div class="radio-group">
+  <mat-radio-group aria-label="Select an option">
+    <mat-radio-button (change)="type = 'employees'">employees</mat-radio-button
+    >&nbsp;
+    <mat-radio-button (change)="type = 'managers'" value="1"
+      >managers</mat-radio-button
+    >
+  </mat-radio-group>
+</div>
+<mat-list class="list">
+  <div *ngIf="type === 'employees'">
+    <mat-list-item
+      class="item"
+      *ngFor="let employee of filteredEmployees"
+      (click)="showEmployee.emit(employee)"
+      >{{ employee.firstName }}&nbsp;{{ employee.lastName }}</mat-list-item
+    >
+  </div>
+  <div *ngIf="type === 'managers'">
+    <mat-list-item
+      class="item"
+      *ngFor="let manager of filteredManagers"
+      (click)="showEmployee.emit(manager)"
+      >{{ manager.firstName }}&nbsp;{{ manager.lastName }}</mat-list-item
+    >
+  </div>
+</mat-list>

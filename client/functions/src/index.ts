@@ -30,7 +30,7 @@ exports.register = functions
       })
       .then((userRecord) => {
         console.log('User ' + email + 'created');
-        res.send({ uid: userRecord.uid });
+        res.send({ uid: userRecord.uid, email: userRecord.email });
       })
       .catch((error) => {
         res.status(500).send(`Error creating new user: ${error.message}`);

@@ -52,6 +52,10 @@ export class EmployeesFilteringFormComponent implements OnInit, OnDestroy {
     return this.filteringForm.get('subordinates');
   }
 
+  setSkillsField(skill: string) {
+    this.filteringForm.patchValue({ skills: [skill] });
+  }
+
   clearForm() {
     this.filteringForm.reset();
   }
