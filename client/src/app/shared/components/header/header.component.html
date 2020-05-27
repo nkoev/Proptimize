@@ -8,10 +8,8 @@
 
   <div class="right">
     <div class="avatar">
-      <img *ngIf="avatarUrl; else elseBlock" class="image" [src]="avatarUrl" />
-      <ng-template #elseBlock
-        ><div class="default">{{ initials }}</div></ng-template
-      >
+      <img *ngIf="avatarUrl" class="image" [src]="avatarUrl" />
+      <div *ngIf="!avatarUrl" class="default">{{ initials }}</div>
     </div>
 
     <div class="logout">

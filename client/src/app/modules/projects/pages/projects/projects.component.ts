@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { DocumentData } from '@angular/fire/firestore/interfaces';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,6 @@ import { EmployeeService } from 'src/app/modules/employees/services/employee.ser
   styleUrls: ['./projects.component.css'],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
-
   isLeftVisible = true;
   today = new Date();
   projectsData: ProjectDTO[];
@@ -27,17 +26,10 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private flag = true;
 
-  skillsList = [
-    'BellyDancing',
-    'JavaScript',
-    'Java',
-  ];
+  skillsList = ['BellyDancing', 'JavaScript', 'Java'];
   employeesListData = new BehaviorSubject([]);
   employeesList = this.employeesListData.asObservable();
-  statusList = [
-    'In Progress',
-    'Closed',
-  ];
+  statusList = ['In Progress', 'Closed'];
 
   constructor(
     private projectService: ProjectService,
@@ -45,11 +37,11 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private matDialog: MatDialog,
     private router: Router,
-    private readonly route: ActivatedRoute,
-  ) { }
+    private readonly route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    const sub1 = this.projectService.getAll().subscribe(data => {
+    const sub1 = this.projectService.getAll().subscribe((data) => {
       console.log(data);
       this.projectsData = data;
       this.projects$.next(data);
@@ -57,20 +49,25 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       const sub3 = this.route.queryParams.subscribe((params) => {
         const projectId = params['id'];
         if (projectId && this.projectsData) {
-          this.singleProject = this.projects$.getValue().filter(p => p.id === projectId)[0];
+          this.singleProject = this.projects$
+            .getValue()
+            .filter((p) => p.id === projectId)[0];
           console.log(this.singleProject);
           this.togglePanes(false);
         }
       });
     });
 
-    const sub2 = this.auth.loggedUser$.subscribe(
+    const sub2 = this.employeeService.$allEmployees.subscribe((employees) => {
+      this.employeesListData.next(employees.map((employee) => employee.data()));
+    });
+
+    const sub4 = this.route.data.subscribe(
+      (data) => (this.loggedUser = data.loggedUser)
+    );
+    const sub5 = this.auth.loggedUser$.subscribe(
       (res) => (this.loggedUser = res)
     );
-
-    const sub4 = this.employeeService.$allEmployees.subscribe((employees) => {
-      this.employeesListData.next(employees.map(employee => employee.data()));
-    });
 
     this.subscriptions.push(sub1, sub2);
   }
@@ -100,15 +97,22 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     if (event.reporter) {
       filteredProjects = filteredProjects.filter((project) => {
         if (
-          project.reporter?.firstName.toLowerCase().includes(event.reporter.toLowerCase())
-          || project.reporter?.lastName.toLowerCase().includes(event.reporter.toLowerCase())
-        ) { return true }
-        else { return false }
+          project.reporter?.firstName
+            .toLowerCase()
+            .includes(event.reporter.toLowerCase()) ||
+          project.reporter?.lastName
+            .toLowerCase()
+            .includes(event.reporter.toLowerCase())
+        ) {
+          return true;
+        } else {
+          return false;
+        }
       });
     }
     if (event.myProjects) {
-      filteredProjects = filteredProjects.filter((project) =>
-        project.reporter?.id === this.loggedUser.uid
+      filteredProjects = filteredProjects.filter(
+        (project) => project.reporter?.id === this.loggedUser.uid
       );
     }
 
@@ -125,7 +129,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.isLeftVisible = event;
     event
       ? this.router.navigate(['/' + 'projects'])
-      : this.router.navigate(['/' + 'projects'], { queryParams: { id: this.singleProject.id } })
+      : this.router.navigate(['/' + 'projects'], {
+          queryParams: { id: this.singleProject.id },
+        });
   }
 
   getSingleProject(project: any) {

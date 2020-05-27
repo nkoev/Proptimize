@@ -10,6 +10,7 @@ import { OrgChartComponent } from '../../components/orgchart/orgchart.component'
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { EmployeesFilteringFormComponent } from '../../components/employees-filtering-form/employees-filtering-form.component';
 import { SkillService } from 'src/app/modules/skills/skill.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-all-employees',
@@ -33,6 +34,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   constructor(
     private matDialog: MatDialog,
     private employeeService: EmployeeService,
+    private route: ActivatedRoute,
     private auth: AuthService,
     private userService: UserService,
     private skillService: SkillService
@@ -49,10 +51,13 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
         employee.data()
       );
     });
-    const sub3 = this.auth.loggedUser$.subscribe(
+    const sub3 = this.route.data.subscribe(
+      (data) => (this.loggedUser = data.loggedUser)
+    );
+    const sub4 = this.auth.loggedUser$.subscribe(
       (res) => (this.loggedUser = res)
     );
-    const sub4 = this.skillService
+    const sub5 = this.skillService
       .getSkills()
       .subscribe((res) => (this.skillsList = res));
     google.charts.load('current', { packages: ['orgchart'] });
