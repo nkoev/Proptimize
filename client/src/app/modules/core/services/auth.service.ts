@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { CoreModule } from '../core.module';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { UserDTO } from 'src/app/models/employees/user.dto';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { of } from 'rxjs';
 
@@ -11,18 +11,27 @@ import { of } from 'rxjs';
   providedIn: CoreModule,
 })
 export class AuthService {
-  loggedUser$: Observable<UserDTO>;
+  isLoggedIn$: Observable<boolean> = this.afAuth.authState.pipe(
+    map((loggedUser) => (loggedUser ? true : false))
+  );
+  private readonly loggedUserSubject$ = new BehaviorSubject<UserDTO>(null);
 
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
-    this.loggedUser$ = this.afAuth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.afs.doc<UserDTO>(`users/${user.uid}`).valueChanges();
-        } else {
-          return of(null);
-        }
-      })
-    );
+    this.afAuth.authState
+      .pipe(
+        switchMap((user) => {
+          if (user) {
+            return this.afs.doc<UserDTO>(`users/${user.uid}`).valueChanges();
+          } else {
+            return of(null);
+          }
+        })
+      )
+      .subscribe((res) => this.loggedUserSubject$.next(res));
+  }
+
+  public get loggedUser$(): Observable<UserDTO> {
+    return this.loggedUserSubject$.asObservable();
   }
 
   async login(username: string, password: string) {

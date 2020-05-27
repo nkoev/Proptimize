@@ -13,7 +13,7 @@ export class FileStorageService {
   ) {}
 
   async uploadAvatar(file: File, userId: string) {
-    const id = Math.random().toString(36).substring(2);
+    const id = userId;
     const ref = this.afStorage.ref(id);
     const result = await ref.put(file);
     ref
