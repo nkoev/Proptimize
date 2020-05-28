@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { DocumentData } from '@google-cloud/firestore';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
@@ -51,5 +52,20 @@ export class UserService {
           this.usersCol.doc(res.uid).set({ ...user, uid: res.uid })
         )
       );
+  }
+
+  addProject(userId: string, project: any) {
+    const employeeRef = this.usersCol.doc(userId);
+    employeeRef.update({
+      availableHours: firebase.firestore.FieldValue.increment(-project.dailyInput[0].hours),
+      projects: firebase.firestore.FieldValue.arrayUnion(project)
+    });
+  }
+
+  deleteProject(userId: string, project: any) {
+    const employeeRef = this.usersCol.doc(userId);
+    employeeRef.update({
+      projects: firebase.firestore.FieldValue.arrayRemove(project)
+    });
   }
 }

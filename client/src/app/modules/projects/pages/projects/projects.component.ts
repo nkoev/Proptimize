@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddProjectComponent } from '../../components/add-project/add-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from 'src/app/modules/employees/services/employee.service';
+import { SkillService } from 'src/app/modules/skills/skill.service';
 
 @Component({
   selector: 'app-projects',
@@ -25,15 +26,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   singleProject: ProjectDTO;
   loggedUser: DocumentData;
   private subscriptions: Subscription[] = [];
-  private flag = true;
-
-  skillsList = [
-    'BellyDancing',
-    'JavaScript',
-    'Java',
-  ];
-  employeesListData = new BehaviorSubject([]);
-  employeesList = this.employeesListData.asObservable();
+  skillsList: string[] = [];
+  employeesListData$ = new BehaviorSubject([]);
+  employeesList = this.employeesListData$.asObservable();
   statusList = [
     'In Progress',
     'Closed',
@@ -42,6 +37,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   constructor(
     private projectService: ProjectService,
     private employeeService: EmployeeService,
+    private skillService: SkillService,
     private auth: AuthService,
     private matDialog: MatDialog,
     private router: Router,
@@ -64,13 +60,19 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       });
     });
 
-    const sub2 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res)
-    );
+    const sub2 = this.auth.loggedUser$.subscribe(res => {
+      this.loggedUser = res;
+    });
 
     const sub4 = this.employeeService.$allEmployees.subscribe((employees) => {
-      this.employeesListData.next(employees.map(employee => employee.data()));
+      this.employeesListData$.next(employees.map(employee => {
+        const data = employee.data();
+        const id = employee.id;
+        return { id, ...data };
+      }));
     });
+
+    const sub5 = this.skillService.getSkills().subscribe((res: any) => (this.skillsList = res));
 
     this.subscriptions.push(sub1, sub2);
   }
@@ -116,8 +118,22 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   addProject() {
-    this.matDialog.open(AddProjectComponent, {
-      data: { skillsList: this.skillsList, employeesList: this.employeesList },
+    if (this.loggedUser.availableHours < 1) {
+      window.alert('You can\'t start a project, because you are already working 8h/day');
+      return;
+    }
+
+    const dialogData: any = {
+      skillsList: this.skillsList,
+      employeesList: this.employeesList,
+      loggedUser: this.loggedUser
+    };
+
+    AddProjectComponent.openProjectDialog(this.matDialog, dialogData).subscribe(result => {
+      if (result) {
+        const projectData = this.projectService.formToProjectData(result);
+        this.projectService.addProject(projectData, this.loggedUser);
+      }
     });
   }
 

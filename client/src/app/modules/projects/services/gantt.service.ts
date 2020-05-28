@@ -42,6 +42,9 @@ export class GanttService {
     const skills: { skill: string, endDate: Date, completeness: { amount: number, fill: boolean } }[] = [];
 
     let sumSkillHours: { skill: string, days: number }[] = [];
+    const manTarget = form.get('managementTarget').value;
+    const manHours = form.get('managementHours').value;
+    const manDays = manHours ? Math.ceil(manTarget / manHours) : -1;
     const targetInDays = form.get('targetInDays').value;
     const skillsC = form.get('skills') as FormArray;
     skillsC.controls.forEach(c => {
@@ -58,6 +61,7 @@ export class GanttService {
       const days = sum ? Math.ceil(target / sum) : -1;
       sumSkillHours.push({ skill: skill, days: days });
     });
+    sumSkillHours.push({ skill: 'Management', days: manDays });
     // const daysNeeded = Math.max(...sumSkillHours.map(s => s.days));
     endDate = moment(this.today).businessAdd(targetInDays)._d;
     sumSkillHours.forEach(s => {
@@ -67,7 +71,8 @@ export class GanttService {
           ? moment(this.today).businessAdd(s.days)._d
           : moment(this.today).businessAdd(targetInDays)._d,
         completeness: {
-          amount: s.days === -1 ? 0 : (s.days <= targetInDays ? 1 : Math.round(((targetInDays / s.days) + Number.EPSILON) * 100) / 100),
+          amount: s.days === -1 ? 0 :
+            (s.days <= targetInDays ? 1 : Math.round(((targetInDays / s.days) + Number.EPSILON) * 100) / 100),
           fill: s.days <= targetInDays ? false : true,
         }
       });
@@ -103,6 +108,7 @@ export class GanttService {
     skills: { skill: string, endDate: Date, completeness: { amount: number, fill: boolean } }[],
   ) {
     const series = this.buildSeries(skills);
+    const actualEndDate = new Date(Math.max.apply(null, skills.map(s => s.endDate)));
 
     Highcharts.ganttChart(elRef, {
       title: {
@@ -110,7 +116,7 @@ export class GanttService {
       },
       xAxis: {
         min: Date.UTC(this.today.getFullYear(), this.today.getMonth(), this.today.getDate()),
-        max: Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+        max: Date.UTC(actualEndDate.getFullYear(), actualEndDate.getMonth(), actualEndDate.getDate())
       },
       colors: ['#f78888'],
       series: [{

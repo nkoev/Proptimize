@@ -5,6 +5,7 @@ import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DocumentData } from '@google-cloud/firestore';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,29 @@ export class EmployeeService {
 
   async getAllEmployees() {
     return await this.employeesCol.ref.get();
+  }
+
+  async getEmployeeById(employeeId: string) {
+    return await this.employeesCol.doc(employeeId).ref.get();
+  }
+
+  addProject(employeeId: string, project: any) {
+    const sum = project.dailyInput.reduce((acc, e) => {
+      acc += e.hours;
+      return acc;
+    }, 0);
+    const employeeRef = this.employeesCol.doc(employeeId);
+    employeeRef.update({
+      availableHours: firebase.firestore.FieldValue.increment(-sum),
+      projects: firebase.firestore.FieldValue.arrayUnion(project)
+    });
+  }
+
+  removeProject(employeeId: string, project: any) {
+    const employeeRef = this.employeesCol.doc(employeeId);
+    employeeRef.update({
+      projects: firebase.firestore.FieldValue.arrayRemove(project)
+    });
   }
 
   async addEmployee(employee: EmployeeDTO) {

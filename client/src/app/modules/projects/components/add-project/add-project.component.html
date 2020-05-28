@@ -20,63 +20,98 @@
                 <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
             <br />
+
+            <div class="management">
+                <p class="text">Management: </p>
+            </div>
+
+            <mat-form-field class="management-target">
+                <mat-label>Target in Hours:</mat-label>
+                <input min="1" max="1000" type="number" matInput formControlName="managementTarget"
+                    (click)="onManTargetSelect()" />
+            </mat-form-field>
+            <br />
+
+            <mat-form-field class="management-hours">
+                <mat-label>Daily Input:</mat-label>
+                <mat-select formControlName="managementHours" (selectionChange)="onManHoursSelect($event.value)">
+                    <mat-option *ngFor="let hour of hours" [value]="hour" [disabled]="manHoursDisabled(hour)">
+                        {{hour}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <br />
         </div>
 
         <div class="skills-container">
-            <h3>Skills</h3> <button (click)="addSkill($event)">Add Skill</button>
+            <div class="skills-header">
+                <h3 class="skills-text">Skills</h3>
+                <button mat-raised-button type="button" class="project-btn add" (click)="addSkill($event)">Add
+                    Skill</button>
+            </div>
             <div formArrayName="skills" *ngFor="let skill of projectForm['controls'].skills['controls']; let i=index">
                 <div formGroupName={{i}} class="single-skill">
 
                     <!-- The repeated skill template START-->
 
-                    <mat-form-field>
-                        <mat-label>Skill</mat-label>
-                        <mat-select #sl formControlName="skill"
-                            (selectionChange)="getSkilledEmployees($event.value, i)">
-                            <mat-option *ngFor="let skill of skillsList" [value]="skill"
-                                [disabled]="this.skillsListD.includes(skill)">
-                                {{skill}} </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <div class="skill-header">
+                        <mat-form-field>
+                            <mat-label>Skill</mat-label>
+                            <mat-select #sl formControlName="skill"
+                                (selectionChange)="getSkilledEmployees($event.value, i)">
+                                <mat-option *ngFor="let skill of skillsList" [value]="skill"
+                                    [disabled]="this.skillsListD.includes(skill)">
+                                    {{skill}} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
-                    <mat-form-field>
-                        <mat-label>Target in Hours:</mat-label>
-                        <input matInput min="0" max="1000" type="number" formControlName="targetInHours">
-                    </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Target in Hours:</mat-label>
+                            <input matInput min="0" max="1000" type="number" formControlName="targetInHours"
+                                (click)="onTargetSelect(i)">
+                        </mat-form-field>
 
-                    <button (click)="removeSkill(i, $event)">Delete Skill</button>
+                        <button mat-raised-button type="button" class="project-btn del"
+                            (click)="removeSkill(i, $event)">Delete Skill</button>
+                    </div>
 
-                    <h4>Employees</h4> <button (click)="addEmployee($event, i)" [disabled]="canAddEmployee(i)">Add
-                        Employee</button>
+
+                    <div class="employees-header">
+                        <h4>Employees</h4>
+                        <button mat-raised-button type="button" class="project-btn add" (click)="addEmployee($event, i)"
+                            [disabled]="canAddEmployee(i)">Add Employee</button>
+                    </div>
                     <div formArrayName="employees"
                         *ngFor="let employee of skill['controls'].employees['controls']; let j=index">
                         <div formGroupName={{j}} class="employee-container">
 
                             <!-- The repeated employee template START-->
 
-                            <mat-form-field>
-                                <mat-label>Employee</mat-label>
-                                <mat-select #sl2 formControlName="employee"
-                                    (selectionChange)="onEmployeeSelect($event.value, i, j)">
-                                    <mat-option *ngFor="let employee of employeesListFiltered[i]" [value]="employee"
-                                        [disabled]="this.selectedEmployeesList[i].includes(employee)">
-                                        {{employee.firstName }} {{employee.lastName }} </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                            <div class="employee-header">
+                                <mat-form-field>
+                                    <mat-label>Employee</mat-label>
+                                    <mat-select #sl2 formControlName="employee"
+                                        (selectionChange)="onEmployeeSelect($event.value, i, j)">
+                                        <mat-option *ngFor="let employee of employeesListFiltered[i]" [value]="employee"
+                                            [disabled]="this.selectedEmployeesList[i].includes(employee)">
+                                            {{employee.firstName }} {{employee.lastName }} </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
 
-                            <mat-form-field *ngIf="this.canAlocateHours(i, j)" (click)="getHoursPrev(i, j)">
-                                <mat-label>Daily Input:</mat-label>
-                                <mat-select #sl3 formControlName="hoursPerSkill"
-                                    (selectionChange)="onHoursSelect($event.value, i, j)">
-                                    <mat-option *ngFor="let hour of hours" [value]="hour"
-                                        [disabled]="hoursDisabled(i, j, hour)">
-                                        {{hour}}</mat-option>
-                                </mat-select>
-                                <!-- <input matInput min="1" max="8" type="number" formControlName="hoursPerSkill"> -->
-                            </mat-form-field>
+                                <mat-form-field *ngIf="this.canAlocateHours(i, j)" (click)="getHoursPrev(i, j)">
+                                    <mat-label>Daily Input:</mat-label>
+                                    <mat-select #sl3 formControlName="hoursPerSkill"
+                                        (selectionChange)="onHoursSelect($event.value, i, j)">
+                                        <mat-option *ngFor="let hour of hours" [value]="hour"
+                                            [disabled]="hoursDisabled(i, j, hour)">
+                                            {{hour}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
 
-                            <button (click)="removeEmployee(i, j)">Delete Employee</button>
+                                <button mat-raised-button type="button" class="project-btn del"
+                                    (click)="removeEmployee(i, j)">Delete
+                                    Employee</button>
 
+                            </div>
                             <!-- The repeated employee template END -->
 
                         </div>

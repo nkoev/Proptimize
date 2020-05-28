@@ -9,20 +9,37 @@
 
 .info-container {
     display: grid;
-    grid-template-columns: 7fr 2fr;
-    grid-template-rows: 5vh 8vh;
-    grid-template-areas: "name target"
-                         "description description";
+    grid-template-columns: 3fr 4fr 2fr;
+    grid-template-rows: 5vh 10vh 7vh;
+    grid-template-areas: "name name target"
+                         "description description description"
+                         "m mTarget mHours";
 }
 
 .skills-container {
-    background-color: lightgrey;
+    background-color: rgb(211, 211, 211, 0.2);
     border-radius: 5px;
     padding: 0.8em;
     margin-bottom: 1em;
     width: 55vw;
 
     overflow-y: auto;
+}
+.skills-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+.skill-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.skills-text {
+    margin-bottom: 0em;
 }
 
 .name {
@@ -36,15 +53,38 @@
 }
 .description textarea {
     resize: none;
-    height: 8vh;
+    /* height: 8vh; */
 }
 .target-in-days {
     grid-area: target;
     width: 10vw;
 }
 
+.management {
+    grid-area: m;
+    width: 30vw;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    font-size: 1.2em;
+}
+.management .text {
+    margin-bottom: 0em;
+    margin-right: 2em;
+    padding-bottom: 0.8em;
+}
+.management-target {
+    grid-area: mTarget;
+    width: 15vw;
+}
+.management-hours {
+    grid-area: mHours;
+    width: 10vw;
+}
+
 .single-skill {
-    background-color: moccasin;
+    background-color: rgb(253, 186, 25, 0.1);
     border-radius: 5px;
     margin-bottom: 1em;
     padding: 0.5em;
@@ -59,11 +99,41 @@ mat-action-row {
 }
 
 .employee-container {
-    background-color: peachpuff;
+    background-color: rgb(253, 186, 25, 0.3);
     border-radius: 5px;
     padding: 0.6em;
     margin-bottom: 1em;
 }
+
+.employees-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.employee-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-btn {
+    line-height: 1.7em;
+    font-size: 0.9em;
+    height: 1.7em;
+}
+.del {
+    background-color: rgb(247, 136, 136, 0.4);
+}
+.add {
+    /* background-color: rgb(21, 219, 149, 0.4); */
+}
+
+/* :host ::ng-deep .mat-form-field-wrapper{
+    margin: 0 !important;
+    padding: 0;
+  } */
 
 /*  MEDIA */
 @media (min-width: 768px) and (max-width: 1150px) { 

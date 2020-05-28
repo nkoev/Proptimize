@@ -16,7 +16,7 @@ export class SkillsComponent implements OnInit {
     Validators.maxLength(20),
   ]);
 
-  constructor(private skillService: SkillService) {}
+  constructor(private skillService: SkillService) { }
 
   ngOnInit(): void {
     this.skillService.getSkills().subscribe((res: any) => (this.skills = res));
