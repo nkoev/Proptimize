@@ -21,3 +21,10 @@
   margin-top: 1em;
   margin-bottom: 1em;
 }
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}

@@ -13,12 +13,19 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.orgchart-position {
+.orgchart .name {
+  font-weight: bold;
+}
+
+.orgchart .position {
   color: red;
   font-style: italic;
 }
-.orgchart-name {
-  font-weight: bold;
+
+.orgchart img {
+  height: 2em;
+  width: 2em;
+  border-radius: 50%;
 }
 
 .indigo-bttn {

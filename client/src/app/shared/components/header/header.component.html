@@ -8,8 +8,14 @@
 
   <div class="right">
     <div class="avatar">
-      <img *ngIf="avatarUrl" class="image" [src]="avatarUrl" />
-      <div *ngIf="!avatarUrl" class="default">{{ initials }}</div>
+      <img
+        *ngIf="loggedUser.avatarUrl"
+        class="image"
+        [src]="loggedUser.avatarUrl"
+      />
+      <div *ngIf="!loggedUser.avatarUrl" class="default">
+        {{ loggedUser.firstName[0].toUpperCase() }}
+      </div>
     </div>
 
     <div class="logout">

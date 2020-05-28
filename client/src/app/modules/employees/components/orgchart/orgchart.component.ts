@@ -22,13 +22,16 @@ export class OrgChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.dialogData.managers.forEach((manager) => {
+      const avatarUrl = manager.data().avatarUrl
+        ? manager.data().avatarUrl
+        : '../../../../assets/backgorund/avatar-default2.png';
       this.data.push([
         {
           v: manager.id,
-          f: `<div class="orgchart-name">${manager.data().firstName}&nbsp;${
-            manager.data().lastName
-          }</div>
-            <div class="orgchart-position">${manager.data().position}</div>`,
+          f: `<div class="orgchart"><div class="name">${
+            manager.data().firstName
+          }&nbsp;${manager.data().lastName}</div><img src="${avatarUrl}">
+            <div class="position">${manager.data().position}</div></div>`,
         },
         manager.data().managedBy,
       ]);
@@ -36,10 +39,10 @@ export class OrgChartComponent implements OnInit {
         this.data.push([
           {
             v: employee.id,
-            f: `<div class="orgchart-name">${employee.data().firstName}&nbsp;${
-              employee.data().lastName
-            }</div>
-              <div class="orgchart-position">${employee.data().position}</div>`,
+            f: `<div class="orgchart"><div class="name">${
+              employee.data().firstName
+            }&nbsp;${employee.data().lastName}</div>
+              <div>${employee.data().position}</div></div>`,
           },
           employee.data().managedBy,
         ]);

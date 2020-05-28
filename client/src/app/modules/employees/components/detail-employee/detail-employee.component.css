@@ -17,3 +17,16 @@
   background-color: rgba(55, 58, 77, 0.2);
   cursor: pointer;
 }
+
+.skill {
+  text-align: center;
+  padding: 5px;
+  background-color: rgba(55, 58, 77, 0.5);
+  border-radius: 8px;
+  margin-right: 1%;
+}
+
+.skill:hover {
+  background-color: rgba(55, 58, 77, 0.2);
+  cursor: pointer;
+}

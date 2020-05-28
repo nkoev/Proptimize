@@ -2,11 +2,16 @@
 <br />
 {{ employee.position }}
 <br />
-<div *ngIf="!employee.skills">Skills: Management</div>
+<div *ngIf="!employee.skills">
+  Skills: <span class="skill">Management</span>
+</div>
 <div *ngIf="employee.skills">
   Skills:
-  <span *ngFor="let skill of employee.skills" (click)="backEvent.emit(skill)"
-    >{{ skill }}&nbsp;</span
+  <span
+    *ngFor="let skill of employee.skills"
+    class="skill"
+    (click)="backEvent.emit(skill)"
+    >{{ skill }}</span
   >
 </div>
 <mat-list class="list">

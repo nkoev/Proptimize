@@ -10,14 +10,9 @@ import { UserDTO } from 'src/app/models/employees/user.dto';
 })
 export class HeaderComponent implements OnInit {
   @Input() loggedUser: UserDTO;
-  avatarUrl: string;
-  initials: string;
   constructor(private auth: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.avatarUrl = this.loggedUser.avatarUrl;
-    this.initials = this.loggedUser.firstName[0].toUpperCase();
-  }
+  ngOnInit(): void {}
 
   logout() {
     this.auth

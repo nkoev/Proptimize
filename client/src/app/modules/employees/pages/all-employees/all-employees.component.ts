@@ -61,7 +61,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
       .getSkills()
       .subscribe((res) => (this.skillsList = res));
     google.charts.load('current', { packages: ['orgchart'] });
-    this.subscriptions.push(sub1, sub2, sub3, sub4);
+    this.subscriptions.push(sub1, sub2, sub3, sub4, sub5);
   }
 
   ngOnDestroy(): void {
