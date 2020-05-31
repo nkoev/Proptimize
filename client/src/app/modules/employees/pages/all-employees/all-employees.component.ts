@@ -11,6 +11,7 @@ import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { EmployeesFilteringFormComponent } from '../../components/employees-filtering-form/employees-filtering-form.component';
 import { SkillService } from 'src/app/modules/skills/skill.service';
 import { ActivatedRoute } from '@angular/router';
+import { EditEmployeeComponent } from '../../components/edit-employee/edit-employee.component';
 
 @Component({
   selector: 'app-all-employees',
@@ -47,9 +48,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     });
     const sub2 = this.employeeService.$allEmployees.subscribe((employees) => {
       this.employees = employees;
-      this.filteredEmployees = this.employees.map((employee) =>
-        employee.data()
-      );
+      this.filteredEmployees = this.employees;
     });
     const sub3 = this.route.data.subscribe(
       (data) => (this.loggedUser = data.loggedUser)
@@ -74,6 +73,12 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     });
   }
 
+  editEmployee(event: Event) {
+    this.matDialog.open(EditEmployeeComponent, {
+      data: { skillsList: this.skillsList, employee: event },
+    });
+  }
+
   showOrgChart() {
     this.matDialog.open(OrgChartComponent, {
       data: { managers: this.managers, employees: this.employees },
@@ -93,7 +98,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   }
 
   filterEmployees(event: any) {
-    this.filteredEmployees = this.employees.map((employee) => employee.data());
+    this.filteredEmployees = this.employees;
     this.filteredManagers = this.managers.map((manager) => manager.data());
 
     if (event.skills?.length) {

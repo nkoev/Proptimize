@@ -15,7 +15,13 @@
       (click)="showEmployee.emit(employee)"
       ><div class="list-item">
         {{ employee.firstName }}&nbsp;{{ employee.lastName }}
-        <button mat-button class="edit-button">Edit</button>
+        <button
+          mat-button
+          class="edit-button"
+          (click)="editEmployee.emit(employee); $event.stopPropagation()"
+        >
+          Edit
+        </button>
       </div></mat-list-item
     >
   </div>

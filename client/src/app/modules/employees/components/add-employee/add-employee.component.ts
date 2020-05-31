@@ -22,10 +22,10 @@ export class AddEmployeeComponent implements OnInit {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private userService: UserService,
-    public dialogRef: MatDialogRef<AddEmployeeComponent>,
     private notificator: NotificationService,
     @Inject(MAT_DIALOG_DATA)
-    private data: { skillsList: string[]; managers: DocumentReference[] }
+    private data: { skillsList: string[]; managers: DocumentReference[] },
+    public dialogRef: MatDialogRef<AddEmployeeComponent>
   ) {
     this.skillsList = this.data.skillsList;
     this.managersList = this.data.managers;

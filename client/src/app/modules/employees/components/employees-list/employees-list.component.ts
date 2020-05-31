@@ -11,6 +11,7 @@ export class EmployeesListComponent implements OnInit {
   @Input() filteredEmployees: DocumentData[];
   @Input() filteredManagers: DocumentData[];
   @Output() showEmployee = new EventEmitter<DocumentData>();
+  @Output() editEmployee = new EventEmitter<DocumentData>();
   constructor() {}
 
   ngOnInit(): void {}

@@ -8,6 +8,7 @@ import { OrgChartComponent } from './components/orgchart/orgchart.component';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { EmployeesListComponent } from './components/employees-list/employees-list.component';
 import { DetailEmployeeComponent } from './components/detail-employee/detail-employee.component';
+import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { DetailEmployeeComponent } from './components/detail-employee/detail-emp
     EmployeesFilteringFormComponent,
     OrgChartComponent,
     EmployeesListComponent,
+    EditEmployeeComponent,
   ],
   imports: [SharedModule, EmployeesRoutingModule, GoogleChartsModule.forRoot()],
 })

@@ -8,5 +8,9 @@ export class UserDTO {
   isAdmin: boolean;
   availableHours: number;
   avatarUrl?: string;
-  projects: { hours: number; project: string }[];
+  projects: {
+    name: string;
+    id: string;
+    dailyInput: { skill: string; hours: number }[];
+  }[];
 }

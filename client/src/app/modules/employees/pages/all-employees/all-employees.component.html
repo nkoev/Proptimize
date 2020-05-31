@@ -22,6 +22,7 @@
                 [filteredEmployees]="filteredEmployees"
                 [filteredManagers]="filteredManagers"
                 (showEmployee)="showDetailEmployee($event)"
+                (editEmployee)="editEmployee($event)"
               ></app-employees-list>
               <app-employees-filtering-form
                 [skillsList]="skillsList"
