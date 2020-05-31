@@ -44,7 +44,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const sub1 = this.userService.allUsers$.subscribe((users) => {
       this.managers = users;
-      this.filteredManagers = this.managers.map((manager) => manager.data());
+      this.filteredManagers = this.managers;
     });
     const sub2 = this.employeeService.$allEmployees.subscribe((employees) => {
       this.employees = employees;
@@ -99,7 +99,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
 
   filterEmployees(event: any) {
     this.filteredEmployees = this.employees;
-    this.filteredManagers = this.managers.map((manager) => manager.data());
+    this.filteredManagers = this.managers;
 
     if (event.skills?.length) {
       this.filteredEmployees = this.filteredEmployees.filter((employee) =>

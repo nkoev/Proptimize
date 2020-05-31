@@ -23,9 +23,13 @@ export class UserService {
     private http: HttpClient
   ) {
     this.usersCol = this.afs.collection<UserDTO>('users');
-    this.allUsers$ = this.usersCol
-      .snapshotChanges()
-      .pipe(map((changes) => changes.map((change) => change.payload.doc)));
+    this.allUsers$ = this.usersCol.snapshotChanges().pipe(
+      map((changes) =>
+        changes.map((change) => {
+          return { ...change.payload.doc.data(), id: change.payload.doc.id };
+        })
+      )
+    );
   }
 
   async getAllUsers() {
