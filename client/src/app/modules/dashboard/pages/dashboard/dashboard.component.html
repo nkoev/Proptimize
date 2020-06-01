@@ -14,8 +14,8 @@
           <div class="title">DASHBOARD</div>
           <div class="date">{{ today | date }}</div>
         </div>
-
         <div class="main">
+          <app-user-info [loggedUser]="loggedUser"></app-user-info>
           <app-avatar-upload></app-avatar-upload>
         </div>
       </div>

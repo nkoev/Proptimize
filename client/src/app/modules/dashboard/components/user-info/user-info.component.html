@@ -1,0 +1,13 @@
+<div class="employee-info">
+  <div>
+    <div class="name">{{ loggedUser.firstName }} {{ loggedUser.lastName }}</div>
+    <div class="position">{{ loggedUser.position }}</div>
+    <div>
+      <div *ngIf="loggedUser.managedBy">
+        manager: {{ loggedUser.managedBy.firstName }}
+        {{ loggedUser.managedBy.lastName }}
+      </div>
+      <div *ngIf="!loggedUser.managedBy">Self-managed</div>
+    </div>
+  </div>
+</div>

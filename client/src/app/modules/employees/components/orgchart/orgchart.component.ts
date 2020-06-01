@@ -31,7 +31,7 @@ export class OrgChartComponent implements OnInit {
           f: `<div class="orgchart"><div class="name">${manager.firstName}&nbsp;${manager.lastName}</div><img src="${avatarUrl}">
             <div class="position">${manager.position}</div></div>`,
         },
-        manager.managedBy,
+        manager.managedBy ? manager.managedBy.id : null,
       ]);
       this.dialogData.employees.forEach((employee) => {
         this.data.push([
@@ -40,7 +40,7 @@ export class OrgChartComponent implements OnInit {
             f: `<div class="orgchart"><div class="name">${employee.firstName}&nbsp;${employee.lastName}</div>
               <div>${employee.position}</div></div>`,
           },
-          employee.managedBy,
+          employee.managedBy ? employee.managedBy.id : null,
         ]);
       });
     });

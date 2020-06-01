@@ -3,6 +3,7 @@ import { UserDTO } from 'src/app/models/employees/user.dto';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { Subscription } from 'rxjs';
+import { UserService } from 'src/app/modules/employees/services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,9 +16,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   constructor(private route: ActivatedRoute, private auth: AuthService) {
-    const sub1 = this.route.data.subscribe(
-      (data) => (this.loggedUser = data.loggedUser)
-    );
+    const sub1 = this.route.data.subscribe((data) => {
+      this.loggedUser = data.loggedUser;
+    });
     const sub2 = this.auth.loggedUser$.subscribe(
       (res) => (this.loggedUser = res.data())
     );

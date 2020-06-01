@@ -142,7 +142,11 @@ export class AddEmployeeComponent implements OnInit {
       managedBy:
         form.value.managedBy === 'self-managed'
           ? null
-          : form.value.managedBy.id,
+          : {
+              id: form.value.managedBy.id,
+              firstName: form.value.managedBy.firstName,
+              lastName: form.value.managedBy.lastName,
+            },
     };
     return employee;
   }
@@ -160,7 +164,11 @@ export class AddEmployeeComponent implements OnInit {
       managedBy:
         form.value.managedBy === 'self-managed'
           ? null
-          : form.value.managedBy.id,
+          : {
+              id: form.value.managedBy.id,
+              firstName: form.value.managedBy.firstName,
+              lastName: form.value.managedBy.lastName,
+            },
     };
     return user;
   }
