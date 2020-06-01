@@ -21,6 +21,7 @@
               <app-employees-list
                 [filteredEmployees]="filteredEmployees"
                 [filteredManagers]="filteredManagers"
+                [loggedUser]="loggedUser"
                 (showEmployee)="showDetailEmployee($event)"
                 (editEmployee)="editEmployee($event)"
               ></app-employees-list>

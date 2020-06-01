@@ -1,7 +1,8 @@
 .list {
   padding: 0px !important;
+  margin-bottom: 5px;
   width: auto;
-  height: 33vh;
+  height: 32vh;
   overflow-y: auto;
 }
 

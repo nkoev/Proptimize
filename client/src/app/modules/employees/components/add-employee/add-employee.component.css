@@ -3,3 +3,12 @@
   margin-bottom: 10px;
   background-color: rgba(55, 58, 77, 0.5);
 }
+
+.form-container {
+  position: relative;
+}
+.spinner {
+  position: fixed;
+  top: 45%;
+  left: 45%;
+}

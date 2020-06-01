@@ -17,6 +17,7 @@ export class AddEmployeeComponent implements OnInit {
   skillsList: string[];
   managersList: DocumentData[];
   employeeForm: FormGroup;
+  inProgress = false;
 
   constructor(
     private fb: FormBuilder,
@@ -114,6 +115,7 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   private registerUser(form: FormGroup) {
+    this.inProgress = true;
     this.userService.registerUser(this.toUserDTO(form)).subscribe(
       () => {
         this.dialogRef.close();
@@ -122,6 +124,7 @@ export class AddEmployeeComponent implements OnInit {
         );
       },
       (err) => {
+        this.inProgress = false;
         this.notificator.error('Registration failed.');
         console.log(err.message);
       }

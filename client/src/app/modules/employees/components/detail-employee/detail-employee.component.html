@@ -28,11 +28,17 @@
       {{ project.name }} &nbsp;
       <button
         mat-button
-        (click)="showTasks(project.dailyInput); $event.stopPropagation()"
+        [matMenuTriggerFor]="tasks"
+        (click)="$event.stopPropagation()"
       >
         Tasks
       </button>
     </div>
+    <mat-menu #tasks="matMenu">
+      <p mat-menu-item *ngFor="let input of project.dailyInput">
+        {{ input.skill }}: {{ input.hours }}h
+      </p>
+    </mat-menu>
   </mat-list-item>
 </mat-list>
 <button mat-button (click)="backEvent.emit()">

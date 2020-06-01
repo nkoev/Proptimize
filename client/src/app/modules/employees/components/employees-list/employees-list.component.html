@@ -18,6 +18,7 @@
         <button
           mat-button
           class="edit-button"
+          *ngIf="loggedUser.isAdmin"
           (click)="editEmployee.emit(employee); $event.stopPropagation()"
         >
           Edit
