@@ -31,7 +31,11 @@
                         </div>
 
                         <div rightPane>
-                            <app-single-project (toggleEvent)="togglePanes($event)"></app-single-project>
+                            <div class="add-project-btn">
+                                <button mat-raised-button (click)="updateProject()">Update Project</button>
+                            </div>
+                            <app-single-project (toggleEvent)="togglePanes($event)">
+                            </app-single-project>
                         </div>
                     </app-slide-panel>
                 </div>

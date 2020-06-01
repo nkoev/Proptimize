@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-single-project',
@@ -17,4 +17,5 @@ export class SingleProjectComponent implements OnInit {
   togglePanes() {
     this.toggleEvent.emit(true);
   }
+
 }

@@ -84,7 +84,8 @@
 }
 
 .single-skill {
-    background-color: rgb(253, 186, 25, 0.1);
+    background-color: rgb(212, 226, 255, 0.2);
+    /* background-color: rgb(253, 186, 25, 0.1); */
     border-radius: 5px;
     margin-bottom: 1em;
     padding: 0.5em;
@@ -99,7 +100,8 @@ mat-action-row {
 }
 
 .employee-container {
-    background-color: rgb(253, 186, 25, 0.3);
+    /* background-color: rgb(253, 186, 25, 0.3); */
+    background-color: rgb(253, 186, 25, 0.1);
     border-radius: 5px;
     padding: 0.6em;
     margin-bottom: 1em;
@@ -126,8 +128,13 @@ mat-action-row {
 .del {
     background-color: rgb(247, 136, 136, 0.4);
 }
-.add {
-    /* background-color: rgb(21, 219, 149, 0.4); */
+.save {
+    background-color: rgb(21, 219, 149, 1);
+}
+
+.apply {
+    background-color: rgb(253, 186, 25, 0.7);
+    margin-left: 1em;
 }
 
 /* :host ::ng-deep .mat-form-field-wrapper{
@@ -171,5 +178,38 @@ mat-action-row {
     }
     .target-in-days {
         width: 60vw;
+    }
+
+    .single-skill {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .skill-header{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .employees-header {
+        margin-top: 1.5em;
+    }
+
+    .employee-header{
+        display: flex;
+        flex-direction: column;
+    }
+
+    mat-action-row {
+        justify-content: flex-start;
+    }
+
+    .management-target {
+        width: 60vw;
+    }
+    .management-hours {
+        width: 60vw;
+    }
+    .management .text {
+        margin-right: 1em;
     }
 }

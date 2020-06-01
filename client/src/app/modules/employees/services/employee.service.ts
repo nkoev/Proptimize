@@ -42,8 +42,13 @@ export class EmployeeService {
   }
 
   removeProject(employeeId: string, project: any) {
+    const sum = project.dailyInput.reduce((acc, e) => {
+      acc += e.hours;
+      return acc;
+    }, 0);
     const employeeRef = this.employeesCol.doc(employeeId);
     employeeRef.update({
+      availableHours: firebase.firestore.FieldValue.increment(sum),
       projects: firebase.firestore.FieldValue.arrayRemove(project)
     });
   }

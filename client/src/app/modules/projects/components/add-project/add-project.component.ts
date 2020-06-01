@@ -4,11 +4,13 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { GanttService } from '../../services/gantt.service';
+import { NotificationService } from 'src/app/modules/core/services/notification.service';
 
 interface ProjectDialogData {
   skillsList: string[];
   employeesList: Observable<any[]>;
   loggedUser: any;
+  currentProject: any;
 }
 
 @Component({
@@ -21,6 +23,7 @@ export class AddProjectComponent implements OnInit {
   @ViewChildren('sl3') hoursPrev: QueryList<MatSelect>;
   @ViewChild('charts') public chartEl: ElementRef;
   loggedUser: any;
+  currentProject: any;
   projectForm: FormGroup;
   skillsList: string[];
   skillsListD: string[] = [];
@@ -41,6 +44,7 @@ export class AddProjectComponent implements OnInit {
         skillsList: dialogData.skillsList,
         employeesList: dialogData.employeesList,
         loggedUser: dialogData.loggedUser,
+        currentProject: dialogData.currentProject,
       },
       // backdropClass: 'backdropClass',
       // panelClass: 'dialog',
@@ -54,30 +58,33 @@ export class AddProjectComponent implements OnInit {
     public dialogRef: MatDialogRef<AddProjectComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProjectDialogData,
     private fb: FormBuilder,
-    private readonly ganttService: GanttService
+    private readonly ganttService: GanttService,
+    private readonly notificationService: NotificationService,
   ) {
     this.skillsList = this.data.skillsList;
     this.employeesListData = this.data.employeesList;
     this.loggedUser = this.data.loggedUser;
+    this.currentProject = this.data.currentProject;
   }
 
   ngOnInit(): void {
     this.projectForm = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(20)]],
-      description: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-      targetInDays: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
-      managementTarget: [null, [Validators.min(1), Validators.max(1000)]],
-      managementHours: [null, [Validators.min(1), Validators.max(8)]],
+      name: [this.currentProject.name, [Validators.required, Validators.maxLength(20)]],
+      description: [this.currentProject.description, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      targetInDays: [this.currentProject.targetInDays, [Validators.required, Validators.min(1), Validators.max(100)]],
+      managementTarget: [this.currentProject.managementTarget, [Validators.min(1), Validators.max(1000)]],
+      managementHours: [this.currentProject.managementHours, [Validators.min(1), Validators.max(8)]],
       skills: this.fb.array([]),
     });
 
     this.employeesListData.subscribe(data => {
-      this.employeesList = data.filter(employee => employee.availableHours >= 1);
-      console.log(this.employeesList);
+      this.employeesList = data;
+      // this.employeesList = data.filter(employee => employee.availableHours >= 1);
+      // console.log(this.employeesList);
+      if (Object.keys(this.currentProject).length !== 0) this.fillUpdateForm();
     });
 
     this.projectForm.valueChanges.subscribe((form) => this.onFormChanges(form));
-    console.log(this.loggedUser);
   }
 
   get skills() {
@@ -99,17 +106,17 @@ export class AddProjectComponent implements OnInit {
     });
   }
 
-  addSkill(event: MouseEvent): void {
+  addSkill(event?: MouseEvent): void {
     this.skills.push(this.newSkill());
-    event.preventDefault();
+    event?.preventDefault();
 
     this.selectedEmployeesList[this.skills.length - 1] = [];
   }
 
-  addEmployee(event: MouseEvent, idxSkill: number): void {
+  addEmployee(idxSkill: number, event?: MouseEvent): void {
     const control = this.skills.at(idxSkill).get('employees') as FormArray;
     control.push(this.newEmployee());
-    event.preventDefault();
+    event?.preventDefault();
   }
 
   removeSkill(idxSkill: number, event: MouseEvent) {
@@ -133,41 +140,52 @@ export class AddProjectComponent implements OnInit {
     this.selectedEmployeesList[idxSkill].splice(idxEmployee, 1);
   }
 
-  canAddEmployee(idxSkill: number): boolean {
-    return this.skills.at(idxSkill).get('skill').invalid
-      || this.skills.at(idxSkill).get('targetInHours').invalid
-      || this.skills.at(idxSkill).get('targetInHours').value < 1
-  }
+  private fillUpdateForm() {
+    this.managementHours = this.currentProject.managementHours;
 
-  onApply(form: FormGroup): void {
-    form.markAllAsTouched();
-    if (form.invalid) {
-      window.alert('INVALID FORM');
-      return;
+    if (1 <= this.currentProject.skills.length) {
+      this.currentProject.skills.forEach((skill, idxSkill) => {
+        this.addSkill();
+        this.skills.at(idxSkill).get('skill').setValue(skill.name);
+        this.skills.at(idxSkill).get('targetInHours').setValue(skill.targetInHours);
+        this.getSkilledEmployees(skill.name, idxSkill);
+
+        if (1 <= skill.employees.length) {
+          skill.employees.forEach((e, idxEmployee) => {
+            this.addEmployee(idxSkill);
+            const employee = this.employeesList.filter(em => em.id === e.id)[0];
+            const control = this.skills.at(idxSkill).get('employees') as FormArray;
+            control.at(idxEmployee)['controls']['employee'].setValue(employee);
+            this.onEmployeeSelect(employee, idxSkill, idxEmployee);
+            control.at(idxEmployee)['controls']['hoursPerSkill'].setValue(e.hoursPerSkill);
+            this.onHoursSelect(e.hoursPerSkill, idxSkill, idxEmployee);
+          });
+        }
+      });
     }
+  }
 
-    this.showChart = this.ganttService.shouldDisplayChart(form);
-    if (this.showChart === 1) {
-      let endDate: Date;
-      let skills: { skill: string, endDate: Date, completeness: { amount: number, fill: boolean } }[];
-      ({ endDate, skills } = this.ganttService.formToChartData(form));
-      setTimeout(() => {
-        this.ganttService.drawGantt(this.chartEl.nativeElement, form.get('name').value, endDate, skills);
-      }, 100);
+  onManTargetSelect() {
+    const target = this.projectForm.get('managementTarget').value;
+    const hours = this.projectForm.get('managementHours').value;
+    if (target < hours) {
+      this.projectForm.get('managementTarget').reset();
+      this.notificationService.error(`You tried to allocate ${hours} hours, but the target is ${target}`);
     }
-    this.canSubmit = true;
   }
 
-  onSubmit(form: FormGroup): void {
-    console.log(form);
-    this.dialogRef.close(form);
+  onManHoursSelect(hours: number): void {
+    this.managementHours = hours;
+    const target = this.projectForm.get('managementTarget').value;
+    if (target < this.managementHours) {
+      this.managementHours = 0;
+      this.projectForm.get('managementHours').reset();
+      this.notificationService.error(`You tried to allocate ${hours} hours, but the target is ${target}`);
+    }
   }
 
-  onFormChanges(form: any): void {
-    this.skillsListD = form.skills.reduce((acc, skill) => {
-      acc.push(skill.skill);
-      return acc;
-    }, []);
+  manHoursDisabled(hour: number) {
+    return hour > this.loggedUser.availableHours + this.currentProject.managementHours;
   }
 
   getSkilledEmployees(skill: string, idxSkill: number): void {
@@ -183,8 +201,26 @@ export class AddProjectComponent implements OnInit {
     control.reset();
   }
 
-  onEmployeeSelect(selectedEmployee: any, idxSkill: number, idxEmployee: number): void {
+  onTargetSelect(idxSkill: number) {
+    const control = this.skills.at(idxSkill).get('employees') as FormArray;
+    const sum = control.controls.reduce((acc, e) => {
+      acc += e['controls']['hoursPerSkill'].value;
+      return acc;
+    }, 0);
+    const target = this.skills.at(idxSkill).get('targetInHours').value;
+    if (target < sum) {
+      this.skills.at(idxSkill).get('targetInHours').reset();
+      this.notificationService.error(`You tried to allocate a total of ${sum} hours to this skill, but the target is ${target}`);
+    }
+  }
 
+  canAddEmployee(idxSkill: number): boolean {
+    return this.skills.at(idxSkill).get('skill').invalid
+      || this.skills.at(idxSkill).get('targetInHours').invalid
+      || this.skills.at(idxSkill).get('targetInHours').value < 1
+  }
+
+  onEmployeeSelect(selectedEmployee: any, idxSkill: number, idxEmployee: number): void {
     const control = this.skills.at(idxSkill).get('employees') as FormArray;
     this.updateHoursMap(idxSkill, idxEmployee, control);
     control.at(idxEmployee)['controls']['hoursPerSkill'].reset();
@@ -196,6 +232,17 @@ export class AddProjectComponent implements OnInit {
       this.hoursPerEmployeeMap.set(selectedEmployee, 0);
     }
     // console.log(this.selectedEmployeesList);
+  }
+
+  canAlocateHours(idxSkill: number, idxEmployee: number) {
+    const control = this.skills.at(idxSkill).get('employees') as FormArray;
+    return control.at(idxEmployee)['controls']['employee'].valid;
+  }
+
+  getHoursPrev(idxSkill: number, idxEmployee: number) {
+    this.hoursHelper = +this.hoursPrev.toArray()[this.findQueryIndex(idxSkill, idxEmployee)].triggerValue;
+    // console.log('LAST', this.hoursHelper);
+    return this.hoursHelper;
   }
 
   onHoursSelect(hours: number, idxSkill: number, idxEmployee: number): void {
@@ -213,29 +260,8 @@ export class AddProjectComponent implements OnInit {
     if (target < sum) {
       this.updateHoursMap(idxSkill, idxEmployee, control);
       control.at(idxEmployee)['controls']['hoursPerSkill'].reset();
-      window.alert(`You tried to allocate a total of ${sum} hours to this skill, but the target is ${target}`);
+      this.notificationService.error(`You tried to allocate a total of ${sum} hours to this skill, but the target is ${target}`);
     }
-  }
-
-  onManHoursSelect(hours: number): void {
-    this.managementHours = hours;
-    const target = this.projectForm.get('managementTarget').value;
-    if (target < this.managementHours) {
-      this.managementHours = 0;
-      this.projectForm.get('managementHours').reset();
-      window.alert(`You tried to allocate ${hours} hours, but the target is ${target}`);
-    }
-  }
-
-  canAlocateHours(idxSkill: number, idxEmployee: number) {
-    const control = this.skills.at(idxSkill).get('employees') as FormArray;
-    return control.at(idxEmployee)['controls']['employee'].valid;
-  }
-
-  getHoursPrev(idxSkill: number, idxEmployee: number) {
-    this.hoursHelper = +this.hoursPrev.toArray()[this.findQueryIndex(idxSkill, idxEmployee)].triggerValue;
-    // console.log('LAST', this.hoursHelper);
-    return this.hoursHelper;
   }
 
   hoursDisabled(idxSkill: number, idxEmployee: number, hour: number) {
@@ -243,30 +269,36 @@ export class AddProjectComponent implements OnInit {
       - this.hoursPerEmployeeMap.get(this.selectedEmployeesList[idxSkill][idxEmployee]) + this.hoursHelper;
   }
 
-  manHoursDisabled(hour: number) {
-    return hour > this.loggedUser.availableHours;
+  onApply(form: FormGroup): void {
+    form.markAllAsTouched();
+    if (form.invalid) {
+      this.notificationService.error('Please fill all form fields!');
+      return;
+    }
+
+    this.showChart = this.ganttService.shouldDisplayChart(form);
+    if (this.showChart === 1) {
+      let startDate: Date;
+      let endDate: Date;
+      let skills: { skill: string, startDate: Date, endDate: Date, completeness: { amount: number, fill: boolean } }[];
+      ({ startDate, endDate, skills } = this.ganttService.formToChartData(form, this.currentProject));
+      setTimeout(() => {
+        this.ganttService.drawGantt(this.chartEl.nativeElement, form.get('name').value, startDate, endDate, skills);
+      }, 100);
+    }
+    this.canSubmit = true;
   }
 
-  onTargetSelect(idxSkill: number) {
-    const control = this.skills.at(idxSkill).get('employees') as FormArray;
-    const sum = control.controls.reduce((acc, e) => {
-      acc += e['controls']['hoursPerSkill'].value;
+  onSubmit(form: FormGroup): void {
+    console.log(form);
+    this.dialogRef.close(form);
+  }
+
+  private onFormChanges(form: any): void {
+    this.skillsListD = form.skills.reduce((acc, skill) => {
+      acc.push(skill.skill);
       return acc;
-    }, 0);
-    const target = this.skills.at(idxSkill).get('targetInHours').value;
-    if (target < sum) {
-      this.skills.at(idxSkill).get('targetInHours').reset();
-      window.alert(`You tried to allocate a total of ${sum} hours to this skill, but the target is ${target}`);
-    }
-  }
-
-  onManTargetSelect() {
-    const target = this.projectForm.get('managementTarget').value;
-    const hours = this.projectForm.get('managementHours').value;
-    if (target < hours) {
-      this.projectForm.get('managementTarget').reset();
-      window.alert(`You tried to allocate ${hours} hours, but the target is ${target}`);
-    }
+    }, []);
   }
 
   private findQueryIndex(idxSkill: number, idxEmployee: number): number {
@@ -274,12 +306,12 @@ export class AddProjectComponent implements OnInit {
     for (let i = 0; i <= idxSkill; i++) {
       if (i !== idxSkill) {
         count += this.selectedEmployeesList[i].reduce((acc, e) => {
-          if (e !== undefined) { acc++; }
+          if (e !== undefined) acc++;
           return acc;
         }, 0);
       } else {
         for (let j = 0; j < idxEmployee; j++) {
-          if (this.selectedEmployeesList[i][j] !== undefined) { count++; }
+          if (this.selectedEmployeesList[i][j] !== undefined) count++;
         }
       }
     }
@@ -292,6 +324,4 @@ export class AddProjectComponent implements OnInit {
       this.hoursPerEmployeeMap.get(this.selectedEmployeesList[idxSkill][idxEmployee])
       - control.at(idxEmployee)['controls']['hoursPerSkill'].value);
   }
-
-
 }

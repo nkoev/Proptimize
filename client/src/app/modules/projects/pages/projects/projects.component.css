@@ -94,7 +94,9 @@ app-slide-panel div {
 }
 
 [rightPane] { 
-    background-color: #6CE6CB; 
+    display: flex;
+    flex-direction: column; 
+    /* background-color: #6CE6CB;  */
 }
 
 /* ----------------- SLIDE PANEL END ----------------- */

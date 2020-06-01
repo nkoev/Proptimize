@@ -77,7 +77,7 @@
 
                     <div class="employees-header">
                         <h4>Employees</h4>
-                        <button mat-raised-button type="button" class="project-btn add" (click)="addEmployee($event, i)"
+                        <button mat-raised-button type="button" class="project-btn add" (click)="addEmployee(i, $event)"
                             [disabled]="canAddEmployee(i)">Add Employee</button>
                     </div>
                     <div formArrayName="employees"
@@ -125,7 +125,8 @@
 
         <mat-action-row>
             <button mat-raised-button type="button" class="close-btn" (click)="this.dialogRef.close()"> Cancel </button>
-            <button mat-raised-button type="button" class="submit-btn" (click)="onApply(projectForm)"> Apply </button>
+            <button mat-raised-button type="button" class="submit-btn apply" (click)="onApply(projectForm)"> Apply
+            </button>
         </mat-action-row>
 
         <div #charts *ngIf="showChart === 1"></div>
@@ -139,7 +140,8 @@
         </div>
 
         <mat-action-row *ngIf="canSubmit">
-            <button mat-raised-button type="button" class="submit-btn" (click)="onSubmit(projectForm)"> Save </button>
+            <button mat-raised-button type="button" class="submit-btn save" (click)="onSubmit(projectForm)"> Save
+            </button>
         </mat-action-row>
     </form>
 </div>

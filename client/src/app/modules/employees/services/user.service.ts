@@ -62,9 +62,10 @@ export class UserService {
     });
   }
 
-  deleteProject(userId: string, project: any) {
+  removeProject(userId: string, project: any) {
     const employeeRef = this.usersCol.doc(userId);
     employeeRef.update({
+      availableHours: firebase.firestore.FieldValue.increment(project.dailyInput[0].hours),
       projects: firebase.firestore.FieldValue.arrayRemove(project)
     });
   }

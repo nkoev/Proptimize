@@ -54,7 +54,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
         const projectId = params['id'];
         if (projectId && this.projectsData) {
           this.singleProject = this.projects$.getValue().filter(p => p.id === projectId)[0];
-          console.log(this.singleProject);
+          // console.log(this.singleProject);
           this.togglePanes(false);
         }
       });
@@ -126,7 +126,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     const dialogData: any = {
       skillsList: this.skillsList,
       employeesList: this.employeesList,
-      loggedUser: this.loggedUser
+      loggedUser: this.loggedUser,
+      currentProject: {},
     };
 
     AddProjectComponent.openProjectDialog(this.matDialog, dialogData).subscribe(result => {
@@ -135,6 +136,31 @@ export class ProjectsComponent implements OnInit, OnDestroy {
         this.projectService.addProject(projectData, this.loggedUser);
       }
     });
+  }
+
+  updateProject() {
+    if (this.loggedUser.uid !== this.singleProject.reporter.id) {
+      window.alert('You can\'t update other users\' projects');
+      return;
+    }
+
+    const dialogData: any = {
+      skillsList: this.skillsList,
+      employeesList: this.employeesList,
+      loggedUser: this.loggedUser,
+      currentProject: this.singleProject,
+    };
+
+    AddProjectComponent.openProjectDialog(this.matDialog, dialogData).subscribe(result => {
+      if (result) {
+        const projectData = this.projectService.formToProjectData(result, this.singleProject);
+        this.projectService.updateProject(projectData, this.loggedUser, this.singleProject);
+      }
+    });
+  }
+
+  closeProject() {
+    this.projectService.closeProject(this.singleProject, this.loggedUser);
   }
 
   togglePanes(event: boolean) {
