@@ -24,15 +24,6 @@
   cursor: pointer;
 }
 
-.item .input {
-  color: white;
-  width: auto;
-  padding: 5px;
-  margin: 1%;
-  background-color: rgba(55, 58, 77, 0.5);
-  border-radius: 8px;
-}
-
 .list-item {
   display: flex;
   justify-content: space-between;
