@@ -18,7 +18,7 @@ export class AdminGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {
     return this.auth.loggedUser$.pipe(
-      map((loggedUser) => loggedUser.isAdmin),
+      map((loggedUser) => loggedUser.data().isAdmin),
       tap((isAdmin) => {
         if (!isAdmin) {
           this.router.navigate(['dashboard']);

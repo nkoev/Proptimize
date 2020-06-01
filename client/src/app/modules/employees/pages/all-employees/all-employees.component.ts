@@ -54,7 +54,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
       (data) => (this.loggedUser = data.loggedUser)
     );
     const sub4 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res)
+      (res) => (this.loggedUser = res.data())
     );
     const sub5 = this.skillService
       .getSkills()
