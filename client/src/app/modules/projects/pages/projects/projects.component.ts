@@ -66,13 +66,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     );
 
     const sub5 = this.employeeService.$allEmployees.subscribe((employees) => {
-      this.employeesListData$.next(
-        employees.map((employee) => {
-          const data = employee.data();
-          const id = employee.id;
-          return { id, ...data };
-        })
-      );
+      this.employeesListData$.next(employees);
     });
 
     const sub6 = this.skillService
