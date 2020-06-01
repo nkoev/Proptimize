@@ -13,7 +13,17 @@
       class="item"
       *ngFor="let employee of filteredEmployees"
       (click)="showEmployee.emit(employee)"
-      >{{ employee.firstName }}&nbsp;{{ employee.lastName }}</mat-list-item
+      ><div class="list-item">
+        {{ employee.firstName }}&nbsp;{{ employee.lastName }}
+        <button
+          mat-button
+          class="edit-button"
+          *ngIf="loggedUser.isAdmin"
+          (click)="editEmployee.emit(employee); $event.stopPropagation()"
+        >
+          Edit
+        </button>
+      </div></mat-list-item
     >
   </div>
   <div *ngIf="type === 'managers'">

@@ -57,6 +57,10 @@
   font-size: 1.4em;
 }
 
+.main {
+  width: 98%;
+}
+
 /*  MEDIA */
 @media (max-width: 768px) {
   .card-content {

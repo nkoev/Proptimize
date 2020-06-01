@@ -60,9 +60,9 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
 
   width: 95%;
+  max-width: 700px;
   height: 90%;
   overflow-y: auto;
 }
@@ -87,7 +87,9 @@ button {
     display: flex;
     flex-direction: column;
   }
-  .footer {
-    display: none;
+  @media (max-height: 730px) {
+    .footer {
+      display: none;
+    }
   }
 }

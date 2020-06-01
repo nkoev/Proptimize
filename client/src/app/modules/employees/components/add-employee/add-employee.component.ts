@@ -17,15 +17,16 @@ export class AddEmployeeComponent implements OnInit {
   skillsList: string[];
   managersList: DocumentData[];
   employeeForm: FormGroup;
+  inProgress = false;
 
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private userService: UserService,
-    public dialogRef: MatDialogRef<AddEmployeeComponent>,
     private notificator: NotificationService,
     @Inject(MAT_DIALOG_DATA)
-    private data: { skillsList: string[]; managers: DocumentReference[] }
+    private data: { skillsList: string[]; managers: DocumentReference[] },
+    public dialogRef: MatDialogRef<AddEmployeeComponent>
   ) {
     this.skillsList = this.data.skillsList;
     this.managersList = this.data.managers;
@@ -72,10 +73,32 @@ export class AddEmployeeComponent implements OnInit {
 
   onSubmit(form: FormGroup) {
     form.invalid
-      ? console.log('Invalid Form')
+      ? this.notifyErrors()
       : form.value.isManager
       ? this.registerUser(form)
       : this.addEmployee(form);
+  }
+
+  private notifyErrors() {
+    const controls = this.employeeForm.controls;
+    for (const controlName in controls) {
+      if (controls[controlName].errors?.required) {
+        this.notificator.warn(' Please, fill in all the required fields.');
+        break;
+      }
+    }
+    if (this.email.errors?.email) {
+      this.notificator.warn(' Please, provide valid email address.');
+    }
+    if (this.firstName.errors?.maxlength) {
+      this.notificator.warn('First Name should not exceed 20 characters');
+    }
+    if (this.lastName.errors?.maxlength) {
+      this.notificator.warn('Last Name should not exceed 20 characters');
+    }
+    if (this.position.errors?.maxlength) {
+      this.notificator.warn('Position should not exceed 20 characters');
+    }
   }
 
   private addEmployee(form: FormGroup) {
@@ -92,6 +115,7 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   private registerUser(form: FormGroup) {
+    this.inProgress = true;
     this.userService.registerUser(this.toUserDTO(form)).subscribe(
       () => {
         this.dialogRef.close();
@@ -100,6 +124,7 @@ export class AddEmployeeComponent implements OnInit {
         );
       },
       (err) => {
+        this.inProgress = false;
         this.notificator.error('Registration failed.');
         console.log(err.message);
       }
@@ -114,11 +139,15 @@ export class AddEmployeeComponent implements OnInit {
       skills: form.value.skills,
       availableHours: 8,
       projects: [],
-      managedBy: null,
+      managedBy:
+        form.value.managedBy === 'self-managed'
+          ? null
+          : {
+              id: form.value.managedBy.id,
+              firstName: form.value.managedBy.firstName,
+              lastName: form.value.managedBy.lastName,
+            },
     };
-    if (form.value.managedBy !== 'self-managed') {
-      employee.managedBy = form.value.managedBy.id;
-    }
     return employee;
   }
 
@@ -132,11 +161,15 @@ export class AddEmployeeComponent implements OnInit {
       isAdmin: form.value.isAdmin,
       availableHours: 8,
       projects: [],
-      managedBy: null,
+      managedBy:
+        form.value.managedBy === 'self-managed'
+          ? null
+          : {
+              id: form.value.managedBy.id,
+              firstName: form.value.managedBy.firstName,
+              lastName: form.value.managedBy.lastName,
+            },
     };
-    if (form.value.managedBy !== 'self-managed') {
-      user.managedBy = form.value.managedBy.id;
-    }
     return user;
   }
 

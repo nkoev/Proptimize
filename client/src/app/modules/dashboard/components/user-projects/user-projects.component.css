@@ -1,0 +1,32 @@
+.list {
+  padding: 0px !important;
+  margin-bottom: 5px;
+  width: auto;
+  height: 32vh;
+  overflow-y: auto;
+}
+
+.title {
+  margin: 5px 0px 5px;
+}
+
+.item {
+  height: 2.2em !important;
+  width: 100%;
+  background-color: rgba(55, 58, 77, 0.5);
+  border-radius: 8px;
+  margin-bottom: 1%;
+  overflow: hidden;
+}
+
+.item:hover {
+  background-color: rgba(55, 58, 77, 0.2);
+  cursor: pointer;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}

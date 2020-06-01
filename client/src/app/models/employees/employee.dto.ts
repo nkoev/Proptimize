@@ -8,6 +8,6 @@ export class EmployeeDTO {
   projects: {
     name: string;
     id: string;
-    skills: { name: string; hours: number }[];
+    dailyInput: { skill: string; hours: number }[];
   }[];
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { DocumentData } from '@angular/fire/firestore/interfaces';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,7 +17,6 @@ import { SkillService } from 'src/app/modules/skills/skill.service';
   styleUrls: ['./projects.component.css'],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
-
   isLeftVisible = true;
   today = new Date();
   projectsData: ProjectDTO[];
@@ -29,10 +28,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   skillsList: string[] = [];
   employeesListData$ = new BehaviorSubject([]);
   employeesList = this.employeesListData$.asObservable();
-  statusList = [
-    'In Progress',
-    'Closed',
-  ];
+  statusList = ['In Progress', 'Closed'];
 
   constructor(
     private projectService: ProjectService,
@@ -41,40 +37,49 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private matDialog: MatDialog,
     private router: Router,
-    private readonly route: ActivatedRoute,
-  ) { }
+    private readonly route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    const sub1 = this.projectService.getAll().subscribe(data => {
+    const sub1 = this.projectService.getAll().subscribe((data) => {
       console.log(data);
       this.projectsData = data;
       this.projects$.next(data);
 
-      const sub3 = this.route.queryParams.subscribe((params) => {
+      const sub2 = this.route.queryParams.subscribe((params) => {
         const projectId = params['id'];
         if (projectId && this.projectsData) {
-          this.singleProject = this.projects$.getValue().filter(p => p.id === projectId)[0];
+          this.singleProject = this.projects$
+            .getValue()
+            .filter((p) => p.id === projectId)[0];
           // console.log(this.singleProject);
           this.togglePanes(false);
         }
       });
     });
 
-    const sub2 = this.auth.loggedUser$.subscribe(res => {
-      this.loggedUser = res;
+    const sub3 = this.route.data.subscribe(
+      (data) => (this.loggedUser = data.loggedUser)
+    );
+    const sub4 = this.auth.loggedUser$.subscribe(
+      (res) => (this.loggedUser = res.data())
+    );
+
+    const sub5 = this.employeeService.$allEmployees.subscribe((employees) => {
+      this.employeesListData$.next(
+        employees.map((employee) => {
+          const data = employee.data();
+          const id = employee.id;
+          return { id, ...data };
+        })
+      );
     });
 
-    const sub4 = this.employeeService.$allEmployees.subscribe((employees) => {
-      this.employeesListData$.next(employees.map(employee => {
-        const data = employee.data();
-        const id = employee.id;
-        return { id, ...data };
-      }));
-    });
+    const sub6 = this.skillService
+      .getSkills()
+      .subscribe((res: any) => (this.skillsList = res));
 
-    const sub5 = this.skillService.getSkills().subscribe((res: any) => (this.skillsList = res));
-
-    this.subscriptions.push(sub1, sub2);
+    this.subscriptions.push(sub1, sub3, sub4, sub5, sub6);
   }
 
   ngOnDestroy(): void {
@@ -102,15 +107,22 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     if (event.reporter) {
       filteredProjects = filteredProjects.filter((project) => {
         if (
-          project.reporter?.firstName.toLowerCase().includes(event.reporter.toLowerCase())
-          || project.reporter?.lastName.toLowerCase().includes(event.reporter.toLowerCase())
-        ) { return true }
-        else { return false }
+          project.reporter?.firstName
+            .toLowerCase()
+            .includes(event.reporter.toLowerCase()) ||
+          project.reporter?.lastName
+            .toLowerCase()
+            .includes(event.reporter.toLowerCase())
+        ) {
+          return true;
+        } else {
+          return false;
+        }
       });
     }
     if (event.myProjects) {
-      filteredProjects = filteredProjects.filter((project) =>
-        project.reporter?.id === this.loggedUser.uid
+      filteredProjects = filteredProjects.filter(
+        (project) => project.reporter?.id === this.loggedUser.uid
       );
     }
 
@@ -119,7 +131,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   addProject() {
     if (this.loggedUser.availableHours < 1) {
-      window.alert('You can\'t start a project, because you are already working 8h/day');
+      window.alert(
+        "You can't start a project, because you are already working 8h/day"
+      );
       return;
     }
 
@@ -130,17 +144,19 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       currentProject: {},
     };
 
-    AddProjectComponent.openProjectDialog(this.matDialog, dialogData).subscribe(result => {
-      if (result) {
-        const projectData = this.projectService.formToProjectData(result);
-        this.projectService.addProject(projectData, this.loggedUser);
+    AddProjectComponent.openProjectDialog(this.matDialog, dialogData).subscribe(
+      (result) => {
+        if (result) {
+          const projectData = this.projectService.formToProjectData(result);
+          this.projectService.addProject(projectData, this.loggedUser);
+        }
       }
-    });
+    );
   }
 
   updateProject() {
     if (this.loggedUser.uid !== this.singleProject.reporter.id) {
-      window.alert('You can\'t update other users\' projects');
+      window.alert("You can't update other users' projects");
       return;
     }
 
@@ -151,12 +167,21 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       currentProject: this.singleProject,
     };
 
-    AddProjectComponent.openProjectDialog(this.matDialog, dialogData).subscribe(result => {
-      if (result) {
-        const projectData = this.projectService.formToProjectData(result, this.singleProject);
-        this.projectService.updateProject(projectData, this.loggedUser, this.singleProject);
+    AddProjectComponent.openProjectDialog(this.matDialog, dialogData).subscribe(
+      (result) => {
+        if (result) {
+          const projectData = this.projectService.formToProjectData(
+            result,
+            this.singleProject
+          );
+          this.projectService.updateProject(
+            projectData,
+            this.loggedUser,
+            this.singleProject
+          );
+        }
       }
-    });
+    );
   }
 
   closeProject() {
@@ -167,7 +192,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.isLeftVisible = event;
     event
       ? this.router.navigate(['/' + 'projects'])
-      : this.router.navigate(['/' + 'projects'], { queryParams: { id: this.singleProject.id } })
+      : this.router.navigate(['/' + 'projects'], {
+          queryParams: { id: this.singleProject.id },
+        });
   }
 
   getSingleProject(project: any) {

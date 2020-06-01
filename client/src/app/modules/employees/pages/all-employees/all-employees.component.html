@@ -1,12 +1,12 @@
 <div class="top-container">
   <div class="card-container">
     <div class="card-header">
-      <app-header></app-header>
+      <app-header [loggedUser]="loggedUser"></app-header>
     </div>
 
     <div class="card-content">
       <div class="navigation">
-        <app-navigation></app-navigation>
+        <app-navigation [loggedUser]="loggedUser"></app-navigation>
       </div>
 
       <div class="content">
@@ -21,7 +21,9 @@
               <app-employees-list
                 [filteredEmployees]="filteredEmployees"
                 [filteredManagers]="filteredManagers"
+                [loggedUser]="loggedUser"
                 (showEmployee)="showDetailEmployee($event)"
+                (editEmployee)="editEmployee($event)"
               ></app-employees-list>
               <app-employees-filtering-form
                 [skillsList]="skillsList"

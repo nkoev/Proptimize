@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { firestore } from 'firebase/app';
 import { AngularFirestoreCollection } from '@angular/fire/firestore/public_api';
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { Observable } from 'rxjs';
@@ -16,9 +17,13 @@ export class EmployeeService {
 
   constructor(private afs: AngularFirestore) {
     this.employeesCol = this.afs.collection<EmployeeDTO>('employees');
-    this.$allEmployees = this.employeesCol
-      .snapshotChanges()
-      .pipe(map((changes) => changes.map((change) => change.payload.doc)));
+    this.$allEmployees = this.employeesCol.snapshotChanges().pipe(
+      map((changes) =>
+        changes.map((change) => {
+          return { ...change.payload.doc.data(), id: change.payload.doc.id };
+        })
+      )
+    );
   }
 
   async getAllEmployees() {
@@ -55,5 +60,11 @@ export class EmployeeService {
 
   async addEmployee(employee: EmployeeDTO) {
     return await this.employeesCol.add(employee);
+  }
+
+  async addSkillsToEmployee(skills: string[], employeeId: string) {
+    return await this.employeesCol
+      .doc(employeeId)
+      .update({ skills: firestore.FieldValue.arrayUnion(...skills) });
   }
 }

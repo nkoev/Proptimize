@@ -1,24 +1,46 @@
-{{ employee.firstName }} {{ employee.lastName }}
-<br />
-{{ employee.position }}
-<br />
-<div *ngIf="!employee.skills">Skills: Management</div>
+<div class="employee-info">
+  <div>
+    <div class="name">{{ employee.firstName }} {{ employee.lastName }}</div>
+    <div class="position">{{ employee.position }}</div>
+  </div>
+  <img class="avatar" *ngIf="employee.avatarUrl" [src]="employee.avatarUrl" />
+</div>
+
+<div *ngIf="!employee.skills">
+  Skills: <span class="skill">Management</span>
+</div>
 <div *ngIf="employee.skills">
   Skills:
-  <span *ngFor="let skill of employee.skills" (click)="backEvent.emit(skill)"
-    >{{ skill }}&nbsp;</span
+  <span
+    *ngFor="let skill of employee.skills"
+    class="skill"
+    (click)="backEvent.emit(skill)"
+    >{{ skill }}</span
   >
 </div>
+<h2 class="title">Today's projects & tasks:</h2>
 <mat-list class="list">
-  <mat-list-item class="list-header">Today's projects & tasks: </mat-list-item>
   <mat-list-item
     class="item"
     *ngFor="let project of employee.projects"
     (click)="goToProject(project.id)"
-    >{{ project.name }} &nbsp;
-    <span *ngFor="let skill of project.skills"
-      >{{ skill.name }}: &nbsp; {{ skill.hours }}h.
-    </span></mat-list-item
-  >
+    ><div class="list-item">
+      {{ project.name }} &nbsp;
+      <button
+        mat-button
+        [matMenuTriggerFor]="tasks"
+        (click)="$event.stopPropagation()"
+      >
+        Tasks
+      </button>
+    </div>
+    <mat-menu #tasks="matMenu">
+      <p mat-menu-item *ngFor="let input of project.dailyInput">
+        {{ input.skill }}: {{ input.hours }}h
+      </p>
+    </mat-menu>
+  </mat-list-item>
 </mat-list>
-<button mat-button (click)="backEvent.emit()">Back</button>
+<button mat-button (click)="backEvent.emit()">
+  Back
+</button>

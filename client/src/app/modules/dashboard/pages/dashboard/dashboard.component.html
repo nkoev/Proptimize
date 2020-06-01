@@ -1,0 +1,25 @@
+<div class="top-container">
+  <div class="card-container">
+    <div class="card-header">
+      <app-header [loggedUser]="loggedUser"></app-header>
+    </div>
+
+    <div class="card-content">
+      <div class="navigation">
+        <app-navigation [loggedUser]="loggedUser"></app-navigation>
+      </div>
+
+      <div class="content">
+        <div class="header">
+          <div class="title">DASHBOARD</div>
+          <div class="date">{{ today | date }}</div>
+        </div>
+        <div class="main">
+          <app-user-info [loggedUser]="loggedUser"></app-user-info>
+          <app-user-projects [loggedUser]="loggedUser"></app-user-projects>
+          <app-avatar-upload></app-avatar-upload>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

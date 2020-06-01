@@ -3,7 +3,7 @@ import { CoreModule } from '../core.module';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { UserDTO } from 'src/app/models/employees/user.dto';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { of } from 'rxjs';
 
@@ -11,18 +11,27 @@ import { of } from 'rxjs';
   providedIn: CoreModule,
 })
 export class AuthService {
-  loggedUser$: Observable<UserDTO>;
+  isLoggedIn$: Observable<boolean> = this.afAuth.authState.pipe(
+    map((loggedUser) => (loggedUser ? true : false))
+  );
 
-  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
-    this.loggedUser$ = this.afAuth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.afs.doc<UserDTO>(`users/${user.uid}`).valueChanges();
-        } else {
-          return of(null);
-        }
-      })
-    );
+  loggedUser$: Observable<any> = this.afAuth.authState.pipe(
+    switchMap((user) => {
+      if (user) {
+        return this.afs.doc<any>(`users/${user.uid}`).get();
+      } else {
+        return of(null);
+      }
+    })
+  );
+
+  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {}
+
+  async getCurrentUser(): Promise<UserDTO> {
+    const user = await this.afAuth.currentUser;
+    return (
+      await this.afs.doc(`users/${user.uid}`).ref.get()
+    ).data() as UserDTO;
   }
 
   async login(username: string, password: string) {

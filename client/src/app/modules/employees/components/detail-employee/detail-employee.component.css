@@ -1,19 +1,80 @@
 .list {
   padding: 0px !important;
+  margin-bottom: 5px;
   width: auto;
-  height: 46vh;
+  height: 32vh;
   overflow-y: auto;
 }
 
+.title {
+  margin: 5px 0px 5px;
+}
+
 .item {
-  height: 2em !important;
+  height: 2.2em !important;
   width: 100%;
   background-color: rgba(55, 58, 77, 0.5);
   border-radius: 8px;
   margin-bottom: 1%;
+  overflow: hidden;
 }
 
 .item:hover {
   background-color: rgba(55, 58, 77, 0.2);
   cursor: pointer;
 }
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.employee-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-style: solid;
+  border-color: rgba(55, 58, 77, 0.5);
+  width: 97%;
+  text-align: center;
+  border-radius: 8px;
+  padding: 1%;
+  margin: 2% 0;
+}
+
+.name {
+  font-size: 1.5em;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.position {
+  font-style: italic;
+}
+
+.avatar {
+  height: 3em;
+  width: 3em;
+  border-radius: 50%;
+  margin-left: 10%;
+}
+
+.skill {
+  padding: 5px;
+  background-color: rgba(55, 58, 77, 0.5);
+  border-radius: 8px;
+  margin-right: 1%;
+}
+
+.skill:hover {
+  background-color: rgba(55, 58, 77, 0.2);
+  cursor: pointer;
+}
+
+/* @media (max-width: 600px) {
+  .employee-info {
+    width: 96%;
+  }
+} */

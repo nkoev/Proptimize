@@ -12,6 +12,12 @@
   align-items: center;
 }
 
+.right .image {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+
 .right .avatar {
   display: flex;
   justify-content: center;

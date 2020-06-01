@@ -1,0 +1,9 @@
+.dialog-container {
+  text-align: center;
+}
+
+.apply-options-bttn {
+  margin-left: 10px;
+  margin-bottom: 10px;
+  background-color: rgba(55, 58, 77, 0.5);
+}

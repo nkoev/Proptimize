@@ -1,46 +1,89 @@
 <div class="top-container">
-    <div class="card-container">
+  <div class="card-container">
+    <div class="card-header">
+      <app-header [loggedUser]="loggedUser"></app-header>
+    </div>
 
-        <div class="card-header">
-            <app-header></app-header>
+    <div class="card-content">
+      <div class="navigation">
+        <app-navigation [loggedUser]="loggedUser"></app-navigation>
+      </div>
+
+      <div class="content">
+        <div class="header">
+          <div class="title">PROJECTS</div>
+          <div class="date">{{ today | date }}</div>
         </div>
 
-        <div class="card-content">
-            <div class="navigation">
-                <app-navigation></app-navigation>
+        <div class="main">
+          <app-slide-panel [activePane]="isLeftVisible ? 'left' : 'right'">
+            <div leftPane>
+              <div class="add-project-btn">
+                <button mat-raised-button (click)="addProject()">
+                  New Project
+                </button>
+              </div>
+              <app-projects-list
+                [projects]="projects"
+                (click)="togglePanes(false)"
+                (selectProjectEvent)="getSingleProject($event)"
+              >
+              </app-projects-list>
+              <app-projects-filtering-form
+                [skillsList]="skillsList"
+                [statusList]="statusList"
+                (filterEvent)="filterProjects($event)"
+                #filter
+              >
+              </app-projects-filtering-form>
             </div>
 
             <div class="content">
-                <div class="header">
-                    <div class="title">PROJECTS</div>
-                    <div class="date">{{today | date}}</div>
-                </div>
+              <div class="header">
+                <div class="title">PROJECTS</div>
+                <div class="date">{{ today | date }}</div>
+              </div>
 
-                <div class="main">
-                    <app-slide-panel [activePane]="isLeftVisible ? 'left' : 'right'">
-                        <div leftPane>
-                            <div class="add-project-btn">
-                                <button mat-raised-button (click)="addProject()">New Project</button>
-                            </div>
-                            <app-projects-list [projects]="projects" (click)="togglePanes(false)"
-                                (selectProjectEvent)="getSingleProject($event)">
-                            </app-projects-list>
-                            <app-projects-filtering-form [skillsList]="skillsList" [statusList]="statusList"
-                                (filterEvent)="filterProjects($event)" #filter>
-                            </app-projects-filtering-form>
-                        </div>
+              <div class="main">
+                <app-slide-panel
+                  [activePane]="isLeftVisible ? 'left' : 'right'"
+                >
+                  <div leftPane>
+                    <div class="add-project-btn">
+                      <button mat-raised-button (click)="addProject()">
+                        New Project
+                      </button>
+                    </div>
+                    <app-projects-list
+                      [projects]="projects"
+                      (click)="togglePanes(false)"
+                      (selectProjectEvent)="getSingleProject($event)"
+                    >
+                    </app-projects-list>
+                    <app-projects-filtering-form
+                      [skillsList]="skillsList"
+                      [statusList]="statusList"
+                      (filterEvent)="filterProjects($event)"
+                      #filter
+                    >
+                    </app-projects-filtering-form>
+                  </div>
 
-                        <div rightPane>
-                            <div class="add-project-btn">
-                                <button mat-raised-button (click)="updateProject()">Update Project</button>
-                            </div>
-                            <app-single-project (toggleEvent)="togglePanes($event)">
-                            </app-single-project>
-                        </div>
-                    </app-slide-panel>
-                </div>
+                  <div rightPane>
+                    <div class="add-project-btn">
+                      <button mat-raised-button (click)="updateProject()">
+                        Update Project
+                      </button>
+                    </div>
+                    <app-single-project (toggleEvent)="togglePanes($event)">
+                    </app-single-project>
+                  </div>
+                </app-slide-panel>
+              </div>
             </div>
+          </app-slide-panel>
         </div>
-
+      </div>
     </div>
+  </div>
 </div>

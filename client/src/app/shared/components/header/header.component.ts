@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { Router } from '@angular/router';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 
 @Component({
   selector: 'app-header',
@@ -8,16 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  initials: string;
+  @Input() loggedUser: UserDTO;
   constructor(private auth: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.auth.loggedUser$.subscribe((res) => {
-      if (res) {
-        this.initials = res.firstName[0].toUpperCase();
-      }
-    });
-  }
+  ngOnInit(): void {}
 
   logout() {
     this.auth

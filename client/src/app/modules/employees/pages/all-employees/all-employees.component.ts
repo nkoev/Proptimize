@@ -10,6 +10,8 @@ import { OrgChartComponent } from '../../components/orgchart/orgchart.component'
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { EmployeesFilteringFormComponent } from '../../components/employees-filtering-form/employees-filtering-form.component';
 import { SkillService } from 'src/app/modules/skills/skill.service';
+import { ActivatedRoute } from '@angular/router';
+import { EditEmployeeComponent } from '../../components/edit-employee/edit-employee.component';
 
 @Component({
   selector: 'app-all-employees',
@@ -33,6 +35,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   constructor(
     private matDialog: MatDialog,
     private employeeService: EmployeeService,
+    private route: ActivatedRoute,
     private auth: AuthService,
     private userService: UserService,
     private skillService: SkillService
@@ -41,22 +44,23 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const sub1 = this.userService.allUsers$.subscribe((users) => {
       this.managers = users;
-      this.filteredManagers = this.managers.map((manager) => manager.data());
+      this.filteredManagers = this.managers;
     });
     const sub2 = this.employeeService.$allEmployees.subscribe((employees) => {
       this.employees = employees;
-      this.filteredEmployees = this.employees.map((employee) =>
-        employee.data()
-      );
+      this.filteredEmployees = this.employees;
     });
-    const sub3 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res)
+    const sub3 = this.route.data.subscribe(
+      (data) => (this.loggedUser = data.loggedUser)
     );
-    const sub4 = this.skillService
+    const sub4 = this.auth.loggedUser$.subscribe(
+      (res) => (this.loggedUser = res.data())
+    );
+    const sub5 = this.skillService
       .getSkills()
       .subscribe((res) => (this.skillsList = res));
     google.charts.load('current', { packages: ['orgchart'] });
-    this.subscriptions.push(sub1, sub2, sub3, sub4);
+    this.subscriptions.push(sub1, sub2, sub3, sub4, sub5);
   }
 
   ngOnDestroy(): void {
@@ -66,6 +70,12 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   addEmployee() {
     this.matDialog.open(AddEmployeeComponent, {
       data: { skillsList: this.skillsList, managers: this.managers },
+    });
+  }
+
+  editEmployee(event: Event) {
+    this.matDialog.open(EditEmployeeComponent, {
+      data: { skillsList: this.skillsList, employee: event },
     });
   }
 
@@ -88,8 +98,8 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   }
 
   filterEmployees(event: any) {
-    this.filteredEmployees = this.employees.map((employee) => employee.data());
-    this.filteredManagers = this.managers.map((manager) => manager.data());
+    this.filteredEmployees = this.employees;
+    this.filteredManagers = this.managers;
 
     if (event.skills?.length) {
       this.filteredEmployees = this.filteredEmployees.filter((employee) =>
@@ -114,10 +124,10 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     }
     if (event.subordinates) {
       this.filteredEmployees = this.filteredEmployees.filter(
-        (employee) => employee.managedBy === this.loggedUser.uid
+        (employee) => employee.managedBy.id === this.loggedUser.uid
       );
       this.filteredManagers = this.filteredManagers.filter(
-        (manager) => manager.managedBy === this.loggedUser.uid
+        (manager) => manager.managedBy.id === this.loggedUser.uid
       );
     }
   }

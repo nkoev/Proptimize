@@ -1,0 +1,4 @@
+<button type="button" mat-raised-button (click)="fileInput.click()">
+  Upload avatar
+</button>
+<input hidden (change)="onFileSelected($event)" #fileInput type="file" />

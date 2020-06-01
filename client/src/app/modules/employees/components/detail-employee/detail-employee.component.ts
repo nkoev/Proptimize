@@ -1,12 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  AfterViewInit,
-} from '@angular/core';
-import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,13 +7,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./detail-employee.component.css'],
 })
 export class DetailEmployeeComponent implements OnInit {
-  @Input() employee: EmployeeDTO;
+  @Input() employee: any;
   @Output() backEvent = new EventEmitter<any>();
   constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
   goToProject(projectId: string) {
-    this.router.navigate(['/projects', { queryParams: { id: projectId } }]);
+    this.router.navigate(['/projects'], { queryParams: { id: projectId } });
   }
 }

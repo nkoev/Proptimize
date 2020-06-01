@@ -20,9 +20,7 @@
       <mat-select [formControl]="managedBy">
         <mat-option value="self-managed">Self-managed</mat-option>
         <mat-option *ngFor="let manager of managersList" [value]="manager"
-          >{{ manager.data().firstName }}&nbsp;{{
-            manager.data().lastName
-          }}</mat-option
+          >{{ manager.firstName }}&nbsp;{{ manager.lastName }}</mat-option
         >
       </mat-select>
     </mat-form-field>
@@ -62,4 +60,5 @@
       Cancel
     </button>
   </form>
+  <mat-spinner class="spinner" *ngIf="inProgress"></mat-spinner>
 </div>

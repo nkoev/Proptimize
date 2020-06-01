@@ -7,5 +7,10 @@ export class UserDTO {
   managedBy: any;
   isAdmin: boolean;
   availableHours: number;
-  projects: { hours: number; project: string }[];
+  avatarUrl?: string;
+  projects: {
+    name: string;
+    id: string;
+    dailyInput: { skill: string; hours: number }[];
+  }[];
 }
