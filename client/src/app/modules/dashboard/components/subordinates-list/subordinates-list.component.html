@@ -1,0 +1,11 @@
+<h2 class="title">My team:</h2>
+<mat-list class="list">
+  <mat-list-item
+    class="item"
+    *ngFor="let employee of subordinates"
+    (click)="toDetailEmployee(employee.id)"
+    ><div class="list-item">
+      {{ employee.firstName }} {{ employee.lastName }} - {{ employee.position }}
+    </div>
+  </mat-list-item>
+</mat-list>

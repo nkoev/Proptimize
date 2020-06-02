@@ -1,11 +1,21 @@
 <h2 class="title">Today's managed projects:</h2>
 <mat-list class="list">
-  <mat-list-item class="item" *ngFor="let project of loggedUser.projects"
+  <mat-list-item
+    class="item"
+    *ngFor="let project of loggedUser.projects"
+    (click)="goToProject(project.id)"
     ><div class="list-item">{{ project.name }} &nbsp;</div>
     <mat-menu #tasks="matMenu">
       <p mat-menu-item *ngFor="let input of project.dailyInput">
         {{ input.skill }}: {{ input.hours }}h
       </p>
     </mat-menu>
+    <button
+      mat-button
+      class="edit-button"
+      (click)="expandProject(project); $event.stopPropagation()"
+    >
+      More
+    </button>
   </mat-list-item>
 </mat-list>

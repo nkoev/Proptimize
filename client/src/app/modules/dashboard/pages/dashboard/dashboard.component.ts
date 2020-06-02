@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/modules/employees/services/user.service';
+import { EmployeeService } from 'src/app/modules/employees/services/employee.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SubordinatesListComponent } from '../../components/subordinates-list/subordinates-list.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +18,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   today = new Date();
   subscriptions: Subscription[] = [];
 
-  constructor(private route: ActivatedRoute, private auth: AuthService) {
+  constructor(
+    private route: ActivatedRoute,
+    private auth: AuthService,
+    private userService: UserService,
+    private employeeService: EmployeeService,
+    private matDialog: MatDialog
+  ) {}
+
+  ngOnInit(): void {
     const sub1 = this.route.data.subscribe((data) => {
       this.loggedUser = data.loggedUser;
     });
@@ -25,9 +36,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub1, sub2);
   }
 
-  ngOnInit(): void {}
-
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
+  async showSubordinates() {
+    const subordinates = [
+      ...(await this.userService.queryUsers(
+        'managedBy.id',
+        this.loggedUser.uid
+      )),
+      ...(await this.employeeService.queryEmployees(
+        'managedBy.id',
+        this.loggedUser.uid
+      )),
+    ];
+    this.matDialog.open(SubordinatesListComponent, {
+      data: { subordinates },
+      minWidth: '300px',
+    });
   }
 }

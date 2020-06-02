@@ -58,7 +58,17 @@
 }
 
 .main {
-  width: 98%;
+  display: flex;
+  flex-direction: column;
+
+  width: 95%;
+  max-width: 700px;
+  height: 90%;
+}
+
+.footer {
+  margin-bottom: 1%;
+  text-align: center;
 }
 
 /*  MEDIA */

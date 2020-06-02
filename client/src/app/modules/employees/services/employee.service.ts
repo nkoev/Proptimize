@@ -26,8 +26,13 @@ export class EmployeeService {
     );
   }
 
-  async getAllEmployees() {
-    return await this.employeesCol.ref.get();
+  async queryEmployees(field: string, value: string) {
+    const snapshot = await this.employeesCol.ref
+      .where(field, '==', value)
+      .get();
+    return snapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
   }
 
   async getEmployeeById(employeeId: string) {
@@ -42,7 +47,7 @@ export class EmployeeService {
     const employeeRef = this.employeesCol.doc(employeeId);
     employeeRef.update({
       availableHours: firebase.firestore.FieldValue.increment(-sum),
-      projects: firebase.firestore.FieldValue.arrayUnion(project)
+      projects: firebase.firestore.FieldValue.arrayUnion(project),
     });
   }
 
@@ -54,7 +59,7 @@ export class EmployeeService {
     const employeeRef = this.employeesCol.doc(employeeId);
     employeeRef.update({
       availableHours: firebase.firestore.FieldValue.increment(sum),
-      projects: firebase.firestore.FieldValue.arrayRemove(project)
+      projects: firebase.firestore.FieldValue.arrayRemove(project),
     });
   }
 

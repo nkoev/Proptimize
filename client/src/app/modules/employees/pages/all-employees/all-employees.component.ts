@@ -10,7 +10,7 @@ import { OrgChartComponent } from '../../components/orgchart/orgchart.component'
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { EmployeesFilteringFormComponent } from '../../components/employees-filtering-form/employees-filtering-form.component';
 import { SkillService } from 'src/app/modules/skills/skill.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EditEmployeeComponent } from '../../components/edit-employee/edit-employee.component';
 
 @Component({

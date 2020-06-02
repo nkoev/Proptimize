@@ -33,8 +33,11 @@ export class UserService {
     );
   }
 
-  async getAllUsers() {
-    return await this.usersCol.ref.get();
+  async queryUsers(field: string, value: string) {
+    const snapshot = await this.usersCol.ref.where(field, '==', value).get();
+    return snapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
   }
 
   async getUserById(userId: string) {
@@ -65,16 +68,20 @@ export class UserService {
   addProject(userId: string, project: any) {
     const employeeRef = this.usersCol.doc(userId);
     employeeRef.update({
-      availableHours: firebase.firestore.FieldValue.increment(-project.dailyInput[0].hours),
-      projects: firebase.firestore.FieldValue.arrayUnion(project)
+      availableHours: firebase.firestore.FieldValue.increment(
+        -project.dailyInput[0].hours
+      ),
+      projects: firebase.firestore.FieldValue.arrayUnion(project),
     });
   }
 
   removeProject(userId: string, project: any) {
     const employeeRef = this.usersCol.doc(userId);
     employeeRef.update({
-      availableHours: firebase.firestore.FieldValue.increment(project.dailyInput[0].hours),
-      projects: firebase.firestore.FieldValue.arrayRemove(project)
+      availableHours: firebase.firestore.FieldValue.increment(
+        project.dailyInput[0].hours
+      ),
+      projects: firebase.firestore.FieldValue.arrayRemove(project),
     });
   }
 }

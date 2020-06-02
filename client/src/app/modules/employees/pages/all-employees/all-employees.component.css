@@ -64,7 +64,6 @@
   width: 95%;
   max-width: 700px;
   height: 90%;
-  overflow-y: auto;
 }
 
 app-slide-panel {
