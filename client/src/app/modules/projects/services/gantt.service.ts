@@ -167,6 +167,104 @@ export class GanttService {
     return { startDate, endDate, skills };
   }
 
+  projectToChartData(project: any): {
+    startDate: Date,
+    endDate: Date,
+    skills: { skill: string, startDate: Date, endDate: Date, completeness: { amount: number, fill: boolean } }[]
+  } {
+    let sumSkillHours: { skill: string, start: Date, days: number, amount: number }[] = [];
+    let projectManDone: number;
+    if (project.mUpdatedAt) {
+      projectManDone = project.mDone
+        + moment(project.mUpdatedAt.toDate()).businessDiff(moment(this.today)) * project.managementHours;
+    }
+    const targetInDays = project.targetInDays;
+    const startDate = project.createdAt.toDate();
+    const endDate = moment(startDate).businessAdd(targetInDays - 1)._d;
+    const manTarget = project.managementTarget;
+    const manHours = project.managementHours;
+    let manDays: number;
+    let manAmount: number;
+    if (projectManDone) {
+      console.log(projectManDone);
+      manDays = manHours
+        ? (manTarget >= projectManDone
+          ? Math.ceil((manTarget - projectManDone) / manHours)
+          : Math.floor((manTarget - projectManDone) / project.managementHours))
+        : (manTarget > projectManDone ? -1.5 : Math.floor((manTarget - projectManDone) / project.managementHours))
+
+      if (manTarget > projectManDone) {
+        if (manDays === -1.5) {
+          manAmount = 0;
+        } else {
+          if (manDays <= moment(this.today).businessDiff(moment(endDate))) {
+            manAmount = 1;
+          } else {
+            manAmount = Math.round((((projectManDone + moment(this.today).businessDiff(moment(endDate)) * manHours) / manTarget) + Number.EPSILON) * 100) / 100;
+          }
+        }
+      } else { manAmount = 1; }
+    } else {
+      manDays = manHours ? Math.ceil(manTarget / manHours) : -1.5;
+      manAmount = manDays === -1.5
+        ? 0
+        : (manDays <= targetInDays ? 1 : Math.round(((targetInDays / manDays) + Number.EPSILON) * 100) / 100);
+    }
+    sumSkillHours.push({
+      skill: 'Management',
+      start: project.mCreatedAt.toDate(),
+      days: manDays,
+      amount: manAmount
+    });
+
+    const skills: { skill: string, startDate: Date, endDate: Date, completeness: { amount: number, fill: boolean } }[] = [];
+    project.skills.map(skill => {
+      const daysBeen = moment(skill.updatedAt.toDate()).businessDiff(moment(this.today));
+      const daily = skill.employees.reduce((acc, e) => {
+        acc += e.hoursPerSkill;
+        return acc;
+      }, 0);
+      const sumDone = skill.done + daysBeen * daily;
+      const target = skill.targetInHours;
+      let days: number;
+      let amount: number;
+
+      days = daily
+        ? (target >= sumDone ? Math.ceil((target - sumDone) / daily) : Math.floor((target - sumDone) / daily))
+        : (target > sumDone ? -1.5 : Math.floor((target - sumDone) / daily));
+
+      if (target > sumDone) {
+        if (days === -1.5) {
+          amount = 0;
+        } else {
+          if (days <= moment(this.today).businessDiff(moment(endDate))) {
+            amount = 1;
+          } else {
+            amount = Math.round((((sumDone + moment(this.today).businessDiff(moment(endDate)) * daily) / target) + Number.EPSILON) * 100) / 100;
+          }
+        }
+      } else { amount = 1; }
+
+      sumSkillHours.push({ skill: skill.name, start: skill.createdAt.toDate(), days: days, amount: amount });
+    });
+
+    sumSkillHours.forEach(s => {
+      skills.push({
+        skill: s.skill,
+        startDate: s.start,
+        endDate: s.days !== -1.5
+          ? moment(this.today).businessAdd(s.days)._d
+          : moment(this.today).businessAdd(targetInDays)._d,
+        completeness: {
+          amount: s.amount,
+          fill: s.days < moment(this.today).businessDiff(moment(endDate)) ? false : true,
+        }
+      });
+    });
+
+    return { startDate, endDate, skills };
+  }
+
   buildSeries(
     skills: { skill: string, startDate: Date, endDate: Date, completeness: { amount: number, fill: boolean } }[]
   ): { name: string, start: number, end: number, completed: { amount: number, fill?: string } }[] {

@@ -1,15 +1,25 @@
 <div class="projects-container">
 
-    <div>
-        <mat-list *ngFor="let project of (projects | async); let i = index">
-            <mat-list-item (click)="onProjectSelect(i)">
-                <h3 matLine> {{project.name}} </h3>
-                <p matLine>
-                    <span>By: {{ project.reporter.firstName }} {{project.reporter.lastName }} </span>
-                    <span class="demo-2"> -- {{project.status}} </span>
+    <div *ngFor="let project of (projects | async); let i = index">
+        <div (click)="onProjectSelect(i)" class="project">
+            <div class="firstLine">
+                <div class="name">
+                    <div class="icon"></div>
+                    <p>{{project?.name}}</p>
+                </div>
+
+                <div class="status">
+                    <div *ngIf="project?.status === 'In Progress'" class="icon"></div>
+                    <div *ngIf="project?.status === 'Closed'" class="icon closed"></div>
+                    <p>{{project?.status}}</p>
+                </div>
+            </div>
+            <div class="secondLine">
+                <p class="reporter">
+                    <span>Reporter: </span> {{ project.reporter.firstName }} {{project.reporter.lastName }}
                 </p>
-            </mat-list-item>
-        </mat-list>
+            </div>
+        </div>
     </div>
 
 
