@@ -62,7 +62,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       (data) => (this.loggedUser = data.loggedUser)
     );
     const sub4 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res.data())
+      (res) => (this.loggedUser = res)
     );
 
     const sub5 = this.employeeService.$allEmployees.subscribe((employees) => {

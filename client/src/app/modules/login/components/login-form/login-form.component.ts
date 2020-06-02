@@ -19,7 +19,7 @@ export class LoginFormComponent implements OnInit {
     private notificator: NotificationService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required]],
@@ -33,11 +33,11 @@ export class LoginFormComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: FormGroup): void {
     form.invalid ? this.notifyErrors() : this.login();
   }
 
-  private notifyErrors() {
+  private notifyErrors(): void {
     if (this.password.errors?.required) {
       this.notificator.warn(' Please, enter your password.');
     }
@@ -46,7 +46,7 @@ export class LoginFormComponent implements OnInit {
     }
   }
 
-  private login() {
+  private login(): void {
     this.auth
       .login(this.email.value, this.password.value)
       .then(() => {

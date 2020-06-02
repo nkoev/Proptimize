@@ -5,6 +5,7 @@ import { UserDTO } from 'src/app/models/employees/user.dto';
 import { Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { UserCredential } from '@firebase/auth-types';
 import { of } from 'rxjs';
 
 @Injectable({
@@ -15,10 +16,13 @@ export class AuthService {
     map((loggedUser) => (loggedUser ? true : false))
   );
 
-  loggedUser$: Observable<any> = this.afAuth.authState.pipe(
+  loggedUser$: Observable<UserDTO> = this.afAuth.authState.pipe(
     switchMap((user) => {
       if (user) {
-        return this.afs.doc<any>(`users/${user.uid}`).get();
+        return this.afs
+          .doc<UserDTO>(`users/${user.uid}`)
+          .get()
+          .pipe(map((res) => res.data()));
       } else {
         return of(null);
       }
@@ -34,11 +38,11 @@ export class AuthService {
     ).data() as UserDTO;
   }
 
-  async login(username: string, password: string) {
+  async login(username: string, password: string): Promise<UserCredential> {
     return await this.afAuth.signInWithEmailAndPassword(username, password);
   }
 
-  async logout() {
+  async logout(): Promise<void> {
     return await this.afAuth.signOut();
   }
 }

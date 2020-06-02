@@ -1,12 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
-import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { UserService } from '../../services/user.service';
-import { UserDTO } from 'src/app/models/employees/user.dto';
+import { UserCreateDTO } from 'src/app/models/employees/user-create.dto';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DocumentReference, DocumentData } from '@google-cloud/firestore';
 import { NotificationService } from '../../../core/services/notification.service';
+import { EmployeeCreateDTO } from 'src/app/models/employees/employee-create.dto';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 
 @Component({
   selector: 'app-add-employee',
@@ -15,7 +16,7 @@ import { NotificationService } from '../../../core/services/notification.service
 })
 export class AddEmployeeComponent implements OnInit {
   skillsList: string[];
-  managersList: DocumentData[];
+  managersList: UserDTO[];
   employeeForm: FormGroup;
   inProgress = false;
 
@@ -25,14 +26,14 @@ export class AddEmployeeComponent implements OnInit {
     private userService: UserService,
     private notificator: NotificationService,
     @Inject(MAT_DIALOG_DATA)
-    private data: { skillsList: string[]; managers: DocumentReference[] },
+    private data: { skillsList: string[]; managers: UserDTO[] },
     public dialogRef: MatDialogRef<AddEmployeeComponent>
   ) {
     this.skillsList = this.data.skillsList;
     this.managersList = this.data.managers;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.employeeForm = this.fb.group({
       firstName: [null, [Validators.required, Validators.maxLength(20)]],
       lastName: [null, [Validators.required, Validators.maxLength(20)]],
@@ -71,7 +72,7 @@ export class AddEmployeeComponent implements OnInit {
     return this.employeeForm.get('email');
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: FormGroup): void {
     form.invalid
       ? this.notifyErrors()
       : form.value.isManager
@@ -79,7 +80,7 @@ export class AddEmployeeComponent implements OnInit {
       : this.addEmployee(form);
   }
 
-  private notifyErrors() {
+  private notifyErrors(): void {
     const controls = this.employeeForm.controls;
     for (const controlName in controls) {
       if (controls[controlName].errors?.required) {
@@ -101,7 +102,7 @@ export class AddEmployeeComponent implements OnInit {
     }
   }
 
-  private addEmployee(form: FormGroup) {
+  private addEmployee(form: FormGroup): void {
     this.employeeService
       .addEmployee(this.toEmployeeDTO(form))
       .then(() => {
@@ -114,7 +115,7 @@ export class AddEmployeeComponent implements OnInit {
       });
   }
 
-  private registerUser(form: FormGroup) {
+  private registerUser(form: FormGroup): void {
     this.inProgress = true;
     this.userService.registerUser(this.toUserDTO(form)).subscribe(
       () => {
@@ -131,8 +132,8 @@ export class AddEmployeeComponent implements OnInit {
     );
   }
 
-  private toEmployeeDTO(form: FormGroup): EmployeeDTO {
-    const employee: EmployeeDTO = {
+  private toEmployeeDTO(form: FormGroup): EmployeeCreateDTO {
+    const employee: EmployeeCreateDTO = {
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       position: form.value.position,
@@ -151,9 +152,8 @@ export class AddEmployeeComponent implements OnInit {
     return employee;
   }
 
-  private toUserDTO(form: FormGroup): UserDTO {
-    const user: UserDTO = {
-      uid: undefined,
+  private toUserDTO(form: FormGroup): UserCreateDTO {
+    const user: UserCreateDTO = {
       email: form.value.email,
       firstName: form.value.firstName,
       lastName: form.value.lastName,
@@ -173,7 +173,7 @@ export class AddEmployeeComponent implements OnInit {
     return user;
   }
 
-  private setIsManagerValidators() {
+  private setIsManagerValidators(): void {
     const emailControl = this.employeeForm.get('email');
     const skillsControl = this.employeeForm.get('skills');
 

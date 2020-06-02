@@ -4,12 +4,9 @@
     class="item"
     *ngFor="let project of loggedUser.projects"
     (click)="goToProject(project.id)"
-    ><div class="list-item">{{ project.name }} &nbsp;</div>
-    <mat-menu #tasks="matMenu">
-      <p mat-menu-item *ngFor="let input of project.dailyInput">
-        {{ input.skill }}: {{ input.hours }}h
-      </p>
-    </mat-menu>
+    ><div class="list-item">
+      {{ project.name }} - {{ project.dailyInput[0].hours }}h&nbsp;
+    </div>
     <button
       mat-button
       class="edit-button"

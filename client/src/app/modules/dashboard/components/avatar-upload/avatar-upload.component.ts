@@ -21,9 +21,9 @@ export class AvatarUploadComponent implements OnInit {
     this.auth.loggedUser$.subscribe((res) => (this.loggedUser = res));
   }
 
-  onFileSelected(event: any) {
+  onFileSelected(event: any): void {
     this.fileStorage
-      .uploadAvatar(event.target.files[0], this.loggedUser.uid)
+      .uploadAvatar(event.target.files[0], this.loggedUser.id)
       .then(() => this.notificator.success('File uploaded successfully.'))
       .catch(() => this.notificator.error('Something went wrong.'));
   }

@@ -15,7 +15,7 @@ export class SkillsComponent implements OnInit, OnDestroy {
   today = new Date();
   loggedUser: UserDTO;
   skills: string[];
-  skill: FormControl = new FormControl('', [
+  skill = new FormControl('', [
     Validators.required,
     Validators.minLength(4),
     Validators.maxLength(20),
@@ -36,16 +36,16 @@ export class SkillsComponent implements OnInit, OnDestroy {
       (data) => (this.loggedUser = data.loggedUser)
     );
     const sub3 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res.data())
+      (res) => (this.loggedUser = res)
     );
     this.subscriptions.push(sub1, sub2, sub3);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-  addSkill() {
+  addSkill(): void {
     if (this.skill.valid) {
       this.skillService.addSkill({ name: this.skill.value });
       this.skill.reset();
