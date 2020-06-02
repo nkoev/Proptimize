@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DocumentData } from '@google-cloud/firestore';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 
 @Component({
   selector: 'app-employees-list',
@@ -8,11 +10,11 @@ import { DocumentData } from '@google-cloud/firestore';
 })
 export class EmployeesListComponent implements OnInit {
   type = 'employees';
-  @Input() filteredEmployees: DocumentData[];
-  @Input() filteredManagers: DocumentData[];
-  @Input() loggedUser: DocumentData;
-  @Output() showEmployee = new EventEmitter<DocumentData>();
-  @Output() editEmployee = new EventEmitter<DocumentData>();
+  @Input() filteredEmployees: EmployeeDTO[];
+  @Input() filteredManagers: UserDTO[];
+  @Input() loggedUser: UserDTO;
+  @Output() showEmployee = new EventEmitter<any>();
+  @Output() editEmployee = new EventEmitter<EmployeeDTO>();
   constructor() {}
 
   ngOnInit(): void {}

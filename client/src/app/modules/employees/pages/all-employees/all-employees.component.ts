@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEmployeeComponent } from '../../components/add-employee/add-employee.component';
 import { EmployeeService } from '../../services/employee.service';
-import { DocumentData } from '@angular/fire/firestore/interfaces';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
@@ -10,8 +9,10 @@ import { OrgChartComponent } from '../../components/orgchart/orgchart.component'
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { EmployeesFilteringFormComponent } from '../../components/employees-filtering-form/employees-filtering-form.component';
 import { SkillService } from 'src/app/modules/skills/skill.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { EditEmployeeComponent } from '../../components/edit-employee/edit-employee.component';
+import { UserDTO } from 'src/app/models/employees/user.dto';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-all-employees',
@@ -22,11 +23,11 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   activePane = 'left';
   showEmployee: EmployeeDTO;
   skillsList: string[];
-  managers: DocumentData[];
-  employees: DocumentData[];
-  filteredManagers: DocumentData[];
-  filteredEmployees: DocumentData[];
-  loggedUser: DocumentData;
+  managers: UserDTO[];
+  employees: EmployeeDTO[];
+  filteredManagers: UserDTO[];
+  filteredEmployees: EmployeeDTO[];
+  loggedUser: UserDTO;
   today = new Date();
   @ViewChild(EmployeesFilteringFormComponent)
   filteringFormComp: EmployeesFilteringFormComponent;
@@ -54,7 +55,7 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
       (data) => (this.loggedUser = data.loggedUser)
     );
     const sub4 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res.data())
+      (res) => (this.loggedUser = res)
     );
     const sub5 = this.skillService
       .getSkills()
@@ -67,37 +68,37 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-  addEmployee() {
+  addEmployee(): void {
     this.matDialog.open(AddEmployeeComponent, {
       data: { skillsList: this.skillsList, managers: this.managers },
     });
   }
 
-  editEmployee(event: Event) {
+  editEmployee(event: Event): void {
     this.matDialog.open(EditEmployeeComponent, {
       data: { skillsList: this.skillsList, employee: event },
     });
   }
 
-  showOrgChart() {
+  showOrgChart(): void {
     this.matDialog.open(OrgChartComponent, {
       data: { managers: this.managers, employees: this.employees },
     });
   }
 
-  showDetailEmployee(event) {
+  showDetailEmployee(event: EmployeeDTO): void {
     this.activePane = 'right';
     this.showEmployee = event;
   }
 
-  backToList(skill?: string) {
+  backToList(skill?: string): void {
     this.activePane = 'left';
     if (skill) {
       this.filteringFormComp.setSkillsField(skill);
     }
   }
 
-  filterEmployees(event: any) {
+  filterEmployees(event: any): void {
     this.filteredEmployees = this.employees;
     this.filteredManagers = this.managers;
 
@@ -124,10 +125,10 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     }
     if (event.subordinates) {
       this.filteredEmployees = this.filteredEmployees.filter(
-        (employee) => employee.managedBy.id === this.loggedUser.uid
+        (employee) => employee.managedBy.id === this.loggedUser.id
       );
       this.filteredManagers = this.filteredManagers.filter(
-        (manager) => manager.managedBy.id === this.loggedUser.uid
+        (manager) => manager.managedBy.id === this.loggedUser.id
       );
     }
   }

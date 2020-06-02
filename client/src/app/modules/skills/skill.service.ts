@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -18,7 +18,7 @@ export class SkillService {
       );
   }
 
-  async addSkill(skill: { name: string }): Promise<any> {
+  async addSkill(skill: { name: string }): Promise<DocumentReference> {
     return await this.afs.collection('skills').add(skill);
   }
 }

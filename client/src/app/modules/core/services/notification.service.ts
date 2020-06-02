@@ -8,15 +8,15 @@ import { CoreModule } from '../core.module';
 export class NotificationService {
   constructor(private readonly toastrService: ToastrService) {}
 
-  public success(message: string) {
+  public success(message: string): void {
     this.toastrService.success(message);
   }
 
-  public warn(message: string) {
+  public warn(message: string): void {
     this.toastrService.warning(message);
   }
 
-  public error(message: string) {
+  public error(message: string): void {
     this.toastrService.error(message);
   }
 }

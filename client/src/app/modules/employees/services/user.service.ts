@@ -10,13 +10,14 @@ import { DocumentData } from '@google-cloud/firestore';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
+import { UserCreateDTO } from 'src/app/models/employees/user-create.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private usersCol: AngularFirestoreCollection;
-  allUsers$: Observable<DocumentData[]>;
+  private usersCol: AngularFirestoreCollection<UserDTO>;
+  allUsers$: Observable<UserDTO[]>;
 
   constructor(
     private afs: AngularFirestore,
@@ -27,28 +28,32 @@ export class UserService {
     this.allUsers$ = this.usersCol.snapshotChanges().pipe(
       map((changes) =>
         changes.map((change) => {
-          return { ...change.payload.doc.data(), id: change.payload.doc.id };
+          return {
+            ...change.payload.doc.data(),
+            id: change.payload.doc.id,
+          } as UserDTO;
         })
       )
     );
   }
 
-  async queryUsers(field: string, value: string) {
+  async queryUsers(field: string, value: string): Promise<UserDTO[]> {
     const snapshot = await this.usersCol.ref.where(field, '==', value).get();
     return snapshot.docs.map((doc) => {
-      return { ...doc.data(), id: doc.id };
+      return { ...doc.data(), id: doc.id } as UserDTO;
     });
   }
 
-  async getUserById(userId: string) {
-    return await this.usersCol.doc(userId).ref.get();
+  async getUserById(userId: string): Promise<UserDTO> {
+    const doc = await this.usersCol.doc(userId).ref.get();
+    return { ...doc.data(), id: doc.id } as UserDTO;
   }
 
   async updateUser(userId: string, data: Partial<UserDTO>): Promise<void> {
     return await this.usersCol.doc(userId).update(data);
   }
 
-  registerUser(user: UserDTO): Observable<any> {
+  registerUser(user: UserCreateDTO): Observable<void> {
     return this.http
       .post<DocumentData>(
         'https://europe-west1-proptimize-edb90.cloudfunctions.net/register',
@@ -60,7 +65,7 @@ export class UserService {
       .pipe(
         tap((res) => this.afAuth.sendPasswordResetEmail(res.email)),
         switchMap((res) =>
-          this.usersCol.doc(res.uid).set({ ...user, uid: res.uid })
+          this.usersCol.doc(res.uid).set({ ...user, id: res.uid })
         )
       );
   }

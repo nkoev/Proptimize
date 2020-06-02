@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.loggedUser = data.loggedUser;
     });
     const sub2 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res.data())
+      (res) => (this.loggedUser = res)
     );
     this.subscriptions.push(sub1, sub2);
   }
@@ -44,11 +44,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const subordinates = [
       ...(await this.userService.queryUsers(
         'managedBy.id',
-        this.loggedUser.uid
+        this.loggedUser.id
       )),
       ...(await this.employeeService.queryEmployees(
         'managedBy.id',
-        this.loggedUser.uid
+        this.loggedUser.id
       )),
     ];
     this.matDialog.open(SubordinatesListComponent, {

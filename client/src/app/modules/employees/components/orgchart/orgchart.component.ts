@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DocumentData } from '@angular/fire/firestore/interfaces';
+import { UserDTO } from 'src/app/models/employees/user.dto';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 
 @Component({
   selector: 'app-orgchart',
@@ -15,8 +16,8 @@ export class OrgChartComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     private dialogData: {
-      managers: DocumentData[];
-      employees: DocumentData[];
+      managers: UserDTO[];
+      employees: EmployeeDTO[];
     }
   ) {}
 

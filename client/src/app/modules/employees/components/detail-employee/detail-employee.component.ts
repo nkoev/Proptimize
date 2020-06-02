@@ -8,12 +8,12 @@ import { Router } from '@angular/router';
 })
 export class DetailEmployeeComponent implements OnInit {
   @Input() employee: any;
-  @Output() backEvent = new EventEmitter<any>();
+  @Output() backEvent = new EventEmitter();
   constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
-  goToProject(projectId: string) {
+  goToProject(projectId: string): void {
     this.router.navigate(['/projects'], { queryParams: { id: projectId } });
   }
 }

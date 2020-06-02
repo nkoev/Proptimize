@@ -1,13 +1,10 @@
-export class UserDTO {
-  email: string;
-  id: string;
+export class EmployeeCreateDTO {
   firstName: string;
   lastName: string;
   position: string;
   managedBy: any;
-  isAdmin: boolean;
+  skills: any[];
   availableHours: number;
-  avatarUrl?: string;
   projects: {
     name: string;
     id: string;

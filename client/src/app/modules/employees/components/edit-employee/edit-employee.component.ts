@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DocumentData } from '@google-cloud/firestore';
 import { FormControl, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 
 @Component({
   selector: 'app-edit-employee',
@@ -14,24 +14,24 @@ export class EditEmployeeComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    private data: { skillsList: string[]; employee: DocumentData },
+    private data: { skillsList: string[]; employee: EmployeeDTO },
     private employeeService: EmployeeService,
     public dialogRef: MatDialogRef<EditEmployeeComponent>
   ) {}
 
   ngOnInit(): void {}
 
-  get skillsList() {
+  get skillsList(): string[] {
     return this.data.skillsList.filter(
       (skill) => !this.employee.skills.includes(skill)
     );
   }
 
-  get employee() {
+  get employee(): EmployeeDTO {
     return this.data.employee;
   }
 
-  addSkills(skills: string[]) {
+  addSkills(skills: string[]): void {
     this.employeeService.addSkillsToEmployee(skills, this.employee.id);
   }
 }

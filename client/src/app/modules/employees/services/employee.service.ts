@@ -1,42 +1,62 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { firestore } from 'firebase/app';
-import { AngularFirestoreCollection } from '@angular/fire/firestore/public_api';
+import {
+  AngularFirestoreCollection,
+  DocumentReference,
+} from '@angular/fire/firestore/public_api';
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DocumentData } from '@google-cloud/firestore';
 import * as firebase from 'firebase/app';
+import { EmployeeCreateDTO } from 'src/app/models/employees/employee-create.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService {
   employeesCol: AngularFirestoreCollection;
-  $allEmployees: Observable<DocumentData[]>;
+  $allEmployees: Observable<EmployeeDTO[]>;
 
   constructor(private afs: AngularFirestore) {
     this.employeesCol = this.afs.collection<EmployeeDTO>('employees');
     this.$allEmployees = this.employeesCol.snapshotChanges().pipe(
       map((changes) =>
         changes.map((change) => {
-          return { ...change.payload.doc.data(), id: change.payload.doc.id };
+          return {
+            ...change.payload.doc.data(),
+            id: change.payload.doc.id,
+          } as EmployeeDTO;
         })
       )
     );
   }
 
-  async queryEmployees(field: string, value: string) {
+  async queryEmployees(field: string, value: string): Promise<EmployeeDTO[]> {
     const snapshot = await this.employeesCol.ref
       .where(field, '==', value)
       .get();
     return snapshot.docs.map((doc) => {
-      return { ...doc.data(), id: doc.id };
+      return { ...doc.data(), id: doc.id } as EmployeeDTO;
     });
   }
 
-  async getEmployeeById(employeeId: string) {
-    return await this.employeesCol.doc(employeeId).ref.get();
+  async getEmployeeById(employeeId: string): Promise<EmployeeDTO> {
+    const doc = await this.employeesCol.doc(employeeId).ref.get();
+    return { ...doc.data(), id: doc.id } as EmployeeDTO;
+  }
+
+  async addEmployee(employee: EmployeeCreateDTO): Promise<DocumentReference> {
+    return await this.employeesCol.add(employee);
+  }
+
+  async addSkillsToEmployee(
+    skills: string[],
+    employeeId: string
+  ): Promise<void> {
+    return await this.employeesCol
+      .doc(employeeId)
+      .update({ skills: firestore.FieldValue.arrayUnion(...skills) });
   }
 
   addProject(employeeId: string, project: any) {
@@ -61,15 +81,5 @@ export class EmployeeService {
       availableHours: firebase.firestore.FieldValue.increment(sum),
       projects: firebase.firestore.FieldValue.arrayRemove(project),
     });
-  }
-
-  async addEmployee(employee: EmployeeDTO) {
-    return await this.employeesCol.add(employee);
-  }
-
-  async addSkillsToEmployee(skills: string[], employeeId: string) {
-    return await this.employeesCol
-      .doc(employeeId)
-      .update({ skills: firestore.FieldValue.arrayUnion(...skills) });
   }
 }
