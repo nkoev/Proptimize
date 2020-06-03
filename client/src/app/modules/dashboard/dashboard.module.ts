@@ -6,9 +6,10 @@ import { AvatarUploadComponent } from './components/avatar-upload/avatar-upload.
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { UserProjectsComponent } from './components/user-projects/user-projects.component';
 import { SubordinatesListComponent } from './components/subordinates-list/subordinates-list.component';
+import { ProjectInfoComponent } from './components/project-info/project-info.component';
 
 @NgModule({
-  declarations: [DashboardComponent, AvatarUploadComponent, UserInfoComponent, UserProjectsComponent, SubordinatesListComponent],
+  declarations: [DashboardComponent, AvatarUploadComponent, UserInfoComponent, UserProjectsComponent, SubordinatesListComponent, ProjectInfoComponent],
   imports: [DashboardRoutingModule, SharedModule],
 })
 export class DashboardModule {}

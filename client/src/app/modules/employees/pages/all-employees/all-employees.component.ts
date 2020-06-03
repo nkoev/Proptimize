@@ -125,10 +125,10 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     }
     if (event.subordinates) {
       this.filteredEmployees = this.filteredEmployees.filter(
-        (employee) => employee.managedBy.id === this.loggedUser.id
+        (employee) => employee.managedBy?.id === this.loggedUser.id
       );
       this.filteredManagers = this.filteredManagers.filter(
-        (manager) => manager.managedBy.id === this.loggedUser.id
+        (manager) => manager.managedBy?.id === this.loggedUser.id
       );
     }
   }

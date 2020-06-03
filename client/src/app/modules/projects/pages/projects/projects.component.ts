@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, AfterViewChecked, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewChecked,
+  ViewChild,
+} from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -44,7 +50,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private readonly matDialog: MatDialog,
     private readonly router: Router,
     private readonly route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const sub1 = this.projectService.getAll().subscribe((data) => {
@@ -132,7 +138,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   addProject() {
     if (this.loggedUser.availableHours < 1) {
-      this.notificationService.error("You can't start a project, because you are already working 8h/day");
+      this.notificationService.error(
+        "You can't start a project, because you are already working 8h/day"
+      );
       return;
     }
 
@@ -154,7 +162,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   updateProject() {
-    if (this.loggedUser.uid !== this.singleProject.reporter.id) {
+    if (this.loggedUser.id !== this.singleProject.reporter.id) {
       this.notificationService.error("You can't update other users' projects");
       return;
     }
@@ -192,8 +200,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     event
       ? this.router.navigate(['/' + 'projects'])
       : this.router.navigate(['/' + 'projects'], {
-        queryParams: { id: this.singleProject.id },
-      });
+          queryParams: { id: this.singleProject.id },
+        });
   }
 
   getSingleProject(project: any) {
