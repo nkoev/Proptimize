@@ -351,4 +351,30 @@ export class ProjectService {
       this.employeeService.removeProject(eId, newProject);
     }
   }
+
+  getProjectsEmployees(project: any): any[] {
+    let employeeArray: any[] = [];
+
+    project.skills.forEach(skill => {
+      skill.employees.forEach(e => {
+        const eId = e.firstName + ' ' + e.lastName;
+        let objId = 0;
+        if (!employeeArray.some(e => Object.keys(e).includes(eId))) {
+          employeeArray.push({ [eId]: [] });
+        }
+        objId = employeeArray.reduce((acc, e, i) => {
+          if (Object.keys(e).includes(eId)) { acc = i; }
+          return acc;
+        }, -1);
+
+        employeeArray[objId][eId].push({ skill: skill.name, hours: e.hoursPerSkill });
+      });
+
+      const eId = project.reporter.firstName + ' ' + project.reporter.lastName;
+      employeeArray.push({ [eId]: [] });
+      employeeArray[employeeArray.length - 1][eId].push({ skill: 'Management', hours: project.managementHours });
+    });
+
+    return employeeArray;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewChecked, ViewChild } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -10,6 +10,8 @@ import { AddProjectComponent } from '../../components/add-project/add-project.co
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from 'src/app/modules/employees/services/employee.service';
 import { SkillService } from 'src/app/modules/skills/skill.service';
+import { SingleProjectComponent } from '../../components/single-project/single-project.component';
+import { NotificationService } from 'src/app/modules/core/services/notification.service';
 
 @Component({
   selector: 'app-projects',
@@ -17,6 +19,9 @@ import { SkillService } from 'src/app/modules/skills/skill.service';
   styleUrls: ['./projects.component.css'],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
+  @ViewChild(SingleProjectComponent)
+  private singleProjectComponent: SingleProjectComponent;
+
   isLeftVisible = true;
   today = new Date();
   projectsData: ProjectDTO[];
@@ -31,14 +36,15 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   statusList = ['In Progress', 'Closed'];
 
   constructor(
-    private projectService: ProjectService,
-    private employeeService: EmployeeService,
-    private skillService: SkillService,
-    private auth: AuthService,
-    private matDialog: MatDialog,
-    private router: Router,
+    private readonly projectService: ProjectService,
+    private readonly employeeService: EmployeeService,
+    private readonly skillService: SkillService,
+    private readonly auth: AuthService,
+    private readonly notificationService: NotificationService,
+    private readonly matDialog: MatDialog,
+    private readonly router: Router,
     private readonly route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const sub1 = this.projectService.getAll().subscribe((data) => {
@@ -53,6 +59,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
             .getValue()
             .filter((p) => p.id === projectId)[0];
           // console.log(this.singleProject);
+          this.singleProjectComponent.loadChart();
           this.togglePanes(false);
         }
       });
@@ -125,9 +132,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   addProject() {
     if (this.loggedUser.availableHours < 1) {
-      window.alert(
-        "You can't start a project, because you are already working 8h/day"
-      );
+      this.notificationService.error("You can't start a project, because you are already working 8h/day");
       return;
     }
 
@@ -150,7 +155,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   updateProject() {
     if (this.loggedUser.uid !== this.singleProject.reporter.id) {
-      window.alert("You can't update other users' projects");
+      this.notificationService.error("You can't update other users' projects");
       return;
     }
 
@@ -187,11 +192,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     event
       ? this.router.navigate(['/' + 'projects'])
       : this.router.navigate(['/' + 'projects'], {
-          queryParams: { id: this.singleProject.id },
-        });
+        queryParams: { id: this.singleProject.id },
+      });
   }
 
   getSingleProject(project: any) {
     this.singleProject = project;
+    this.singleProjectComponent.loadChart();
   }
 }

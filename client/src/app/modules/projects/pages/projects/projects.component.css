@@ -103,7 +103,8 @@ app-slide-panel div {
 
 .add-project-btn {
     height: 5em;
-    width: 73vw;
+    /* width: 73vw; */
+    width: 99%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -111,6 +112,11 @@ app-slide-panel div {
 }
 .add-project-btn button {
     line-height: 1.7;
+    /* margin-left: 0.5em; */
+}
+
+.delete {
+    background-color: rgb(247, 136, 136, 1);;
 }
 
 
@@ -129,9 +135,9 @@ app-slide-panel div {
         height: 96%;
     }
 
-    .add-project-btn {
+    /* .add-project-btn {
         width: 75vw;
-    }
+    } */
 }
 
 /*  MEDIA */
@@ -148,9 +154,9 @@ app-slide-panel div {
         height: 96%;
     }
 
-    .add-project-btn {
+    /* .add-project-btn {
         width: 69vw;
-    }
+    } */
 }
 
 
@@ -169,5 +175,9 @@ app-slide-panel div {
 
     .add-project-btn {
         width: 85vw;
+    }
+
+    .add-project-btn button { 
+        margin-bottom: 0.4em 0em 0.2em 0em;
     }
 }

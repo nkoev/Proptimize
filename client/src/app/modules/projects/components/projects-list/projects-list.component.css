@@ -1,20 +1,84 @@
 .projects-container {
     height: 57vh;
-    /* height: 100%; */
-    width: 75vw;
+    width: 100%;
     overflow-y: scroll;
-    /* font-size: 8px; */
 }
 
-.mat-list-base .mat-list-item.mat-2-line, .mat-list-base .mat-list-option.mat-2-line {
-    height: 50px;
-    /* font-size: 0.em; */
+.project {
+    display: flex;
+    flex-direction: column;
+    /* align-items: flex-start; */
+
+    height: 7vh;
+    width: 92%;
+    border-bottom: 1px solid rgb(28, 110, 164);
+    border-radius: 15px;
+    padding: 0.3em 0.6em 0.3em 0.6em;
+    margin-bottom: 0.5em;
+    cursor: pointer;
 }
+
+.name {
+    font-size: 1em;
+    font-weight: 500;
+    font-family: roboto;
+    margin-bottom: 0.2em;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.name p {
+    margin: 0em 0em 0em 0.3em;
+}
+.name .icon {
+    width: 0.8em;
+    height: 0.8em;
+    background-size: cover;
+    background-image: url("../../../../../assets/icons/project.png");
+}
+
+.reporter {
+    font-size: 0.7em;
+    font-weight: 400;
+    font-family: roboto;
+}
+.reporter span {
+    font-weight: 300;
+}
+
+.firstLine {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.status {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+.status p {
+    margin: 0em 0em 0em 0.2em;
+    font-size: 0.7em;
+    font-family: roboto;
+}
+.status .icon {
+    width: 0.8em;
+    height: 0.8em;
+    background-size: cover;
+    background-image: url("../../../../../assets/icons/in-progress.png");
+}
+.status .icon.closed {
+    background-image: url("../../../../../assets/icons/closed.png");
+}
+
 
  /* MEDIA */
 @media (min-width: 768px) and (max-width: 1300px) {
     .projects-container {
-        width: 71vw;
+        /* width: 71vw; */
         height: 50vh;
         align-self: flex-start;
     }
@@ -24,7 +88,24 @@
 @media (max-width: 768px) {
 
     .projects-container{
-        width: 85vw;
+        /* width: 85vw; */
         height: 50vh;
+    }
+
+    .name {
+        font-size: 0.8em; 
+    }
+
+    .reporter {
+        font-size: 0.6em;
+    }
+
+    .status p {
+        font-size: 0.6em;
+    }
+
+    .status .icon {
+        width: 0.6em;
+        height: 0.6em;
     }
 }

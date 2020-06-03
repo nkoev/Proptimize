@@ -1,3 +1,202 @@
 .single-project-container {
     height: 65vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.project-info {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    grid-template-rows: 2fr 1fr 4fr;
+    grid-template-areas: "name status"
+                         "reporter ."
+                         "description description";
+
+    min-height: 15vh;
+    max-height: 20vh;
+    width: 95%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+.name {
+    grid-area: name;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.name .icon {
+    width: 1.4em;
+    height: 1.4em;
+    background-size: cover;
+    background-image: url("../../../../../assets/icons/project.png");
+}
+.name p {
+    font-size: 1.9em;
+    font-weight: 500;
+    font-family: roboto;
+    margin: 0em 0em 0.1em 0.1em;
+}
+.reporter {
+    grid-area: reporter;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 0.8em;
+    font-family: roboto;
+}
+.reporter span {
+    font-weight: 300;
+}
+.reporter p{
+    font-weight: 400;
+    margin: 0em 0em 0em 0.4em;
+    cursor: pointer;
+}
+.status {
+    grid-area: status;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+.status p {
+    margin: 0em 0em 0em 0.2em;
+    font-size: 0.9em;
+    font-family: roboto;
+}
+.status .icon {
+    width: 1em;
+    height: 1em;
+    background-size: cover;
+    background-image: url("../../../../../assets/icons/in-progress.png");
+}
+.status .icon.closed {
+    background-image: url("../../../../../assets/icons/closed.png");
+}
+.description {
+    grid-area: description;
+    display: flex;
+    flex-direction: row;
+    margin-top: 0.5em;    
+}
+.description p {
+    border-top: 3px dotted rgb(28, 110, 164);
+    width: 100%;
+    margin-bottom: 0em;
+    padding-top: 0.8em;
+    font-size: 0.7em;
+    font-weight: 300;
+    font-family: roboto;
+    min-height: 1em;
+    max-height: 5em;
+    overflow-y: auto;
+}
+
+.chart-container {
+    width: 95%;
+    background-color: white;
+    border-radius: 15px;
+    padding: 1em;
+    margin-top: 1em;
+}
+
+.back-btn {
+    margin-top: 0.5em;
+}
+
+.employees-container {
+    width: 95%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+.single-employee {
+    border-bottom: 1px solid rgb(28, 110, 164);
+    /* background-color: rgb(253, 186, 25, 0.1); */
+    width: 98%;
+    border-radius: 15px;
+    margin-top: 0.5em;
+    padding: 0.5em;
+}
+
+.single-employee p {
+    font-size: 0.9em;
+    font-weight: 400;
+    font-family: roboto;
+}
+
+.single-employee p span {
+    font-size: 0.95em;
+    font-weight: 300;
+    font-family: roboto;
+}
+
+.single-employee .input p {
+    margin: 0.3em 0em 0em 2em;
+    font-size: 0.8em;
+    font-weight: 400;
+    font-family: roboto;
+}
+
+/*  MEDIA */
+@media (max-width: 768px) { 
+
+    .project-info {
+        /* display: flex;
+        flex-direction: column; */
+        min-height: 20vh;
+        max-height: 29vh;
+        width: 85%;
+     }
+     .name p {
+        font-size: 1.2em;
+    }
+
+     .status {
+        justify-content: flex-start;
+    }
+    .status p {
+        font-size: 0.7em;
+    }
+    .status .icon {
+        width: 0.7em;
+        height: 0.7em;
+    }
+    
+    .reporter {
+        font-size: 0.7em;
+    }
+    .description p {
+        font-size: 0.6em;
+    }
+
+    .chart-container {
+        width: 93%;
+        background-color: white;
+        border-radius: 15px;
+        padding: 0.5em;
+        margin-top: 1em;
+    }
+
+    .employees-container {
+        width: 85%;
+    }
+
+    .single-employee p {
+        font-size: 0.72em;
+    }
+    
+    .single-employee p span {
+        font-size: 0.83em;
+    }
+    
+    .single-employee .input p {
+        font-size: 0.7em;
+    }
 }

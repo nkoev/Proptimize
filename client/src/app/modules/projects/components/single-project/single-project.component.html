@@ -1,4 +1,41 @@
 <div class="single-project-container">
 
-    <p (click)="togglePanes()">All Projects</p>
+    <div class="project-info">
+        <div class="name">
+            <div class="icon"></div>
+            <p>{{project?.name}}</p>
+        </div>
+        <div class="status">
+            <div *ngIf="project?.status === 'In Progress'" class="icon"></div>
+            <div *ngIf="project?.status === 'Closed'" class="icon closed"></div>
+            <p>{{project?.status}}</p>
+        </div>
+        <div class="reporter">
+            <span>Reporter: </span>
+            <p>{{project?.reporter.firstName}} {{project?.reporter.lastName}}</p>
+        </div>
+        <div class="description">
+            <p>{{project?.description}}</p>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <div #charts class="chart"></div>
+    </div>
+
+    <div *ngIf="this.employees" class="employees-container">
+        <div *ngFor="let e of employees; let i = index" class="single-employee">
+            <p><span>{{i+1}}. Employee: </span>{{employeeNames[i]}}</p>
+            <div *ngFor="let input of employeeInput[i]" class="input">
+                <p>{{input.skill}} - {{input.hours}}h</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-btn">
+        <button mat-button (click)="togglePanes()">
+            All Projects
+        </button>
+    </div>
+
 </div>
