@@ -20,14 +20,14 @@ export class ProjectsListComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  onScroll() {
-    console.log('scrolled');
-  }
-
   onProjectSelect(idx: number) {
     let selectedProject: ProjectDTO;
     this.projects.subscribe(data => selectedProject = data[idx]);
     this.selectProjectEvent.emit(selectedProject);
   }
+
+  // onScroll() {
+  //   console.log('scrolled');
+  // }
 
 }

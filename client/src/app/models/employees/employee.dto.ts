@@ -1,4 +1,5 @@
 export class EmployeeDTO {
+  id?: string;
   firstName: string;
   lastName: string;
   position: string;

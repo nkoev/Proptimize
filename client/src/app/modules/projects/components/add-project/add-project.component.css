@@ -53,7 +53,6 @@
 }
 .description textarea {
     resize: none;
-    /* height: 8vh; */
 }
 .target-in-days {
     grid-area: target;
@@ -85,7 +84,6 @@
 
 .single-skill {
     background-color: rgb(212, 226, 255, 0.2);
-    /* background-color: rgb(253, 186, 25, 0.1); */
     border-radius: 5px;
     margin-bottom: 1em;
     padding: 0.5em;
@@ -100,7 +98,6 @@ mat-action-row {
 }
 
 .employee-container {
-    /* background-color: rgb(253, 186, 25, 0.3); */
     background-color: rgb(253, 186, 25, 0.1);
     border-radius: 5px;
     padding: 0.6em;

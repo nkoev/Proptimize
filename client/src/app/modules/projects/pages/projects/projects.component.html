@@ -26,8 +26,7 @@
               <app-projects-list [projects]="projects" (click)="togglePanes(false)"
                 (selectProjectEvent)="getSingleProject($event)">
               </app-projects-list>
-              <app-projects-filtering-form [skillsList]="skillsList" [statusList]="statusList"
-                (filterEvent)="filterProjects($event)" #filter>
+              <app-projects-filtering-form [skillsList]="skillsList" (filterEvent)="filterProjects($event)" #filter>
               </app-projects-filtering-form>
             </div>
 
@@ -38,18 +37,22 @@
                   mat-raised-button (click)="updateProject()">
                   Update Project
                 </button>
+
                 <button
                   *ngIf="singleProject?.reporter.id === loggedUser?.uid && singleProject?.status === 'In Progress'"
                   mat-raised-button (click)="closeProject()" class="delete">
                   Close Project
                 </button>
               </div>
-              <app-single-project [project]="singleProject" (toggleEvent)="togglePanes($event)">
-              </app-single-project>
+
+              <app-single-project [project]="singleProject" (toggleEvent)="togglePanes($event)"> </app-single-project>
+
             </div>
           </app-slide-panel>
         </div>
+
       </div>
     </div>
+
   </div>
 </div>

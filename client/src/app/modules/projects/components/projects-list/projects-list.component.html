@@ -2,6 +2,7 @@
 
     <div *ngFor="let project of (projects | async); let i = index">
         <div (click)="onProjectSelect(i)" class="project">
+
             <div class="firstLine">
                 <div class="name">
                     <div class="icon"></div>
@@ -14,18 +15,20 @@
                     <p>{{project?.status}}</p>
                 </div>
             </div>
+
             <div class="secondLine">
                 <p class="reporter">
                     <span>Reporter: </span> {{ project.reporter.firstName }} {{project.reporter.lastName }}
                 </p>
             </div>
+
         </div>
     </div>
 
 
-    <div infiniteScroll [infiniteScrollDistance]="7" [infiniteScrollThrottle]="1000"
+    <!-- <div infiniteScroll [infiniteScrollDistance]="7" [infiniteScrollThrottle]="1000"
         [infiniteScrollContainer]="selector" [fromRoot]="true" (scrolled)="onScroll()">
-    </div>
+    </div> -->
 
     <!-- <div *ngIf="!finished"> LOADING </div> -->
 

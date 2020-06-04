@@ -5,15 +5,18 @@
             <div class="icon"></div>
             <p>{{project?.name}}</p>
         </div>
+
         <div class="status">
             <div *ngIf="project?.status === 'In Progress'" class="icon"></div>
             <div *ngIf="project?.status === 'Closed'" class="icon closed"></div>
             <p>{{project?.status}}</p>
         </div>
+
         <div class="reporter">
             <span>Reporter: </span>
             <p>{{project?.reporter.firstName}} {{project?.reporter.lastName}}</p>
         </div>
+
         <div class="description">
             <p>{{project?.description}}</p>
         </div>
