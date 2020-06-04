@@ -1,0 +1,102 @@
+/*------------------------------ General Styles-----*/
+
+h1 {
+  font-family: "Ubuntu", sans-serif;
+  font-size: 50px;
+  color: rgb(55, 58, 77);
+  display: inline-block;
+  padding: 15px;
+  /* animation: test 10s infinite; */
+}
+
+h2 {
+  font-family: "Ubuntu", sans-serif;
+  text-align: center;
+  font-size: 40px;
+  color: rgb(55, 58, 77);
+  display: block;
+  padding: 80px 0 40px;
+  margin: 0;
+}
+
+.heading {
+  text-align: center;
+  margin: 50px 0;
+}
+/*------------------------------ Header-----*/
+.header {
+  background: url(../../../assets/welcome/blake-cheek-N50XXKaPnII-unsplash.jpg)
+    no-repeat center;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  height: 50vh;
+}
+.description {
+  color: white;
+  padding: 50px;
+  background: linear-gradient(rgba(55, 58, 77, 0.5), rgba(55, 58, 77, 0.5));
+  text-align: center;
+}
+
+/*------------------------------ Sections -----*/
+
+.wrapcontent {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: 50vh;
+}
+
+.users-image {
+  background: url(../../../assets/welcome/scott-graham-5fNmWej4tAA-unsplash.jpg)
+    no-repeat center;
+  background-size: cover;
+}
+.employees-image {
+  background: url(../../../assets/welcome/quino-al-dhGFLj3rI0Q-unsplash.jpg)
+    no-repeat center;
+  background-size: cover;
+}
+.projects-image {
+  background: url(../../../assets/welcome/randy-fath-ymf4_9Y9S_A-unsplash.jpg)
+    no-repeat center;
+  background-size: cover;
+}
+.skills-image {
+  background: url(../../../assets/welcome/hans-peter-gauster-3y1zF4hIPCg-unsplash.jpg)
+    no-repeat center;
+  background-size: cover;
+}
+/*------------------------------ Footer-----*/
+.footer {
+  margin-top: 80px;
+  height: 30vh;
+  display: flex;
+  justify-items: center;
+  background: rgb(55, 58, 77, 0.5);
+  overflow: auto;
+}
+.links {
+  display: inline-block;
+  text-align: center;
+  margin: auto;
+}
+
+.links a {
+  color: #1f4172;
+  font-size: 50px;
+  margin: 0 30px;
+  cursor: pointer;
+}
+
+.links h2 {
+  padding: 15px;
+  border: solid;
+  border-radius: 8px;
+}
+.links h2:hover {
+  color: white;
+  transition: color 3s;
+}

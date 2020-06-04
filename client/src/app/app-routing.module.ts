@@ -4,9 +4,10 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthGuard } from './modules/core/guards/auth.guard';
 import { AdminGuard } from './modules/core/guards/admin.guard';
 import { LoggedUserResolver } from './modules/core/resolvers/logged-user.resolver';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   {
     path: 'login',
     loadChildren: () =>
@@ -47,6 +48,7 @@ const routes: Routes = [
     resolve: { loggedUser: LoggedUserResolver },
   },
   { path: '404', component: NotFoundComponent },
+  { path: 'welcome', component: WelcomeComponent },
   { path: '**', redirectTo: '/404', pathMatch: 'full' },
 ];
 
