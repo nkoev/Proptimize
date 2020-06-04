@@ -18,6 +18,7 @@ import { EmployeeService } from 'src/app/modules/employees/services/employee.ser
 import { SkillService } from 'src/app/modules/skills/skill.service';
 import { SingleProjectComponent } from '../../components/single-project/single-project.component';
 import { NotificationService } from 'src/app/modules/core/services/notification.service';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 
 @Component({
   selector: 'app-projects',
@@ -34,7 +35,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   singleProject: ProjectDTO;
   employeesListData$ = new BehaviorSubject([]);
   employeesList = this.employeesListData$.asObservable();
-  loggedUser: DocumentData;
+  loggedUser: UserDTO;
   skillsList: string[] = [];
   private subscriptions: Subscription[] = [];
   today = new Date();
@@ -127,7 +128,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     }
     if (event.myProjects) {
       filteredProjects = filteredProjects.filter((project) =>
-        project.reporter?.id === this.loggedUser.uid
+        project.reporter?.id === this.loggedUser.id
       );
     }
 
@@ -160,7 +161,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   updateProject(): void {
-    if (this.loggedUser.uid !== this.singleProject.reporter.id) {
+    if (this.loggedUser.id !== this.singleProject.reporter.id) {
       this.notificationService.error("You can't update other users' projects");
       return;
     }
@@ -194,6 +195,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   togglePanes(event: boolean): void {
+    console.log(this.loggedUser);
     this.isLeftVisible = event;
     event
       ? this.router.navigate(['/' + 'projects'])

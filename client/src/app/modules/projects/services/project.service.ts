@@ -11,6 +11,7 @@ import { EmployeeService } from '../../employees/services/employee.service';
 import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { ProjectStatusType } from 'src/app/models/projects/project-status.type';
 import { SkillDTO } from 'src/app/models/skills/skill.dto';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 const moment = require('moment-business-days');
 
 @Injectable({
@@ -50,7 +51,7 @@ export class ProjectService {
     return await this.projectsColl.doc(projectId).ref.get();
   }
 
-  private assignProjectToUser(project: ProjectDTO, loggedUser: any): void {
+  private assignProjectToUser(project: ProjectDTO, loggedUser: UserDTO): void {
     const newProject = {
       id: project.id,
       name: project.name,
@@ -60,7 +61,7 @@ export class ProjectService {
     this.userService.addProject(loggedUser.id, newProject);
   }
 
-  private updateUsersProjects(project: ProjectDTO, loggedUser: any, oldProject: ProjectDTO): void {
+  private updateUsersProjects(project: ProjectDTO, loggedUser: UserDTO, oldProject: ProjectDTO): void {
     const projectBefore = {
       id: project.id,
       name: project.name,
@@ -191,7 +192,7 @@ export class ProjectService {
       manHours: number,
       skills: SkillDTO[],
     },
-    loggedUser: any
+    loggedUser: UserDTO
   ): Promise<void> {
     const newProject = {
       reporter: {
@@ -230,7 +231,7 @@ export class ProjectService {
       manHours: number,
       skills: SkillDTO[],
     },
-    loggedUser: any,
+    loggedUser: UserDTO,
     oldProject: ProjectDTO
   ): Promise<void> {
     let manDone = 0;
@@ -347,7 +348,7 @@ export class ProjectService {
     return projectData;
   }
 
-  closeProject(project: ProjectDTO, loggedUser: any): void {
+  closeProject(project: ProjectDTO, loggedUser: UserDTO): void {
     let employeeArray: { [employeeName: string]: { skill: string, hours: number }[] }[] = [];
     const closedProject = {
       id: project.id,
@@ -413,7 +414,7 @@ export class ProjectService {
       skills: skillsFree,
     });
 
-    this.userService.removeProject(loggedUser.uid, closedProject);
+    this.userService.removeProject(loggedUser.id, closedProject);
     for (const e of employeeArray) {
       const eId = Object.keys(e)[0];
       const dailyInput = e[eId];

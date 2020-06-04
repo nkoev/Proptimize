@@ -32,14 +32,12 @@
 
             <div rightPane>
               <div class="add-project-btn">
-                <button
-                  *ngIf="singleProject?.reporter.id === loggedUser?.uid && singleProject?.status === 'In Progress'"
+                <button *ngIf="singleProject?.reporter.id === loggedUser?.id && singleProject?.status === 'In Progress'"
                   mat-raised-button (click)="updateProject()">
                   Update Project
                 </button>
 
-                <button
-                  *ngIf="singleProject?.reporter.id === loggedUser?.uid && singleProject?.status === 'In Progress'"
+                <button *ngIf="singleProject?.reporter.id === loggedUser?.id && singleProject?.status === 'In Progress'"
                   mat-raised-button (click)="closeProject()" class="delete">
                   Close Project
                 </button>

@@ -11,7 +11,7 @@ import * as _ from "lodash";
 export class ProjectsListComponent implements OnInit {
 
   @Input() projects: Observable<ProjectDTO[]>;
-  @Output() selectProjectEvent = new EventEmitter<any>();
+  @Output() selectProjectEvent = new EventEmitter<ProjectDTO>();
 
   selector = '.projects-container';
   lastKeypress = 0;

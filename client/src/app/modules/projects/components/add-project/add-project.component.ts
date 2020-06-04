@@ -8,11 +8,12 @@ import { NotificationService } from 'src/app/modules/core/services/notification.
 import { DataFormatterService } from '../../services/data-formatter.service';
 import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 
 export interface ProjectDialogData {
   skillsList: string[];
   employeesList: Observable<EmployeeDTO[]>;
-  loggedUser: any;
+  loggedUser: UserDTO;
   currentProject: ProjectDTO;
 }
 
@@ -25,7 +26,7 @@ export class AddProjectComponent implements OnInit {
 
   @ViewChildren('sl3') hoursPrev: QueryList<MatSelect>;
   @ViewChild('charts') public chartEl: ElementRef;
-  loggedUser: any;
+  loggedUser: UserDTO;
   currentProject: ProjectDTO;
   projectForm: FormGroup;
   skillsList: string[];
@@ -270,6 +271,7 @@ export class AddProjectComponent implements OnInit {
   }
 
   onApply(form: FormGroup): void {
+    console.log(this.selectedEmployeesList);
     form.markAllAsTouched();
     if (form.invalid) {
       this.notificationService.error('Please fill all form fields!');
