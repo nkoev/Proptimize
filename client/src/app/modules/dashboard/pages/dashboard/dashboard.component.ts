@@ -30,9 +30,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const sub1 = this.route.data.subscribe((data) => {
       this.loggedUser = data.loggedUser;
     });
-    const sub2 = this.auth.loggedUser$.subscribe((res) => {
-      this.loggedUser = res;
-    });
+    const sub2 = this.auth.loggedUser$.subscribe(
+      (res) => (this.loggedUser = res)
+    );
     this.subscriptions.push(sub1, sub2);
   }
 
