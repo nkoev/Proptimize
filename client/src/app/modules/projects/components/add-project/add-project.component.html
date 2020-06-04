@@ -3,33 +3,77 @@
         <h2>Project Info</h2>
 
         <div class="info-container">
-            <mat-form-field class="name">
-                <mat-label>Name</mat-label>
-                <input matInput formControlName="name" />
-            </mat-form-field>
+            <div class="name">
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name" />
+                </mat-form-field>
+
+                <mat-error *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                    <div *ngIf="name.errors.required">
+                        Project name is required
+                    </div>
+                    <div *ngIf="name.errors.maxlength && !name.errors.required">
+                        Project name should be max 20 symbols
+                    </div>
+                </mat-error>
+            </div>
             <br />
 
-            <mat-form-field class="target-in-days">
-                <mat-label>Target In Days</mat-label>
-                <input min="1" max="100" type="number" matInput formControlName="targetInDays" />
-            </mat-form-field>
+            <div class="target-in-days">
+                <mat-form-field>
+                    <mat-label>Target In Days</mat-label>
+                    <input min="1" max="100" type="number" matInput formControlName="targetInDays" />
+                </mat-form-field>
+                <mat-error *ngIf="targetInDays.invalid && (targetInDays.dirty || targetInDays.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="targetInDays.errors.required">
+                        Target in days is required
+                    </div>
+                    <div *ngIf="targetInDays.errors.max && !targetInDays.errors.required">
+                        The project cannot last more than 100 days
+                    </div>
+                </mat-error>
+            </div>
             <br />
 
-            <mat-form-field class="description">
-                <mat-label>Description</mat-label>
-                <textarea matInput formControlName="description"></textarea>
-            </mat-form-field>
+            <div class="description">
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="description"></textarea>
+                </mat-form-field>
+                <mat-error *ngIf="description.invalid && (description.dirty || description.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="description.errors.required">
+                        Description is required
+                    </div>
+                    <div *ngIf="description.errors.minlength && !description.errors.required">
+                        Description should be at least 2 symbols
+                    </div>
+                    <div *ngIf="description.errors.maxlength && !description.errors.required">
+                        Description should be max 100 symbols
+                    </div>
+                </mat-error>
+            </div>
             <br />
 
             <div class="management">
                 <p class="text">Management: </p>
             </div>
 
-            <mat-form-field class="management-target">
-                <mat-label>Target in Hours:</mat-label>
-                <input min="1" max="1000" type="number" matInput formControlName="managementTarget"
-                    (click)="onManTargetSelect()" />
-            </mat-form-field>
+            <div class="management-target">
+                <mat-form-field>
+                    <mat-label>Target in Hours:</mat-label>
+                    <input min="1" max="1000" type="number" matInput formControlName="managementTarget"
+                        (click)="onManTargetSelect()" />
+                </mat-form-field>
+                <mat-error *ngIf="managementTarget.invalid && (managementTarget.dirty || managementTarget.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="managementTarget.errors.max && !managementTarget.errors.required">
+                        Target should be max 1000h
+                    </div>
+                </mat-error>
+            </div>
             <br />
 
             <mat-form-field class="management-hours">

@@ -88,6 +88,18 @@ export class AddProjectComponent implements OnInit {
     this.projectForm.valueChanges.subscribe((form) => this.onFormChanges(form));
   }
 
+  get name() {
+    return this.projectForm.get('name');
+  }
+  get targetInDays() {
+    return this.projectForm.get('targetInDays');
+  }
+  get description() {
+    return this.projectForm.get('description');
+  }
+  get managementTarget() {
+    return this.projectForm.get('managementTarget');
+  }
   get skills() {
     return this.projectForm.get('skills') as FormArray;
   }
