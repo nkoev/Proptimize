@@ -47,7 +47,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private readonly notificationService: NotificationService,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
