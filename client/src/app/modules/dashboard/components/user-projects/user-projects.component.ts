@@ -5,6 +5,8 @@ import { ProjectService } from 'src/app/modules/projects/services/project.servic
 import { GanttService } from 'src/app/modules/projects/services/gantt.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectInfoComponent } from '../project-info/project-info.component';
+import { DataFormatterService } from 'src/app/modules/projects/services/data-formatter.service';
+import { ProjectDTO } from 'src/app/models/projects/project.dto';
 
 @Component({
   selector: 'app-user-projects',
@@ -17,11 +19,12 @@ export class UserProjectsComponent implements OnInit {
   constructor(
     private router: Router,
     private projectService: ProjectService,
+    private readonly dataFormatterService: DataFormatterService,
     private gantt: GanttService,
     private matDialog: MatDialog
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async expandProject(project: any): Promise<void> {
     let startDate: Date;
@@ -33,8 +36,8 @@ export class UserProjectsComponent implements OnInit {
       completeness: { amount: number; fill: boolean };
     }[];
     const projectData = await this.projectService.getProjectById(project.id);
-    ({ startDate, endDate, skills } = this.gantt.projectToChartData(
-      projectData.data()
+    ({ startDate, endDate, skills } = this.dataFormatterService.projectToChartData(
+      projectData.data() as ProjectDTO
     ));
     this.matDialog.open(ProjectInfoComponent, {
       data: { name: project.name, startDate, endDate, skills },
