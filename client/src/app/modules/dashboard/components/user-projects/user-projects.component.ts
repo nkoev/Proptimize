@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { UserDTO } from 'src/app/models/employees/user.dto';
 import { Router } from '@angular/router';
 import { ProjectService } from 'src/app/modules/projects/services/project.service';
@@ -23,7 +23,7 @@ export class UserProjectsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  async expandProject(project: any) {
+  async expandProject(project: any): Promise<void> {
     let startDate: Date;
     let endDate: Date;
     let skills: {
@@ -41,7 +41,7 @@ export class UserProjectsComponent implements OnInit {
     });
   }
 
-  goToProject(projectId: string) {
+  goToProject(projectId: string): void {
     this.router.navigate(['/projects'], { queryParams: { id: projectId } });
   }
 }

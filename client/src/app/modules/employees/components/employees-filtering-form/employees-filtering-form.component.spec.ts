@@ -8,9 +8,8 @@ describe('EmployeesFilteringFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EmployeesFilteringFormComponent ]
-    })
-    .compileComponents();
+      declarations: [EmployeesFilteringFormComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
