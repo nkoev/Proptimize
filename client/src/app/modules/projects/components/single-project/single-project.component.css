@@ -118,7 +118,6 @@
 
 .single-employee {
     border-bottom: 1px solid rgb(28, 110, 164);
-    /* background-color: rgb(253, 186, 25, 0.1); */
     width: 98%;
     border-radius: 15px;
     margin-top: 0.5em;
@@ -148,8 +147,6 @@
 @media (max-width: 768px) { 
 
     .project-info {
-        /* display: flex;
-        flex-direction: column; */
         min-height: 20vh;
         max-height: 29vh;
         width: 85%;

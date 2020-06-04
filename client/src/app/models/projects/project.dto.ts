@@ -1,13 +1,23 @@
 import { ProjectStatusType } from './project-status.type';
+import { SkillDTO } from '../skills/skill.dto';
 
-export interface ProjectDTO {
-    id: string,
-    reporter: { id: string, firstName: string, lastName: string };
+export class ProjectDTO {
+    id?: string;
+    reporter: {
+        id: string;
+        firstName: string;
+        lastName: string;
+    };
     name: string;
     description: string;
     targetInDays: number;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: any;
+    updatedAt: any;
     status: ProjectStatusType;
-    skills: string[];
+    mCreatedAt: any;
+    mUpdatedAt: any;
+    mDone: number;
+    managementHours: number;
+    managementTarget: number;
+    skills: SkillDTO[];
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ProjectStatusType } from 'src/app/models/projects/project-status.type';
 
 @Component({
   selector: 'app-projects-filtering-form',
@@ -10,12 +11,18 @@ import { Subscription } from 'rxjs';
 export class ProjectsFilteringFormComponent implements OnInit, OnDestroy {
 
   @Input() skillsList: string[];
-  @Input() statusList: string[];
-  @Output() filterEvent = new EventEmitter<any>();
+  @Output() filterEvent = new EventEmitter<{
+    skills: string[],
+    status: string[],
+    name: string,
+    reporter: string,
+    myProjects: boolean
+  }>();
   filteringForm: FormGroup;
   private subscriptions: Subscription[] = [];
-  selectedSkills: any;
-  selectedStatus: any;
+  selectedSkills: string[];
+  selectedStatus: string[];
+  statusList = Object.keys(ProjectStatusType).map(k => ProjectStatusType[k as any]);
 
   constructor(private fb: FormBuilder) { }
 
