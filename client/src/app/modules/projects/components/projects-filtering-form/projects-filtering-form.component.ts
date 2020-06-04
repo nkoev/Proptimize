@@ -34,6 +34,10 @@ export class ProjectsFilteringFormComponent implements OnInit, OnDestroy {
       reporter: null,
       myProjects: false,
     });
+    const sub1 = this.filteringForm.valueChanges.subscribe((form) => {
+      this.filterEvent.next(form);
+    });
+    this.subscriptions.push(sub1);
   }
 
   ngOnDestroy(): void {
@@ -60,15 +64,13 @@ export class ProjectsFilteringFormComponent implements OnInit, OnDestroy {
     this.filteringForm.reset();
   }
 
-  applyFilters() {
-    this.filterEvent.emit(this.filteringForm.value);
-  }
-
   clearSkills() {
+    this.skills.reset();
     this.selectedSkills = undefined;
   }
 
   clearStatus() {
+    this.status.reset();
     this.selectedStatus = undefined;
   }
 
