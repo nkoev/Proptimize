@@ -5,6 +5,8 @@
 
 Proptimize is a Project Planning System, designed to help managers to distribute the company employees as well as working man-hours upon projects.
 
+**Official link**: https://proptimize-edb90.web.app/ 
+
 <h2>Team</h2>
 
 This project is being developed by <a href="https://gitlab.com/0ligotann">Tanya</a> and <a href="https://gitlab.com/nkoev">Nikolay</a>,
