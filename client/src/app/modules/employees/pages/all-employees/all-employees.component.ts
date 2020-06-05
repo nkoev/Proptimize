@@ -83,6 +83,8 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   showOrgChart(): void {
     this.matDialog.open(OrgChartComponent, {
       data: { managers: this.managers, employees: this.employees },
+      maxWidth: '80vw',
+      maxHeight: '80vh',
     });
   }
 
