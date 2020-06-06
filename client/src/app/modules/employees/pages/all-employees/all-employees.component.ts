@@ -44,11 +44,12 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const sub1 = this.userService.allUsers$.subscribe((users) => {
+    const sub1 = this.userService.allUsers().subscribe((users) => {
+      console.log('subscribes');
       this.managers = users;
       this.filteredManagers = this.managers;
     });
-    const sub2 = this.employeeService.$allEmployees.subscribe((employees) => {
+    const sub2 = this.employeeService.allEmployees().subscribe((employees) => {
       this.employees = employees;
       this.filteredEmployees = this.employees;
     });

@@ -20,7 +20,6 @@ export class AuthService {
     switchMap((user) => {
       if (user) {
         return this.afs.doc<UserDTO>(`users/${user.uid}`).valueChanges();
-        // .pipe(map((res) => res.data()));
       } else {
         return of(null);
       }

@@ -7,7 +7,6 @@ import {
 } from '@angular/fire/firestore/public_api';
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 import { EmployeeCreateDTO } from 'src/app/models/employees/employee-create.dto';
 
@@ -15,21 +14,14 @@ import { EmployeeCreateDTO } from 'src/app/models/employees/employee-create.dto'
   providedIn: 'root',
 })
 export class EmployeeService {
-  employeesCol: AngularFirestoreCollection;
-  $allEmployees: Observable<EmployeeDTO[]>;
+  employeesCol: AngularFirestoreCollection<EmployeeDTO | EmployeeCreateDTO>;
 
   constructor(private afs: AngularFirestore) {
     this.employeesCol = this.afs.collection<EmployeeDTO>('employees');
-    this.$allEmployees = this.employeesCol.snapshotChanges().pipe(
-      map((changes) =>
-        changes.map((change) => {
-          return {
-            ...change.payload.doc.data(),
-            id: change.payload.doc.id,
-          } as EmployeeDTO;
-        })
-      )
-    );
+  }
+
+  allEmployees(): Observable<EmployeeDTO[]> {
+    return this.employeesCol.valueChanges({ idField: 'id' });
   }
 
   async queryEmployees(field: string, value: string): Promise<EmployeeDTO[]> {

@@ -82,7 +82,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     const sub4 = this.auth.loggedUser$.subscribe((res) =>
       res ? (this.loggedUser = res) : this.router.navigate(['login'])
     );
-    const sub5 = this.employeeService.$allEmployees.subscribe((employees) => {
+    const sub5 = this.employeeService.allEmployees().subscribe((employees) => {
       this.employeesListData$.next(employees);
     });
     const sub6 = this.skillService
