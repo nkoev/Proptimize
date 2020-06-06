@@ -73,7 +73,7 @@ export class AddProjectComponent implements OnInit {
   ngOnInit(): void {
     this.projectForm = this.fb.group({
       name: [this.currentProject.name, [Validators.required, Validators.maxLength(20)]],
-      description: [this.currentProject.description, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      description: [this.currentProject.description, [Validators.required, Validators.minLength(2), Validators.maxLength(200)]],
       targetInDays: [this.currentProject.targetInDays, [Validators.required, Validators.min(1), Validators.max(300)]],
       managementTarget: [this.currentProject.managementTarget, [Validators.min(1), Validators.max(20000)]],
       managementHours: [this.currentProject.managementHours, [Validators.min(1), Validators.max(8)]],
@@ -202,7 +202,7 @@ export class AddProjectComponent implements OnInit {
   }
 
   manHoursDisabled(hour: number): boolean {
-    return hour > this.loggedUser.availableHours + this.currentProject.managementHours;
+    return hour > this.loggedUser.availableHours + (this.currentProject.managementHours || 0);
   }
 
   getSkilledEmployees(skill: string, idxSkill: number): void {

@@ -12,6 +12,7 @@ import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { ProjectStatusType } from 'src/app/models/projects/project-status.type';
 import { SkillDTO } from 'src/app/models/skills/skill.dto';
 import { UserDTO } from 'src/app/models/employees/user.dto';
+import { NotificationService } from '../../core/services/notification.service';
 const moment = require('moment-business-days');
 
 @Injectable({
@@ -24,7 +25,8 @@ export class ProjectService {
   constructor(
     private readonly afs: AngularFirestore,
     private readonly employeeService: EmployeeService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly notificationService: NotificationService,
   ) { }
 
   private getProjectsData(): Observable<ProjectDTO[]> {
@@ -220,6 +222,10 @@ export class ProjectService {
       loggedUser
     );
     this.assignProjectToEmployees({ id: (await projectRef).id, ...newProject });
+
+    this.notificationService.success(
+      "Project was created"
+    );
   }
 
   async updateProject(
@@ -275,6 +281,10 @@ export class ProjectService {
     this.updateEmployeesProjects(
       { id: (await updatedProject).id, ...(await updatedProject).data() } as ProjectDTO,
       oldProject,
+    );
+
+    this.notificationService.success(
+      "Project was updated"
     );
   }
 
@@ -449,13 +459,13 @@ export class ProjectService {
           hours: e.hoursPerSkill,
         });
       });
+    });
 
-      const eId = project.reporter.firstName + ' ' + project.reporter.lastName;
-      employeeArray.push({ [eId]: [] });
-      employeeArray[employeeArray.length - 1][eId].push({
-        skill: 'Management',
-        hours: project.managementHours,
-      });
+    const eId = project.reporter.firstName + ' ' + project.reporter.lastName;
+    employeeArray.push({ [eId]: [] });
+    employeeArray[employeeArray.length - 1][eId].push({
+      skill: 'Management',
+      hours: project.managementHours,
     });
 
     return employeeArray;
