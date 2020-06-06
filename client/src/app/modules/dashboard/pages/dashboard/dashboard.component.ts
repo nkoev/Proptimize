@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserDTO } from 'src/app/models/employees/user.dto';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/modules/employees/services/user.service';
@@ -23,15 +23,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private userService: UserService,
     private employeeService: EmployeeService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     const sub1 = this.route.data.subscribe((data) => {
       this.loggedUser = data.loggedUser;
     });
-    const sub2 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res)
+    const sub2 = this.auth.loggedUser$.subscribe((res) =>
+      res ? (this.loggedUser = res) : this.router.navigate(['login'])
     );
     this.subscriptions.push(sub1, sub2);
   }

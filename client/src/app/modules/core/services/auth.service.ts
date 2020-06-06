@@ -19,10 +19,8 @@ export class AuthService {
   loggedUser$: Observable<UserDTO> = this.afAuth.authState.pipe(
     switchMap((user) => {
       if (user) {
-        return this.afs
-          .doc<UserDTO>(`users/${user.uid}`)
-          .get()
-          .pipe(map((res) => res.data()));
+        return this.afs.doc<UserDTO>(`users/${user.uid}`).valueChanges();
+        // .pipe(map((res) => res.data()));
       } else {
         return of(null);
       }

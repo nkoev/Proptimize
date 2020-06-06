@@ -12,7 +12,10 @@ import * as _ from 'lodash';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { DocumentData } from '@angular/fire/firestore/interfaces';
 import { MatDialog } from '@angular/material/dialog';
-import { AddProjectComponent, ProjectDialogData } from '../../components/add-project/add-project.component';
+import {
+  AddProjectComponent,
+  ProjectDialogData,
+} from '../../components/add-project/add-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from 'src/app/modules/employees/services/employee.service';
 import { SkillService } from 'src/app/modules/skills/skill.service';
@@ -26,7 +29,8 @@ import { UserDTO } from 'src/app/models/employees/user.dto';
   styleUrls: ['./projects.component.css'],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
-  @ViewChild(SingleProjectComponent) private singleProjectComponent: SingleProjectComponent;
+  @ViewChild(SingleProjectComponent)
+  private singleProjectComponent: SingleProjectComponent;
   isLeftVisible = true;
 
   projects$: BehaviorSubject<ProjectDTO[]> = new BehaviorSubject([]);
@@ -48,8 +52,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private readonly notificationService: NotificationService,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
-  ) { }
+    private readonly route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     const sub1 = this.projectService.getAll().subscribe((data) => {
@@ -72,12 +76,18 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.subscriptions.push(sub2);
     });
 
-    const sub3 = this.route.data.subscribe(data => (this.loggedUser = data.loggedUser));
-    const sub4 = this.auth.loggedUser$.subscribe(res => (this.loggedUser = res));
-    const sub5 = this.employeeService.$allEmployees.subscribe(employees => {
+    const sub3 = this.route.data.subscribe(
+      (data) => (this.loggedUser = data.loggedUser)
+    );
+    const sub4 = this.auth.loggedUser$.subscribe((res) =>
+      res ? (this.loggedUser = res) : this.router.navigate(['login'])
+    );
+    const sub5 = this.employeeService.$allEmployees.subscribe((employees) => {
       this.employeesListData$.next(employees);
     });
-    const sub6 = this.skillService.getSkills().subscribe(res => (this.skillsList = res));
+    const sub6 = this.skillService
+      .getSkills()
+      .subscribe((res) => (this.skillsList = res));
 
     this.subscriptions.push(sub1, sub3, sub4, sub5, sub6);
   }
@@ -87,11 +97,11 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   filterProjects(event: {
-    skills: string[],
-    status: string[],
-    name: string,
-    reporter: string,
-    myProjects: boolean
+    skills: string[];
+    status: string[];
+    name: string;
+    reporter: string;
+    myProjects: boolean;
   }): void {
     let filteredProjects = this.projectsData;
 
@@ -127,8 +137,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       });
     }
     if (event.myProjects) {
-      filteredProjects = filteredProjects.filter((project) =>
-        project.reporter?.id === this.loggedUser.id
+      filteredProjects = filteredProjects.filter(
+        (project) => project.reporter?.id === this.loggedUser.id
       );
     }
 
@@ -200,8 +210,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     event
       ? this.router.navigate(['/' + 'projects'])
       : this.router.navigate(['/' + 'projects'], {
-        queryParams: { id: this.singleProject.id },
-      });
+          queryParams: { id: this.singleProject.id },
+        });
   }
 
   getSingleProject(project: ProjectDTO): void {
