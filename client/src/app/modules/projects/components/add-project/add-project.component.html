@@ -23,7 +23,7 @@
             <div class="target-in-days">
                 <mat-form-field>
                     <mat-label>Target In Days</mat-label>
-                    <input min="1" max="100" type="number" matInput formControlName="targetInDays" />
+                    <input min="1" max="300" type="number" matInput formControlName="targetInDays" />
                 </mat-form-field>
                 <mat-error *ngIf="targetInDays.invalid && (targetInDays.dirty || targetInDays.touched)"
                     class="alert alert-danger">
@@ -31,7 +31,7 @@
                         Target in days is required
                     </div>
                     <div *ngIf="targetInDays.errors.max && !targetInDays.errors.required">
-                        The project cannot last more than 100 days
+                        The project cannot last more than 300 days
                     </div>
                 </mat-error>
             </div>
@@ -64,13 +64,13 @@
             <div class="management-target">
                 <mat-form-field>
                     <mat-label>Target in Hours:</mat-label>
-                    <input min="1" max="1000" type="number" matInput formControlName="managementTarget"
+                    <input min="1" max="20000" type="number" matInput formControlName="managementTarget"
                         (click)="onManTargetSelect()" />
                 </mat-form-field>
                 <mat-error *ngIf="managementTarget.invalid && (managementTarget.dirty || managementTarget.touched)"
                     class="alert alert-danger">
                     <div *ngIf="managementTarget.errors.max && !managementTarget.errors.required">
-                        Target should be max 1000h
+                        Target should be max 20000h
                     </div>
                 </mat-error>
             </div>
@@ -110,9 +110,16 @@
 
                         <mat-form-field>
                             <mat-label>Target in Hours:</mat-label>
-                            <input matInput min="0" max="1000" type="number" formControlName="targetInHours"
+                            <input matInput min="0" max="20000" type="number" formControlName="targetInHours"
                                 (click)="onTargetSelect(i)">
                         </mat-form-field>
+                        <mat-error
+                            *ngIf="getTargetInHours(i).invalid && (getTargetInHours(i).dirty || getTargetInHours(i).touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="getTargetInHours(i).errors.max && !getTargetInHours(i).errors.required">
+                                Target should be max 20000h
+                            </div>
+                        </mat-error>
 
                         <button mat-raised-button type="button" class="project-btn del"
                             (click)="removeSkill(i, $event)">Delete Skill</button>
