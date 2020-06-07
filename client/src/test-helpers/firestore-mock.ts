@@ -6,6 +6,7 @@ export class FirestoreMock {
   public mockOrderBy;
   public mockAdd;
   public mockGet;
+  public mockSet;
   public mockUpdate;
   public mockDoc;
   public mockValueChanges;
@@ -15,6 +16,7 @@ export class FirestoreMock {
   /* tslint:disable */
   public _mockAddReturn;
   public _mockGetReturn;
+  public _mockSetReturn;
   public _mockUpdateReturn;
   public _mockOnSnapshotSuccess;
   public _mockValueChangesReturn;
@@ -31,6 +33,7 @@ export class FirestoreMock {
     // methods that return promises
     this.mockAdd = jest.fn(() => Promise.resolve(this._mockAddReturn));
     this.mockGet = jest.fn(() => Promise.resolve(this._mockGetReturn));
+    this.mockSet = jest.fn(() => Promise.resolve(this._mockSetReturn));
     this.mockUpdate = jest.fn(() => Promise.resolve(this._mockUpdateReturn));
 
     // methods that return observables
@@ -45,6 +48,7 @@ export class FirestoreMock {
     this._mockAddReturn = null;
     this._mockGetReturn = null;
     this._mockOnSnapshotSuccess = null;
+    this._mockValueChangesReturn = null;
   }
 
   collection(c: string) {
@@ -75,6 +79,10 @@ export class FirestoreMock {
     return this.mockGet();
   }
 
+  set(...args) {
+    return this.mockSet(...args);
+  }
+
   update(...args) {
     return this.mockUpdate(...args);
   }
@@ -93,6 +101,10 @@ export class FirestoreMock {
 
   set mockGetReturn(val) {
     this._mockGetReturn = val;
+  }
+
+  set mockSetReturn(val) {
+    this._mockSetReturn = val;
   }
 
   set mockUpdateReturn(val) {
