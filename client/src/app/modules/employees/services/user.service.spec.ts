@@ -3,18 +3,49 @@ import { UserService } from './user.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, of } from 'rxjs';
+import { of } from 'rxjs';
 
 describe('UserService', () => {
   let service: any;
   let afsMock: any;
   let afAuthMock: any;
   let collectionStub: any;
+  let refStub: any;
   let httpMock: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    collectionStub = { valueChanges: () => of('test') };
+    (refStub = {
+      get: jest.fn(
+        () =>
+          new Promise((resolve) =>
+            resolve({
+              data: () => ({ name: 'test user' }),
+              id: 'testId',
+            })
+          )
+      ),
+    }),
+      (collectionStub = {
+        valueChanges: jest.fn(() => of('users')),
+        doc: () => ({
+          ref: refStub,
+        }),
+        ref: {
+          where: jest.fn(() => ({
+            get: jest.fn(
+              () =>
+                new Promise((resolve) =>
+                  resolve({
+                    docs: [
+                      { data: () => ({ name: 'test user' }), id: 'testId' },
+                    ],
+                  })
+                )
+            ),
+          })),
+        },
+      });
     afsMock = {
       collection: jest.fn(() => collectionStub),
     };
@@ -36,28 +67,49 @@ describe('UserService', () => {
     expect(afsMock.collection).toHaveBeenCalledWith('users');
   });
 
-  describe('AllUsers$', () => {
-    it('should call Users collection valueChanges method', () => {
-      service.allUsers$.subscribe(() => {
-        expect(afsMock.collection.valueChanges).toHaveBeenCalled();
+  describe('AllUsers()', () => {
+    it('should call Users collection valueChanges method', (done) => {
+      service.allUsers().subscribe(() => {
+        expect(collectionStub.valueChanges).toHaveBeenCalled();
+        done();
       });
     });
 
-    it('should emit correct value from AngularFirestore.collection.valueChanges', () => {
-      jest
-        .spyOn(afsMock, 'collection')
-        .mockImplementation(() => ({ valueChanges: () => of('All users') }));
-      service.allUsers().subscribe((res) => {
-        expect(res).toEqual('All users');
+    it('should emit correct value from Users collection valueChanges method', (done) => {
+      service.allUsers().subscribe((res: string) => {
+        expect(res).toEqual('users');
+        done();
       });
     });
   });
-  // describe('queryUsers', () => {
-  //   it('should call AngularFirestore.collection.where.get', () => {
-  //     service.queryUsers('name', 'test').then((res) => {
-  //       expect(afs.collection.valueChanges()).toHaveBeenCalled();
-  //       expect(res).toEqual({ foo: 'bar' } as any);
-  //     });
-  //   });
-  // });
+
+  describe('queryUsers()', () => {
+    it('should call AngularFirestore.collection.where with correct arguments', async(() => {
+      service.queryUsers('name', 'test').then(() => {
+        expect(collectionStub.ref.where).toHaveBeenCalledWith(
+          'name',
+          '==',
+          'test'
+        );
+      });
+    }));
+
+    it('should return correct value from AngularFirestore.collection.where.get', async(() => {
+      service
+        .queryUsers('name', 'test')
+        .then((res: { name: string; id: string }) => {
+          expect(res).toEqual([{ name: 'test user', id: 'testId' }]);
+        });
+    }));
+  });
+
+  describe('getUserById()', () => {
+    it('should call AngularFirestore.collection.where with correct arguments.', async(() => {
+      console.log(collectionStub.doc().ref.get());
+      service.getUserById('testId').then((res) => {
+        expect(res).toEqual({ name: 'test user', id: 'testId' });
+        expect(refStub.get).toHaveBeenCalled();
+      });
+    }));
+  });
 });
