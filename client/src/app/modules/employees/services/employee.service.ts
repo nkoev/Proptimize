@@ -7,7 +7,6 @@ import {
 } from '@angular/fire/firestore/public_api';
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { Observable } from 'rxjs';
-import * as firebase from 'firebase/app';
 import { EmployeeCreateDTO } from 'src/app/models/employees/employee-create.dto';
 
 @Injectable({
@@ -51,27 +50,27 @@ export class EmployeeService {
       .update({ skills: firestore.FieldValue.arrayUnion(...skills) });
   }
 
-  addProject(employeeId: string, project: any) {
+  addProject(employeeId: string, project: any): void {
     const sum = project.dailyInput.reduce((acc, e) => {
       acc += e.hours;
       return acc;
     }, 0);
     const employeeRef = this.employeesCol.doc(employeeId);
     employeeRef.update({
-      availableHours: firebase.firestore.FieldValue.increment(-sum),
-      projects: firebase.firestore.FieldValue.arrayUnion(project),
+      availableHours: firestore.FieldValue.increment(-sum),
+      projects: firestore.FieldValue.arrayUnion(project),
     });
   }
 
-  removeProject(employeeId: string, project: any) {
+  removeProject(employeeId: string, project: any): void {
     const sum = project.dailyInput.reduce((acc, e) => {
       acc += e.hours;
       return acc;
     }, 0);
     const employeeRef = this.employeesCol.doc(employeeId);
     employeeRef.update({
-      availableHours: firebase.firestore.FieldValue.increment(sum),
-      projects: firebase.firestore.FieldValue.arrayRemove(project),
+      availableHours: firestore.FieldValue.increment(sum),
+      projects: firestore.FieldValue.arrayRemove(project),
     });
   }
 }

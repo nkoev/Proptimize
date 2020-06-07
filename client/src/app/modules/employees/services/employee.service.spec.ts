@@ -5,7 +5,13 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { firestore } from 'firebase/app';
 
 jest.mock('firebase/app', () => ({
-  firestore: { FieldValue: { arrayUnion: jest.fn((...args) => args) } },
+  firestore: {
+    FieldValue: {
+      arrayUnion: jest.fn((...args) => args),
+      arrayRemove: jest.fn((...args) => args),
+      increment: jest.fn((num) => num),
+    },
+  },
 }));
 
 describe('EmployeeServiceService', () => {
@@ -162,5 +168,63 @@ describe('EmployeeServiceService', () => {
     }));
   });
 
-  describe('addEmployee method', () => {});
+  describe('addProject method', () => {
+    it('should call employees collection.doc() with correct argument', () => {
+      const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
+      service.addProject('testId', projectStub);
+      expect(firestoreMock.mockDoc).toHaveBeenCalledWith('testId');
+    });
+
+    it('should call firestore increment method with negative dailyInputs sum', () => {
+      const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
+      service.addProject('testId', projectStub);
+      expect(firestore.FieldValue.increment).toHaveBeenCalledWith(-5);
+    });
+
+    it('should call firestore arrayUnion method with correct argument', () => {
+      const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
+      service.addProject('testId', projectStub);
+      expect(firestore.FieldValue.arrayUnion).toHaveBeenCalledWith(projectStub);
+    });
+
+    it('should call employees collection update method with correct arguments.', () => {
+      const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
+      service.addProject('testId', projectStub);
+      expect(firestoreMock.mockUpdate).toHaveBeenCalledWith({
+        projects: [projectStub],
+        availableHours: -5,
+      });
+    });
+  });
+
+  describe('removeProject method', () => {
+    it('should call employees collection.doc() with correct argument.', () => {
+      const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
+      service.removeProject('testId', projectStub);
+      expect(firestoreMock.mockDoc).toHaveBeenCalledWith('testId');
+    });
+
+    it('should call firestore increment method with dailyInputs sum', () => {
+      const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
+      service.removeProject('testId', projectStub);
+      expect(firestore.FieldValue.increment).toHaveBeenCalledWith(5);
+    });
+
+    it('should call firestore arrayRemove method with correct argument', () => {
+      const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
+      service.removeProject('testId', projectStub);
+      expect(firestore.FieldValue.arrayRemove).toHaveBeenCalledWith(
+        projectStub
+      );
+    });
+
+    it('should call employees collection.update method with correct arguments.', () => {
+      const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
+      service.removeProject('testId', projectStub);
+      expect(firestoreMock.mockUpdate).toHaveBeenCalledWith({
+        projects: [projectStub],
+        availableHours: 5,
+      });
+    });
+  });
 });
