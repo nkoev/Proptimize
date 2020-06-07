@@ -6,12 +6,12 @@ import { SkillSeriesDTO } from 'src/app/models/skills/skill-series.dto';
 const moment = require('moment-business-days');
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GanttService {
   today = new Date();
 
-  constructor() { }
+  constructor() {}
 
   private skillHasEmployees(employeesArray: FormArray): boolean {
     return 1 <= employeesArray.controls.length;
@@ -22,7 +22,7 @@ export class GanttService {
     if (skillsArray.controls.length < 1) {
       return 2;
     }
-    const anyEmployees = skillsArray.controls.some(c => {
+    const anyEmployees = skillsArray.controls.some((c) => {
       const control = c.get('employees') as FormArray;
       return this.skillHasEmployees(control);
     });
@@ -30,16 +30,22 @@ export class GanttService {
     return anyEmployees ? 1 : 3;
   }
 
-  buildSeries(
-    skills: SkillGanttDTO[]
-  ): SkillSeriesDTO[] {
-    let series: SkillSeriesDTO[] = [];
+  buildSeries(skills: SkillGanttDTO[]): SkillSeriesDTO[] {
+    const series: SkillSeriesDTO[] = [];
 
-    skills.forEach(skill => {
+    skills.forEach((skill) => {
       const entry: SkillSeriesDTO = {
         name: skill.skill,
-        start: Date.UTC(skill.startDate.getFullYear(), skill.startDate.getMonth(), skill.startDate.getDate()),
-        end: Date.UTC(skill.endDate.getFullYear(), skill.endDate.getMonth(), skill.endDate.getDate()),
+        start: Date.UTC(
+          skill.startDate.getFullYear(),
+          skill.startDate.getMonth(),
+          skill.startDate.getDate()
+        ),
+        end: Date.UTC(
+          skill.endDate.getFullYear(),
+          skill.endDate.getMonth(),
+          skill.endDate.getDate()
+        ),
         completed: {
           amount: skill.completeness.amount,
           fill: skill.completeness.fill ? '#bfe3b6' : '#15DB95',
@@ -57,31 +63,47 @@ export class GanttService {
     projectName: string,
     startDate: Date,
     endDate: Date,
-    skills: SkillGanttDTO[],
+    skills: SkillGanttDTO[]
   ): void {
     const series = this.buildSeries(skills);
-    const actualEndDate = new Date(Math.max.apply(null, skills.map(s => s.endDate)));
+    const actualEndDate = new Date(
+      Math.max.apply(
+        null,
+        skills.map((s) => s.endDate)
+      )
+    );
 
     Highcharts.ganttChart(elRef, {
       title: {
-        text: `Project Period:  ${moment(startDate).format('ll')} - ${moment(endDate).format('ll')}`
+        text: `Project Period:  ${moment(startDate).format('ll')} - ${moment(
+          endDate
+        ).format('ll')}`,
       },
       xAxis: {
-        min: Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
-        max: Date.UTC(actualEndDate.getFullYear(), actualEndDate.getMonth(), actualEndDate.getDate())
+        min: Date.UTC(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate()
+        ),
+        max: Date.UTC(
+          actualEndDate.getFullYear(),
+          actualEndDate.getMonth(),
+          actualEndDate.getDate()
+        ),
       },
       tooltip: {
         dateTimeLabelFormats: {
-          day: '%A, %b %e'
-        }
+          day: '%A, %b %e',
+        },
       },
       colors: ['#f78888'],
-      series: [{
-        name: projectName,
-        data: series,
-        type: undefined
-      }]
+      series: [
+        {
+          name: projectName,
+          data: series,
+          type: undefined,
+        },
+      ],
     });
   }
-
 }

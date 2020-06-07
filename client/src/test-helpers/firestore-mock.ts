@@ -12,11 +12,13 @@ export class FirestoreMock {
   public mockOnSnapshot;
   public mockRef;
 
+  /* tslint:disable */
   public _mockAddReturn;
   public _mockGetReturn;
   public _mockUpdateReturn;
-  public _mockOnSnapshotSuccess: any;
+  public _mockOnSnapshotSuccess;
   public _mockValueChangesReturn;
+  /* tslint:enable */
 
   constructor() {
     // mocked methods and properties that return the class

@@ -1,4 +1,4 @@
 export enum ProjectStatusType {
-    InProgress = "In Progress",
-    Closed = "Closed",
-};
+  InProgress = 'In Progress',
+  Closed = 'Closed',
+}
