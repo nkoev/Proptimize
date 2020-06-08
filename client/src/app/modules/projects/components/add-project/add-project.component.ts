@@ -45,7 +45,7 @@ export class AddProjectComponent implements OnInit {
   employeesListData: Observable<EmployeeDTO[]>;
   employeesList: EmployeeDTO[] = [];
   employeesListFiltered: EmployeeDTO[][] = [];
-  selectedEmployeesList: any[] = [];
+  selectedEmployeesList: EmployeeDTO[][] = [];
   hours = Array(8)
     .fill(0)
     .map((_, i) => i + 1);
@@ -100,16 +100,16 @@ export class AddProjectComponent implements OnInit {
         [
           Validators.required,
           Validators.minLength(2),
-          Validators.maxLength(100),
+          Validators.maxLength(200),
         ],
       ],
       targetInDays: [
         this.currentProject.targetInDays,
-        [Validators.required, Validators.min(1), Validators.max(100)],
+        [Validators.required, Validators.min(1), Validators.max(300)],
       ],
       managementTarget: [
         this.currentProject.managementTarget,
-        [Validators.min(1), Validators.max(1000)],
+        [Validators.min(1), Validators.max(20000)],
       ],
       managementHours: [
         this.currentProject.managementHours,
@@ -143,13 +143,17 @@ export class AddProjectComponent implements OnInit {
   get skills() {
     return this.projectForm.get('skills') as FormArray;
   }
+  getTargetInHours(idxSkill: number) {
+    const control = this.skills;
+    return control.at(idxSkill)['controls']['targetInHours'];
+  }
 
   private newSkill(): FormGroup {
     return this.fb.group({
       skill: [null, [Validators.required]],
       targetInHours: [
         null,
-        [Validators.required, Validators.min(0), Validators.max(1000)],
+        [Validators.required, Validators.min(0), Validators.max(20000)],
       ],
       employees: this.fb.array([]),
     });
@@ -259,7 +263,8 @@ export class AddProjectComponent implements OnInit {
   manHoursDisabled(hour: number): boolean {
     return (
       hour >
-      this.loggedUser.availableHours + this.currentProject.managementHours
+      this.loggedUser.availableHours +
+        (this.currentProject.managementHours || 0)
     );
   }
 
@@ -376,7 +381,7 @@ export class AddProjectComponent implements OnInit {
     console.log(this.selectedEmployeesList);
     form.markAllAsTouched();
     if (form.invalid) {
-      this.notificationService.error('Please fill all form fields!');
+      this.notificationService.error('Please fill in all required fields!');
       return;
     }
 
