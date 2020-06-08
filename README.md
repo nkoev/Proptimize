@@ -3,14 +3,15 @@
 
 <h2>What is Proptimize?</h2>
 
-Proptimize is a Project Planning System, designed to help managers to distribute the company employees as well as working man-hours upon projects.
+Proptimize is a Project Planning System, designed to support managers in their day to day operations. It allows registered users to create and easily manage new projects, assign tasks and distribute available human resources, track deadlines and more.
+It's simple and readable overview pages together with user-friendly interface aim to make Proptimize easy and enjoyable application.
 
 **Official link**: https://proptimize-edb90.web.app/ 
 
 <h2>Team</h2>
 
 This project is being developed by <a href="https://gitlab.com/0ligotann">Tanya</a> and <a href="https://gitlab.com/nkoev">Nikolay</a>,
-proud Bulgaria's Telerik Academy students under the guidance of our technical trainers Edward Evlogiev, Rosen Urkov and Stoyan Peshev and the inestimable mental support of Boyan Hadjiev.
+proud Bulgaria's Telerik Academy students under the guidance of Kiril Parushev from Tick 42, our technical trainers Edward Evlogiev, Rosen Urkov and Stoyan Peshev and the inestimable mental support of Boyan Hadjiev.
 
 <h2>Features</h2>
 The system is accessible through successful authentication. It is accessible both by regular users and administrators, which are basically regular users (managers) with extra capabilities.
@@ -18,7 +19,7 @@ The system is accessible through successful authentication. It is accessible bot
 ___
 </br>
 
-**As a User (Manager)**
+**Regular User** (```login: boyan@proptimize.com, pass: 123456```)
   - Login & logout
   - Dashboard
     - overview of the state of the manager
@@ -34,7 +35,7 @@ ___
     - filtering by name, competence etc.
     - dedicated profile page for each employee
 
-**Additional features as an Admin**
+**Administrator** (```login elon@proptimize.com, pass: 123456```)
   - Register new users
     - emlpoyees
     - managers
