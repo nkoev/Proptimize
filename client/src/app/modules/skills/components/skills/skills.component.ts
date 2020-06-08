@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SkillService } from '../../skill.service';
 import { FormControl, Validators } from '@angular/forms';
 import { UserDTO } from 'src/app/models/employees/user.dto';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { Subscription } from 'rxjs';
 
@@ -25,7 +25,8 @@ export class SkillsComponent implements OnInit, OnDestroy {
   constructor(
     private skillService: SkillService,
     private route: ActivatedRoute,
-    private auth: AuthService
+    private auth: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -35,8 +36,8 @@ export class SkillsComponent implements OnInit, OnDestroy {
     const sub2 = this.route.data.subscribe(
       (data) => (this.loggedUser = data.loggedUser)
     );
-    const sub3 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res)
+    const sub3 = this.auth.loggedUser$.subscribe((res) =>
+      res ? (this.loggedUser = res) : this.router.navigate(['login'])
     );
     this.subscriptions.push(sub1, sub2, sub3);
   }

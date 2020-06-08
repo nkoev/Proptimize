@@ -7,29 +7,20 @@ import {
 } from '@angular/fire/firestore/public_api';
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import * as firebase from 'firebase/app';
 import { EmployeeCreateDTO } from 'src/app/models/employees/employee-create.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService {
-  employeesCol: AngularFirestoreCollection;
-  $allEmployees: Observable<EmployeeDTO[]>;
+  employeesCol: AngularFirestoreCollection<EmployeeDTO | EmployeeCreateDTO>;
 
   constructor(private afs: AngularFirestore) {
     this.employeesCol = this.afs.collection<EmployeeDTO>('employees');
-    this.$allEmployees = this.employeesCol.snapshotChanges().pipe(
-      map((changes) =>
-        changes.map((change) => {
-          return {
-            ...change.payload.doc.data(),
-            id: change.payload.doc.id,
-          } as EmployeeDTO;
-        })
-      )
-    );
+  }
+
+  allEmployees(): Observable<EmployeeDTO[]> {
+    return this.employeesCol.valueChanges({ idField: 'id' });
   }
 
   async queryEmployees(field: string, value: string): Promise<EmployeeDTO[]> {
@@ -59,27 +50,27 @@ export class EmployeeService {
       .update({ skills: firestore.FieldValue.arrayUnion(...skills) });
   }
 
-  addProject(employeeId: string, project: any) {
+  addProject(employeeId: string, project: any): void {
     const sum = project.dailyInput.reduce((acc, e) => {
       acc += e.hours;
       return acc;
     }, 0);
     const employeeRef = this.employeesCol.doc(employeeId);
     employeeRef.update({
-      availableHours: firebase.firestore.FieldValue.increment(-sum),
-      projects: firebase.firestore.FieldValue.arrayUnion(project),
+      availableHours: firestore.FieldValue.increment(-sum),
+      projects: firestore.FieldValue.arrayUnion(project),
     });
   }
 
-  removeProject(employeeId: string, project: any) {
+  removeProject(employeeId: string, project: any): void {
     const sum = project.dailyInput.reduce((acc, e) => {
       acc += e.hours;
       return acc;
     }, 0);
     const employeeRef = this.employeesCol.doc(employeeId);
     employeeRef.update({
-      availableHours: firebase.firestore.FieldValue.increment(sum),
-      projects: firebase.firestore.FieldValue.arrayRemove(project),
+      availableHours: firestore.FieldValue.increment(sum),
+      projects: firestore.FieldValue.arrayRemove(project),
     });
   }
 }

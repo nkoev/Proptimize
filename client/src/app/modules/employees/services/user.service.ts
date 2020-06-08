@@ -7,7 +7,7 @@ import { UserDTO } from 'src/app/models/employees/user.dto';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DocumentData } from '@google-cloud/firestore';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { UserCreateDTO } from 'src/app/models/employees/user-create.dto';
@@ -17,7 +17,6 @@ import { UserCreateDTO } from 'src/app/models/employees/user-create.dto';
 })
 export class UserService {
   private usersCol: AngularFirestoreCollection<UserDTO>;
-  allUsers$: Observable<UserDTO[]>;
 
   constructor(
     private afs: AngularFirestore,
@@ -25,16 +24,10 @@ export class UserService {
     private http: HttpClient
   ) {
     this.usersCol = this.afs.collection<UserDTO>('users');
-    this.allUsers$ = this.usersCol.snapshotChanges().pipe(
-      map((changes) =>
-        changes.map((change) => {
-          return {
-            ...change.payload.doc.data(),
-            id: change.payload.doc.id,
-          } as UserDTO;
-        })
-      )
-    );
+  }
+
+  allUsers(): Observable<UserDTO[]> {
+    return this.usersCol.valueChanges();
   }
 
   async queryUsers(field: string, value: string): Promise<UserDTO[]> {

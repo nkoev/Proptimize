@@ -18,7 +18,8 @@
           <app-user-info [loggedUser]="loggedUser"></app-user-info>
           <app-user-projects [loggedUser]="loggedUser"></app-user-projects>
           <div class="footer">
-            <app-avatar-upload></app-avatar-upload>&nbsp;
+            <app-avatar-upload [loggedUser]="loggedUser"></app-avatar-upload
+            >&nbsp;
             <button mat-raised-button (click)="showSubordinates()">
               My team
             </button>

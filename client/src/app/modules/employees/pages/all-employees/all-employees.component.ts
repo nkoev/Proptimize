@@ -9,7 +9,7 @@ import { OrgChartComponent } from '../../components/orgchart/orgchart.component'
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { EmployeesFilteringFormComponent } from '../../components/employees-filtering-form/employees-filtering-form.component';
 import { SkillService } from 'src/app/modules/skills/skill.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EditEmployeeComponent } from '../../components/edit-employee/edit-employee.component';
 import { UserDTO } from 'src/app/models/employees/user.dto';
 import { FormGroup } from '@angular/forms';
@@ -39,23 +39,25 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private auth: AuthService,
     private userService: UserService,
-    private skillService: SkillService
+    private skillService: SkillService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    const sub1 = this.userService.allUsers$.subscribe((users) => {
+    const sub1 = this.userService.allUsers().subscribe((users) => {
+      console.log('subscribes');
       this.managers = users;
       this.filteredManagers = this.managers;
     });
-    const sub2 = this.employeeService.$allEmployees.subscribe((employees) => {
+    const sub2 = this.employeeService.allEmployees().subscribe((employees) => {
       this.employees = employees;
       this.filteredEmployees = this.employees;
     });
     const sub3 = this.route.data.subscribe(
       (data) => (this.loggedUser = data.loggedUser)
     );
-    const sub4 = this.auth.loggedUser$.subscribe(
-      (res) => (this.loggedUser = res)
+    const sub4 = this.auth.loggedUser$.subscribe((res) =>
+      res ? (this.loggedUser = res) : this.router.navigate(['login'])
     );
     const sub5 = this.skillService
       .getSkills()
@@ -83,6 +85,8 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
   showOrgChart(): void {
     this.matDialog.open(OrgChartComponent, {
       data: { managers: this.managers, employees: this.employees },
+      maxWidth: '80vw',
+      maxHeight: '80vh',
     });
   }
 

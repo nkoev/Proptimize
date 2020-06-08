@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthGuard } from './modules/core/guards/auth.guard';
 import { AdminGuard } from './modules/core/guards/admin.guard';
+import { LoginGuard } from './modules/core/guards/login.guard';
 import { LoggedUserResolver } from './modules/core/resolvers/logged-user.resolver';
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () =>
       import('./modules/login/login.module').then((m) => m.LoginModule),
+    canActivate: [LoginGuard],
   },
   {
     path: 'dashboard',
