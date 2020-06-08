@@ -4,7 +4,7 @@
 <h2>What is Proptimize?</h2>
 
 Proptimize is a Project Planning System, designed to support managers in their day to day operations. It allows registered users to create and easily manage new projects, assign tasks and distribute available human resources, track deadlines and more.
-It's simple and readable overview pages together with user-friendly interface aim to make Proptimize easy and enjoyable application.
+Its simple and readable overview pages, together with user-friendly interface, aim to make Proptimize easy and enjoyable application.
 
 **Official link**: https://proptimize-edb90.web.app/ 
 
