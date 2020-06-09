@@ -6,7 +6,10 @@
 
     <div class="card-content">
       <div class="navigation">
-        <app-navigation [loggedUser]="loggedUser"></app-navigation>
+        <app-navigation
+          [loggedUser]="loggedUser"
+          (toLeftPane)="activePane = 'left'"
+        ></app-navigation>
       </div>
 
       <div class="content">

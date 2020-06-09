@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 
 @Component({
   selector: 'app-subordinates-list',
@@ -20,10 +22,13 @@ export class SubordinatesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  toDetailEmployee(id: string): void {
+  toDetailEmployee(employee: EmployeeDTO & UserDTO): void {
     this.dialogRef.close();
     this.router.navigate(['/employees'], {
-      queryParams: { id },
+      queryParams: {
+        employeeId: employee.id,
+        isManager: employee.email ? true : false,
+      },
     });
   }
 }

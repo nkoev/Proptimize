@@ -3,7 +3,7 @@
   <mat-list-item
     class="item"
     *ngFor="let employee of subordinates"
-    (click)="toDetailEmployee(employee.id)"
+    (click)="toDetailEmployee(employee)"
     ><div class="list-item">
       {{ employee.firstName }} {{ employee.lastName }} - {{ employee.position }}
     </div>

@@ -5,6 +5,7 @@ import { UserDTO } from 'src/app/models/employees/user.dto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/modules/core/services/auth.service';
 import { Subscription } from 'rxjs';
+import { NotificationService } from 'src/app/modules/core/services/notification.service';
 
 @Component({
   selector: 'app-skills',
@@ -15,18 +16,15 @@ export class SkillsComponent implements OnInit, OnDestroy {
   today = new Date();
   loggedUser: UserDTO;
   skills: string[];
-  skill = new FormControl('', [
-    Validators.required,
-    Validators.minLength(4),
-    Validators.maxLength(20),
-  ]);
+  skill = new FormControl('', [Validators.required, Validators.maxLength(20)]);
   subscriptions: Subscription[] = [];
 
   constructor(
     private skillService: SkillService,
     private route: ActivatedRoute,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private notificator: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -47,9 +45,14 @@ export class SkillsComponent implements OnInit, OnDestroy {
   }
 
   addSkill(): void {
-    if (this.skill.valid) {
-      this.skillService.addSkill({ name: this.skill.value });
-      this.skill.reset();
-    }
+    this.skills.includes(this.skill.value)
+      ? this.notificator.warn('This skill is already on the list')
+      : this.skill.errors.maxlength
+      ? this.notificator.warn('Skill name should not exceed 20 characters')
+      : this.skill.errors.required
+      ? this.notificator.warn('Please type in some skill')
+      : (this.skillService.addSkill({ name: this.skill.value }),
+        this.skills.push(this.skill.value),
+        this.skill.reset());
   }
 }
