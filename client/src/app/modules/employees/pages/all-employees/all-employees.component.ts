@@ -12,7 +12,6 @@ import { SkillService } from 'src/app/modules/skills/skill.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EditEmployeeComponent } from '../../components/edit-employee/edit-employee.component';
 import { UserDTO } from 'src/app/models/employees/user.dto';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-all-employees',

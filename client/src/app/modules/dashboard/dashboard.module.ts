@@ -9,7 +9,14 @@ import { SubordinatesListComponent } from './components/subordinates-list/subord
 import { ProjectInfoComponent } from './components/project-info/project-info.component';
 
 @NgModule({
-  declarations: [DashboardComponent, AvatarUploadComponent, UserInfoComponent, UserProjectsComponent, SubordinatesListComponent, ProjectInfoComponent],
+  declarations: [
+    DashboardComponent,
+    AvatarUploadComponent,
+    UserInfoComponent,
+    UserProjectsComponent,
+    SubordinatesListComponent,
+    ProjectInfoComponent,
+  ],
   imports: [DashboardRoutingModule, SharedModule],
 })
 export class DashboardModule {}

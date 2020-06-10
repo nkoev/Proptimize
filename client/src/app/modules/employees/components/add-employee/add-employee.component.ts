@@ -3,14 +3,12 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
-  FormControl,
   AbstractControl,
 } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { UserService } from '../../services/user.service';
 import { UserCreateDTO } from 'src/app/models/employees/user-create.dto';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DocumentReference, DocumentData } from '@google-cloud/firestore';
 import { NotificationService } from '../../../core/services/notification.service';
 import { EmployeeCreateDTO } from 'src/app/models/employees/employee-create.dto';
 import { UserDTO } from 'src/app/models/employees/user.dto';

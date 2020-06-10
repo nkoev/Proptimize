@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
+import { NotificationService } from 'src/app/modules/core/services/notification.service';
 
 @Component({
   selector: 'app-edit-employee',
@@ -16,7 +17,8 @@ export class EditEmployeeComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     private data: { skillsList: string[]; employee: EmployeeDTO },
     private employeeService: EmployeeService,
-    public dialogRef: MatDialogRef<EditEmployeeComponent>
+    public dialogRef: MatDialogRef<EditEmployeeComponent>,
+    private notificator: NotificationService
   ) {}
 
   ngOnInit(): void {}
@@ -32,6 +34,9 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   addSkills(skills: string[]): void {
-    this.employeeService.addSkillsToEmployee(skills, this.employee.id);
+    this.skills.invalid
+      ? this.notificator.warn('Please, select a skill')
+      : (this.employeeService.addSkillsToEmployee(skills, this.employee.id),
+        this.skills.reset());
   }
 }

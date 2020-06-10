@@ -188,7 +188,7 @@ describe('UserService', () => {
   });
 
   describe('addProject method', () => {
-    it('should call employees collection.doc() with correct argument', () => {
+    it('should call users collection.doc() with correct argument', () => {
       const projectStub = { dailyInput: [{ hours: 5 }] };
       service.addProject('testId', projectStub);
       expect(afsMock.mockDoc).toHaveBeenCalledWith('testId');
@@ -206,7 +206,7 @@ describe('UserService', () => {
       expect(firestore.FieldValue.arrayUnion).toHaveBeenCalledWith(projectStub);
     });
 
-    it('should call employees collection update method with correct arguments.', () => {
+    it('should call users collection update method with correct arguments.', () => {
       const projectStub = { dailyInput: [{ hours: 5 }] };
       service.addProject('testId', projectStub);
       expect(afsMock.mockUpdate).toHaveBeenCalledWith({
@@ -217,7 +217,7 @@ describe('UserService', () => {
   });
 
   describe('removeProject method', () => {
-    it('should call employees collection.doc() with correct argument.', () => {
+    it('should call users collection.doc() with correct argument.', () => {
       const projectStub = { dailyInput: [{ hours: 5 }] };
       service.removeProject('testId', projectStub);
       expect(afsMock.mockDoc).toHaveBeenCalledWith('testId');
@@ -237,7 +237,7 @@ describe('UserService', () => {
       );
     });
 
-    it('should call employees collection.update method with correct arguments.', () => {
+    it('should call users collection.update method with correct arguments.', () => {
       const projectStub = { dailyInput: [{ hours: 5 }] };
       service.removeProject('testId', projectStub);
       expect(afsMock.mockUpdate).toHaveBeenCalledWith({
