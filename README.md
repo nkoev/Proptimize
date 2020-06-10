@@ -1,7 +1,7 @@
 # <img src="https://i.ibb.co/61q2tKR/logo-small.png" alt="logo-small" border="0">
   </br>
   <h4><i>
-A Telerik Academy students project on typescript, generated with Angular CLI version 9.1.4.
+A Telerik Academy students project on TypeScript, generated with Angular CLI version 9.1.4.
 </i></h4>
 
 
