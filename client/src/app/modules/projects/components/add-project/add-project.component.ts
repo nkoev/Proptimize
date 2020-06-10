@@ -229,7 +229,7 @@ export class AddProjectComponent implements OnInit {
             this.onEmployeeSelect(employee, idxSkill, idxEmployee);
             control
               .at(idxEmployee)
-              ['controls']['hoursPerSkill'].setValue(e.hoursPerSkill);
+            ['controls']['hoursPerSkill'].setValue(e.hoursPerSkill);
             this.onHoursSelect(e.hoursPerSkill, idxSkill, idxEmployee);
           });
         }
@@ -264,7 +264,7 @@ export class AddProjectComponent implements OnInit {
     return (
       hour >
       this.loggedUser.availableHours +
-        (this.currentProject.managementHours || 0)
+      (this.currentProject.managementHours || 0)
     );
   }
 
@@ -346,8 +346,8 @@ export class AddProjectComponent implements OnInit {
       this.hoursPerEmployeeMap.get(
         this.selectedEmployeesList[idxSkill][idxEmployee]
       ) +
-        hours -
-        this.hoursHelper
+      hours -
+      this.hoursHelper
     );
     // console.log('MAP: ', this.hoursPerEmployeeMap.get(this.selectedEmployeesList[idxSkill][idxEmployee]));
 
@@ -370,15 +370,15 @@ export class AddProjectComponent implements OnInit {
     return (
       hour >
       this.selectedEmployeesList[idxSkill][idxEmployee].availableHours -
-        this.hoursPerEmployeeMap.get(
-          this.selectedEmployeesList[idxSkill][idxEmployee]
-        ) +
-        this.hoursHelper
+      this.hoursPerEmployeeMap.get(
+        this.selectedEmployeesList[idxSkill][idxEmployee]
+      ) +
+      this.hoursHelper
     );
   }
 
   onApply(form: FormGroup): void {
-    console.log(this.selectedEmployeesList);
+    // console.log(this.selectedEmployeesList);
     form.markAllAsTouched();
     if (form.invalid) {
       this.notificationService.error('Please fill in all required fields!');
@@ -413,7 +413,7 @@ export class AddProjectComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup): void {
-    console.log(form);
+    // console.log(form);
     this.dialogRef.close(form);
   }
 

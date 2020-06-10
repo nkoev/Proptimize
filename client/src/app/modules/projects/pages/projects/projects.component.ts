@@ -53,11 +53,11 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private readonly matDialog: MatDialog,
     private readonly router: Router,
     private readonly route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const sub1 = this.projectService.getAll().subscribe((data) => {
-      console.log(data);
+      // console.log(data);
       this.projectsData = data;
       this.projects$.next(data);
 
@@ -205,13 +205,13 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   togglePanes(event: boolean): void {
-    console.log(this.loggedUser);
+    // console.log(this.loggedUser);
     this.isLeftVisible = event;
     event
       ? this.router.navigate(['/' + 'projects'])
       : this.router.navigate(['/' + 'projects'], {
-          queryParams: { id: this.singleProject.id },
-        });
+        queryParams: { id: this.singleProject.id },
+      });
   }
 
   getSingleProject(project: ProjectDTO): void {

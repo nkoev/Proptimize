@@ -55,7 +55,6 @@ describe('EmployeeServiceService', () => {
     it('should emit correct value from employees collection valueChanges method', (done) => {
       firestoreMock.mockValueChangesReturn = { data: 'all employees' };
       service.allEmployees().subscribe((res) => {
-        console.log(res);
         expect(res).toEqual({ data: 'all employees' } as any);
         done();
       });
