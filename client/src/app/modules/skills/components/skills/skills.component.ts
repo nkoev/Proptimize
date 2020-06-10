@@ -16,7 +16,7 @@ export class SkillsComponent implements OnInit, OnDestroy {
   today = new Date();
   loggedUser: UserDTO;
   skills: string[];
-  skill = new FormControl('', [Validators.required, Validators.maxLength(20)]);
+  skill: FormControl;
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -28,6 +28,11 @@ export class SkillsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.skill = new FormControl('', [
+      Validators.required,
+      Validators.maxLength(20),
+      Validators.pattern('^[A-Za-z].*'),
+    ]);
     const sub1 = this.skillService
       .getSkills()
       .subscribe((res: any) => (this.skills = res));
@@ -37,7 +42,13 @@ export class SkillsComponent implements OnInit, OnDestroy {
     const sub3 = this.auth.loggedUser$.subscribe((res) =>
       res ? (this.loggedUser = res) : this.router.navigate(['login'])
     );
-    this.subscriptions.push(sub1, sub2, sub3);
+    const sub4 = this.skill.valueChanges.subscribe(() => {
+      this.skill.patchValue(
+        this.skill.value.charAt(0).toUpperCase() + this.skill.value.slice(1),
+        { emitEvent: false }
+      );
+    });
+    this.subscriptions.push(sub1, sub2, sub3, sub4);
   }
 
   ngOnDestroy(): void {
@@ -45,14 +56,19 @@ export class SkillsComponent implements OnInit, OnDestroy {
   }
 
   addSkill(): void {
-    this.skills.includes(this.skill.value)
+    let skill = this.skill.value?.trim();
+    skill = skill.charAt(0).toUpperCase() + skill.slice(1);
+    const skills = this.skills.map((s) => s.toLowerCase());
+    skills.includes(skill.toLowerCase())
       ? this.notificator.warn('This skill is already on the list')
-      : this.skill.errors.maxlength
+      : this.skill.errors?.pattern
+      ? this.notificator.warn('Skill name should start with a letter')
+      : this.skill.errors?.maxlength
       ? this.notificator.warn('Skill name should not exceed 20 characters')
-      : this.skill.errors.required
+      : this.skill.errors?.required
       ? this.notificator.warn('Please type in some skill')
-      : (this.skillService.addSkill({ name: this.skill.value }),
-        this.skills.push(this.skill.value),
+      : (this.skillService.addSkill({ name: skill }),
+        this.skills.push(skill),
         this.skill.reset());
   }
 }

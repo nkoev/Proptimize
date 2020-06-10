@@ -16,15 +16,15 @@ jest.mock('firebase/app', () => ({
 
 describe('EmployeeServiceService', () => {
   let service: EmployeeService;
-  let firestoreMock: FirestoreMock;
+  let afsMock: FirestoreMock;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    firestoreMock = new FirestoreMock();
+    afsMock = new FirestoreMock();
     TestBed.configureTestingModule({
       providers: [
         EmployeeService,
-        { provide: AngularFirestore, useValue: firestoreMock },
+        { provide: AngularFirestore, useValue: afsMock },
       ],
     });
     service = TestBed.inject(EmployeeService);
@@ -32,20 +32,20 @@ describe('EmployeeServiceService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-    expect(firestoreMock.mockCollection).toHaveBeenCalledWith('employees');
+    expect(afsMock.mockCollection).toHaveBeenCalledWith('employees');
   });
 
   describe('allEmployees method', () => {
     it('should call employees collection valueChanges method', (done) => {
       service.allEmployees().subscribe(() => {
-        expect(firestoreMock.mockValueChanges).toHaveBeenCalled();
+        expect(afsMock.mockValueChanges).toHaveBeenCalled();
         done();
       });
     });
 
     it('should retreive idField as id from valueChanges method', (done) => {
       service.allEmployees().subscribe(() => {
-        expect(firestoreMock.mockValueChanges).toHaveBeenCalledWith({
+        expect(afsMock.mockValueChanges).toHaveBeenCalledWith({
           idField: 'id',
         });
         done();
@@ -53,7 +53,7 @@ describe('EmployeeServiceService', () => {
     });
 
     it('should emit correct value from employees collection valueChanges method', (done) => {
-      firestoreMock.mockValueChangesReturn = { data: 'all employees' };
+      afsMock.mockValueChangesReturn = { data: 'all employees' };
       service.allEmployees().subscribe((res) => {
         expect(res).toEqual({ data: 'all employees' } as any);
         done();
@@ -63,11 +63,11 @@ describe('EmployeeServiceService', () => {
 
   describe('queryEmployees method', () => {
     it('should call employees collection ref where method with correct arguments', async(() => {
-      firestoreMock.mockGetReturn = {
+      afsMock.mockGetReturn = {
         docs: [{ data: () => 'test data' }],
       };
       service.queryEmployees('testField', 'testValue').then(() => {
-        expect(firestoreMock.mockWhere).toHaveBeenCalledWith(
+        expect(afsMock.mockWhere).toHaveBeenCalledWith(
           'testField',
           '==',
           'testValue'
@@ -76,16 +76,16 @@ describe('EmployeeServiceService', () => {
     }));
 
     it('should call employees collection ref where get method with correct arguments', async(() => {
-      firestoreMock.mockGetReturn = {
+      afsMock.mockGetReturn = {
         docs: [{ data: () => 'test data', id: 'testId' }],
       };
       service.queryEmployees('testField', 'testValue').then(() => {
-        expect(firestoreMock.mockGet).toHaveBeenCalled();
+        expect(afsMock.mockGet).toHaveBeenCalled();
       });
     }));
 
     it('should return correct data from get method and attach id', async(() => {
-      firestoreMock.mockGetReturn = {
+      afsMock.mockGetReturn = {
         docs: [{ data: () => ({ data: 'test' }), id: 'testId' }],
       };
       service.queryEmployees('testField', 'testValue').then((res) => {
@@ -96,21 +96,21 @@ describe('EmployeeServiceService', () => {
 
   describe('getEmployeeById', () => {
     it('should call employees collection doc method with correct arguments', async(() => {
-      firestoreMock.mockGetReturn = { data: () => 'test data' };
+      afsMock.mockGetReturn = { data: () => 'test data' };
       service.getEmployeeById('testId').then(() => {
-        expect(firestoreMock.mockDoc).toHaveBeenCalledWith('testId');
+        expect(afsMock.mockDoc).toHaveBeenCalledWith('testId');
       });
     }));
 
     it('should call employees collection doc ref get method', async(() => {
-      firestoreMock.mockGetReturn = { data: () => 'test data' };
+      afsMock.mockGetReturn = { data: () => 'test data' };
       service.getEmployeeById('testId').then(() => {
-        expect(firestoreMock.mockGet).toHaveBeenCalled();
+        expect(afsMock.mockGet).toHaveBeenCalled();
       });
     }));
 
     it('should return correct data and attach id', async(() => {
-      firestoreMock.mockGetReturn = {
+      afsMock.mockGetReturn = {
         data: () => ({ data: 'test' }),
         id: 'testId',
       };
@@ -122,14 +122,14 @@ describe('EmployeeServiceService', () => {
 
   describe('addEmployee method', () => {
     it('should call employees collection add method with correct arguments', async(() => {
-      firestoreMock.mockAddReturn = 'employee added';
+      afsMock.mockAddReturn = 'employee added';
       service.addEmployee('test employee' as any).then(() => {
-        expect(firestoreMock.mockAdd).toHaveBeenCalledWith('test employee');
+        expect(afsMock.mockAdd).toHaveBeenCalledWith('test employee');
       });
     }));
 
     it('should return correct value from add method', async(() => {
-      firestoreMock.mockAddReturn = 'employee added';
+      afsMock.mockAddReturn = 'employee added';
       service.addEmployee('test employee' as any).then((res) => {
         expect(res).toEqual('employee added');
       });
@@ -138,13 +138,13 @@ describe('EmployeeServiceService', () => {
 
   describe('addSkillsToEmployee method', () => {
     it('should call employees collection.doc() with correct arguments', () => {
-      firestoreMock.mockUpdateReturn = 'employee updated';
+      afsMock.mockUpdateReturn = 'employee updated';
       service.addSkillsToEmployee(['test skill'], 'testId');
-      expect(firestoreMock.mockDoc).toHaveBeenCalledWith('testId');
+      expect(afsMock.mockDoc).toHaveBeenCalledWith('testId');
     });
 
     it('should call firestore arrayUnion method with correct arguments', () => {
-      firestoreMock.mockUpdateReturn = 'employee updated';
+      afsMock.mockUpdateReturn = 'employee updated';
       service.addSkillsToEmployee(['test skill'], 'testId');
       expect(firestore.FieldValue.arrayUnion).toHaveBeenCalledWith(
         'test skill'
@@ -152,15 +152,15 @@ describe('EmployeeServiceService', () => {
     });
 
     it('should call employees collection update with correct arguments', () => {
-      firestoreMock.mockUpdateReturn = 'employee updated';
+      afsMock.mockUpdateReturn = 'employee updated';
       service.addSkillsToEmployee(['test skill'], 'testId');
-      expect(firestoreMock.mockUpdate).toHaveBeenCalledWith({
+      expect(afsMock.mockUpdate).toHaveBeenCalledWith({
         skills: ['test skill'],
       });
     });
 
     it('should return correct value from update method', async(() => {
-      firestoreMock.mockUpdateReturn = 'employee updated';
+      afsMock.mockUpdateReturn = 'employee updated';
       service.addSkillsToEmployee(['test skill'], 'testId').then((res) => {
         expect(res).toEqual('employee updated');
       });
@@ -171,7 +171,7 @@ describe('EmployeeServiceService', () => {
     it('should call employees collection.doc() with correct argument', () => {
       const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
       service.addProject('testId', projectStub);
-      expect(firestoreMock.mockDoc).toHaveBeenCalledWith('testId');
+      expect(afsMock.mockDoc).toHaveBeenCalledWith('testId');
     });
 
     it('should call firestore increment method with negative dailyInputs sum', () => {
@@ -189,7 +189,7 @@ describe('EmployeeServiceService', () => {
     it('should call employees collection update method with correct arguments.', () => {
       const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
       service.addProject('testId', projectStub);
-      expect(firestoreMock.mockUpdate).toHaveBeenCalledWith({
+      expect(afsMock.mockUpdate).toHaveBeenCalledWith({
         projects: [projectStub],
         availableHours: -5,
       });
@@ -200,7 +200,7 @@ describe('EmployeeServiceService', () => {
     it('should call employees collection.doc() with correct argument.', () => {
       const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
       service.removeProject('testId', projectStub);
-      expect(firestoreMock.mockDoc).toHaveBeenCalledWith('testId');
+      expect(afsMock.mockDoc).toHaveBeenCalledWith('testId');
     });
 
     it('should call firestore increment method with dailyInputs sum', () => {
@@ -220,7 +220,7 @@ describe('EmployeeServiceService', () => {
     it('should call employees collection.update method with correct arguments.', () => {
       const projectStub = { dailyInput: [{ hours: 2 }, { hours: 3 }] };
       service.removeProject('testId', projectStub);
-      expect(firestoreMock.mockUpdate).toHaveBeenCalledWith({
+      expect(afsMock.mockUpdate).toHaveBeenCalledWith({
         projects: [projectStub],
         availableHours: 5,
       });

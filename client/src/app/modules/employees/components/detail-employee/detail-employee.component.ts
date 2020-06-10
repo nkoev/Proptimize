@@ -9,7 +9,7 @@ import { UserDTO } from 'src/app/models/employees/user.dto';
   styleUrls: ['./detail-employee.component.css'],
 })
 export class DetailEmployeeComponent implements OnInit {
-  @Input() employee: any;
+  @Input() employee: EmployeeDTO & UserDTO;
   @Output() backEvent = new EventEmitter();
   constructor(private router: Router) {}
 

@@ -7,7 +7,7 @@ import { LoginGuard } from './modules/core/guards/login.guard';
 import { LoggedUserResolver } from './modules/core/resolvers/logged-user.resolver';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
     loadChildren: () =>

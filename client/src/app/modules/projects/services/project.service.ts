@@ -26,7 +26,7 @@ export class ProjectService {
     private readonly afs: AngularFirestore,
     private readonly employeeService: EmployeeService,
     private readonly userService: UserService,
-    private readonly notificationService: NotificationService,
+    private readonly notificationService: NotificationService
   ) {
     this.projectsColl = this.afs.collection<ProjectDTO>('projects', (ref) =>
       ref.orderBy('createdAt', 'desc')
@@ -45,8 +45,11 @@ export class ProjectService {
     );
   }
 
-  async getProjectById(projectId: string):
-    Promise<firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>> {
+  async getProjectById(
+    projectId: string
+  ): Promise<
+    firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
+  > {
     return await this.projectsColl.doc(projectId).ref.get();
   }
 
@@ -82,7 +85,7 @@ export class ProjectService {
   }
 
   private assignProjectToEmployees(project: ProjectDTO): void {
-    let employeeArray: {
+    const employeeArray: {
       [employeeName: string]: { skill: string; hours: number }[];
     }[] = [];
 
@@ -90,11 +93,11 @@ export class ProjectService {
       skill.employees.forEach((e) => {
         const eId = e.id;
         let objId = 0;
-        if (!employeeArray.some((e) => Object.keys(e).includes(eId))) {
+        if (!employeeArray.some((ee) => Object.keys(ee).includes(eId))) {
           employeeArray.push({ [eId]: [] });
         }
-        objId = employeeArray.reduce((acc, e, i) => {
-          if (Object.keys(e).includes(eId)) {
+        objId = employeeArray.reduce((acc, ee, i) => {
+          if (Object.keys(ee).includes(eId)) {
             acc = i;
           }
           return acc;
@@ -113,7 +116,7 @@ export class ProjectService {
       const newProject = {
         id: project.id,
         name: project.name,
-        dailyInput: dailyInput,
+        dailyInput,
       };
       this.employeeService.addProject(eId, newProject);
     }
@@ -134,11 +137,11 @@ export class ProjectService {
       skill.employees.forEach((e) => {
         const eId = e.id;
         let objId = 0;
-        if (!employeeArrayBefore.some((e) => Object.keys(e).includes(eId))) {
+        if (!employeeArrayBefore.some((ee) => Object.keys(ee).includes(eId))) {
           employeeArrayBefore.push({ [eId]: [] });
         }
-        objId = employeeArrayBefore.reduce((acc, e, i) => {
-          if (Object.keys(e).includes(eId)) {
+        objId = employeeArrayBefore.reduce((acc, ee, i) => {
+          if (Object.keys(ee).includes(eId)) {
             acc = i;
           }
           return acc;
@@ -155,11 +158,11 @@ export class ProjectService {
       skill.employees.forEach((e) => {
         const eId = e.id;
         let objId = 0;
-        if (!employeeArrayAfter.some((e) => Object.keys(e).includes(eId))) {
+        if (!employeeArrayAfter.some((ee) => Object.keys(ee).includes(eId))) {
           employeeArrayAfter.push({ [eId]: [] });
         }
-        objId = employeeArrayAfter.reduce((acc, e, i) => {
-          if (Object.keys(e).includes(eId)) {
+        objId = employeeArrayAfter.reduce((acc, ee, i) => {
+          if (Object.keys(ee).includes(eId)) {
             acc = i;
           }
           return acc;
@@ -178,7 +181,7 @@ export class ProjectService {
       const newProject = {
         id: oldProject.id,
         name: oldProject.name,
-        dailyInput: dailyInput,
+        dailyInput,
       };
       this.employeeService.removeProject(eId, newProject);
     }
@@ -189,7 +192,7 @@ export class ProjectService {
       const newProject = {
         id: project.id,
         name: project.name,
-        dailyInput: dailyInput,
+        dailyInput,
       };
       this.employeeService.addProject(eId, newProject);
     }
@@ -272,8 +275,8 @@ export class ProjectService {
       mCreatedAt: oldProject.mCreatedAt
         ? oldProject.mCreatedAt
         : projectData.manTarget
-          ? new Date()
-          : null,
+        ? new Date()
+        : null,
       mUpdatedAt: new Date(),
       status: ProjectStatusType.InProgress,
       skills: projectData.skills,
@@ -374,7 +377,7 @@ export class ProjectService {
   }
 
   closeProject(project: ProjectDTO, loggedUser: UserDTO): void {
-    let employeeArray: {
+    const employeeArray: {
       [employeeName: string]: { skill: string; hours: number }[];
     }[] = [];
     const closedProject = {
@@ -387,11 +390,11 @@ export class ProjectService {
       skill.employees.forEach((e) => {
         const eId = e.id;
         let objId = 0;
-        if (!employeeArray.some((e) => Object.keys(e).includes(eId))) {
+        if (!employeeArray.some((ee) => Object.keys(ee).includes(eId))) {
           employeeArray.push({ [eId]: [] });
         }
-        objId = employeeArray.reduce((acc, e, i) => {
-          if (Object.keys(e).includes(eId)) {
+        objId = employeeArray.reduce((acc, ee, i) => {
+          if (Object.keys(ee).includes(eId)) {
             acc = i;
           }
           return acc;
@@ -448,7 +451,7 @@ export class ProjectService {
       const newProject = {
         id: project.id,
         name: project.name,
-        dailyInput: dailyInput,
+        dailyInput,
       };
       this.employeeService.removeProject(eId, newProject);
     }
@@ -457,7 +460,7 @@ export class ProjectService {
   getProjectsEmployees(
     project: ProjectDTO
   ): { [employeeName: string]: { skill: string; hours: number }[] }[] {
-    let employeeArray: {
+    const employeeArray: {
       [employeeName: string]: { skill: string; hours: number }[];
     }[] = [];
 
@@ -465,11 +468,11 @@ export class ProjectService {
       skill.employees.forEach((e) => {
         const eId = e.firstName + ' ' + e.lastName;
         let objId = 0;
-        if (!employeeArray.some((e) => Object.keys(e).includes(eId))) {
+        if (!employeeArray.some((ee) => Object.keys(ee).includes(eId))) {
           employeeArray.push({ [eId]: [] });
         }
-        objId = employeeArray.reduce((acc, e, i) => {
-          if (Object.keys(e).includes(eId)) {
+        objId = employeeArray.reduce((acc, ee, i) => {
+          if (Object.keys(ee).includes(eId)) {
             acc = i;
           }
           return acc;
@@ -482,9 +485,9 @@ export class ProjectService {
       });
     });
 
-    const eId = project.reporter.firstName + ' ' + project.reporter.lastName;
-    employeeArray.push({ [eId]: [] });
-    employeeArray[employeeArray.length - 1][eId].push({
+    const id = project.reporter.firstName + ' ' + project.reporter.lastName;
+    employeeArray.push({ [id]: [] });
+    employeeArray[employeeArray.length - 1][id].push({
       skill: 'Management',
       hours: project.managementHours,
     });
