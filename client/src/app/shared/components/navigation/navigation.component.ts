@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UserDTO } from 'src/app/models/employees/user.dto';
 
 @Component({
@@ -8,6 +8,7 @@ import { UserDTO } from 'src/app/models/employees/user.dto';
 })
 export class NavigationComponent implements OnInit {
   @Input() loggedUser: UserDTO;
+  @Output() toLeftPane = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DocumentData } from '@google-cloud/firestore';
 import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
 import { UserDTO } from 'src/app/models/employees/user.dto';
 

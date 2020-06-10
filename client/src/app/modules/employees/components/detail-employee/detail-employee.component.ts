@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { EmployeeDTO } from 'src/app/models/employees/employee.dto';
+import { UserDTO } from 'src/app/models/employees/user.dto';
 
 @Component({
   selector: 'app-detail-employee',

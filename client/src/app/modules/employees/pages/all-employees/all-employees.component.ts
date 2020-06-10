@@ -21,7 +21,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class AllEmployeesComponent implements OnInit, OnDestroy {
   activePane = 'left';
-  showEmployee: EmployeeDTO;
+  showEmployee: EmployeeDTO | UserDTO;
   skillsList: string[];
   managers: UserDTO[];
   employees: EmployeeDTO[];
@@ -45,7 +45,6 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const sub1 = this.userService.allUsers().subscribe((users) => {
-      console.log('subscribes');
       this.managers = users;
       this.filteredManagers = this.managers;
     });
@@ -62,8 +61,21 @@ export class AllEmployeesComponent implements OnInit, OnDestroy {
     const sub5 = this.skillService
       .getSkills()
       .subscribe((res) => (this.skillsList = res));
+    const sub6 = this.route.queryParams.subscribe(async (params) => {
+      const id = params.employeeId;
+      const isManager = params.isManager;
+
+      if (id) {
+        const employee = isManager
+          ? await this.userService.getUserById(id)
+          : await this.employeeService.getEmployeeById(id);
+
+        this.showEmployee = employee;
+        this.activePane = 'right';
+      }
+    });
     google.charts.load('current', { packages: ['orgchart'] });
-    this.subscriptions.push(sub1, sub2, sub3, sub4, sub5);
+    this.subscriptions.push(sub1, sub2, sub3, sub4, sub5, sub6);
   }
 
   ngOnDestroy(): void {

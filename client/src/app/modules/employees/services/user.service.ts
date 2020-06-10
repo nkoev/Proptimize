@@ -39,7 +39,9 @@ export class UserService {
 
   async getUserById(userId: string): Promise<UserDTO> {
     const doc = await this.usersCol.doc(userId).ref.get();
-    return { ...doc.data(), id: doc.id } as UserDTO;
+    if (doc) {
+      return { ...doc.data(), id: doc.id } as UserDTO;
+    }
   }
 
   async updateUser(userId: string, data: Partial<UserDTO>): Promise<void> {
