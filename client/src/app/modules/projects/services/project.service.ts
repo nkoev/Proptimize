@@ -82,7 +82,7 @@ export class ProjectService {
   }
 
   private assignProjectToEmployees(project: ProjectDTO): void {
-    let employeeArray: {
+    const employeeArray: {
       [employeeName: string]: { skill: string; hours: number }[];
     }[] = [];
 
@@ -113,7 +113,7 @@ export class ProjectService {
       const newProject = {
         id: project.id,
         name: project.name,
-        dailyInput: dailyInput,
+        dailyInput,
       };
       this.employeeService.addProject(eId, newProject);
     }
@@ -178,7 +178,7 @@ export class ProjectService {
       const newProject = {
         id: oldProject.id,
         name: oldProject.name,
-        dailyInput: dailyInput,
+        dailyInput,
       };
       this.employeeService.removeProject(eId, newProject);
     }
@@ -189,7 +189,7 @@ export class ProjectService {
       const newProject = {
         id: project.id,
         name: project.name,
-        dailyInput: dailyInput,
+        dailyInput,
       };
       this.employeeService.addProject(eId, newProject);
     }
@@ -374,7 +374,7 @@ export class ProjectService {
   }
 
   closeProject(project: ProjectDTO, loggedUser: UserDTO): void {
-    let employeeArray: {
+    const employeeArray: {
       [employeeName: string]: { skill: string; hours: number }[];
     }[] = [];
     const closedProject = {
@@ -448,7 +448,7 @@ export class ProjectService {
       const newProject = {
         id: project.id,
         name: project.name,
-        dailyInput: dailyInput,
+        dailyInput,
       };
       this.employeeService.removeProject(eId, newProject);
     }
@@ -457,7 +457,7 @@ export class ProjectService {
   getProjectsEmployees(
     project: ProjectDTO
   ): { [employeeName: string]: { skill: string; hours: number }[] }[] {
-    let employeeArray: {
+    const employeeArray: {
       [employeeName: string]: { skill: string; hours: number }[];
     }[] = [];
 

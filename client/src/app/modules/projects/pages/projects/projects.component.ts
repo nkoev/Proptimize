@@ -148,7 +148,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   addProject(): void {
     if (this.loggedUser.availableHours < 1) {
       this.notificationService.error(
-        "You can't start a project, because you are already working 8h/day"
+        'You can\'t start a project, because you are already working 8h/day'
       );
       return;
     }
@@ -172,7 +172,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   updateProject(): void {
     if (this.loggedUser.id !== this.singleProject.reporter.id) {
-      this.notificationService.error("You can't update other users' projects");
+      this.notificationService.error('You can\'t update other users\' projects');
       return;
     }
 

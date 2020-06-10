@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ProjectDTO } from 'src/app/models/projects/project.dto';
 import { Observable } from 'rxjs';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-projects-list',

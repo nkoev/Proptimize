@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { ProjectService } from './project.service'
+import { ProjectService } from './project.service';
 import { FirestoreMock } from 'src/test-helpers/firestore-mock';
 import { EmployeeService } from '../../employees/services/employee.service';
 import { UserService } from '../../employees/services/user.service';
@@ -10,15 +10,15 @@ import { SkillDTO } from 'src/app/models/skills/skill.dto';
 import { UserDTO } from 'src/app/models/employees/user.dto';
 
 describe('ProjectService', () => {
-    let employeeService = {
+    const employeeService = {
         addProject: jest.fn().mockReturnThis(),
         removeProject: jest.fn().mockReturnThis(),
     };
-    let userService = {
+    const userService = {
         addProject: jest.fn().mockReturnThis(),
         removeProject: jest.fn().mockReturnThis(),
     };
-    let notificationService = {
+    const notificationService = {
         success: jest.fn().mockReturnThis(),
     };
 
@@ -58,7 +58,7 @@ describe('ProjectService', () => {
         it('should emit correct value from projects collection snapshotChanges method', (done) => {
             firestoreMock.mockSnapshotChanges = jest.fn(() => of([{ payload: { doc: { data: () => [1], id: '123' } } }]));
             service.getAll().subscribe((res) => {
-                expect(res).toEqual([{ "0": 1, "id": "123" }] as any);
+                expect(res).toEqual([{ 0: 1, id: '123' }] as any);
                 done();
             });
         });
@@ -115,22 +115,22 @@ describe('ProjectService', () => {
             jest.spyOn(global, 'Date').mockImplementation(() => '12.12.2020');
             service.addProject(projectData, loggedUser).then(() => {
                 expect(firestoreMock.mockAdd).toHaveBeenCalledWith({
-                    "createdAt": new Date(),
-                    "description": "test",
-                    "mCreatedAt": new Date(),
-                    "mDone": 0,
-                    "mUpdatedAt": new Date(),
-                    "managementHours": 1,
-                    "managementTarget": 4,
-                    "name": "pro",
-                    "reporter": {
-                        "firstName": "Georgi",
-                        "id": "1234",
-                        "lastName": "Georgiev"
-                    }, "skills": [],
-                    "status": "In Progress",
-                    "targetInDays": 5,
-                    "updatedAt": new Date()
+                    createdAt: new Date(),
+                    description: 'test',
+                    mCreatedAt: new Date(),
+                    mDone: 0,
+                    mUpdatedAt: new Date(),
+                    managementHours: 1,
+                    managementTarget: 4,
+                    name: 'pro',
+                    reporter: {
+                        firstName: 'Georgi',
+                        id: '1234',
+                        lastName: 'Georgiev'
+                    }, skills: [],
+                    status: 'In Progress',
+                    targetInDays: 5,
+                    updatedAt: new Date()
                 });
             });
         }));
