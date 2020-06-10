@@ -34,7 +34,9 @@ export class EmployeeService {
 
   async getEmployeeById(employeeId: string): Promise<EmployeeDTO> {
     const doc = await this.employeesCol.doc(employeeId).ref.get();
-    return { ...doc.data(), id: doc.id } as EmployeeDTO;
+    if (doc) {
+      return { ...doc.data(), id: doc.id } as EmployeeDTO;
+    }
   }
 
   async addEmployee(employee: EmployeeCreateDTO): Promise<DocumentReference> {

@@ -26,8 +26,8 @@ export class ProjectService {
     private readonly afs: AngularFirestore,
     private readonly employeeService: EmployeeService,
     private readonly userService: UserService,
-    private readonly notificationService: NotificationService,
-  ) { }
+    private readonly notificationService: NotificationService
+  ) {}
 
   private getProjectsData(): Observable<ProjectDTO[]> {
     return this.projectsColl.snapshotChanges().pipe(
@@ -48,8 +48,12 @@ export class ProjectService {
     return this.getProjectsData();
   }
 
-  async getProjectById(projectId: string):
-    Promise<firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>> {
+  async getProjectById(
+    projectId: string
+  ): Promise<
+    firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>
+  > {
+    this.projectsColl = this.afs.collection<ProjectDTO>('projects');
     return await this.projectsColl.doc(projectId).ref.get();
   }
 
@@ -63,7 +67,11 @@ export class ProjectService {
     this.userService.addProject(loggedUser.id, newProject);
   }
 
-  private updateUsersProjects(project: ProjectDTO, loggedUser: UserDTO, oldProject: ProjectDTO): void {
+  private updateUsersProjects(
+    project: ProjectDTO,
+    loggedUser: UserDTO,
+    oldProject: ProjectDTO
+  ): void {
     const projectBefore = {
       id: project.id,
       name: project.name,
@@ -81,7 +89,9 @@ export class ProjectService {
   }
 
   private assignProjectToEmployees(project: ProjectDTO): void {
-    let employeeArray: { [employeeName: string]: { skill: string, hours: number }[] }[] = [];
+    let employeeArray: {
+      [employeeName: string]: { skill: string; hours: number }[];
+    }[] = [];
 
     project.skills.forEach((skill) => {
       skill.employees.forEach((e) => {
@@ -116,9 +126,16 @@ export class ProjectService {
     }
   }
 
-  private updateEmployeesProjects(project: ProjectDTO, oldProject: ProjectDTO): void {
-    const employeeArrayBefore: { [employeeName: string]: { skill: string, hours: number }[] }[] = [];
-    const employeeArrayAfter: { [employeeName: string]: { skill: string, hours: number }[] }[] = [];
+  private updateEmployeesProjects(
+    project: ProjectDTO,
+    oldProject: ProjectDTO
+  ): void {
+    const employeeArrayBefore: {
+      [employeeName: string]: { skill: string; hours: number }[];
+    }[] = [];
+    const employeeArrayAfter: {
+      [employeeName: string]: { skill: string; hours: number }[];
+    }[] = [];
 
     oldProject.skills.forEach((skill) => {
       skill.employees.forEach((e) => {
@@ -187,12 +204,12 @@ export class ProjectService {
 
   async addProject(
     projectData: {
-      name: string,
-      description: string,
-      targetInDays: number,
-      manTarget: number,
-      manHours: number,
-      skills: SkillDTO[],
+      name: string;
+      description: string;
+      targetInDays: number;
+      manTarget: number;
+      manHours: number;
+      skills: SkillDTO[];
     },
     loggedUser: UserDTO
   ): Promise<void> {
@@ -223,19 +240,17 @@ export class ProjectService {
     );
     this.assignProjectToEmployees({ id: (await projectRef).id, ...newProject });
 
-    this.notificationService.success(
-      "Project was created"
-    );
+    this.notificationService.success('Project was created');
   }
 
   async updateProject(
     projectData: {
-      name: string,
-      description: string,
-      targetInDays: number,
-      manTarget: number,
-      manHours: number,
-      skills: SkillDTO[],
+      name: string;
+      description: string;
+      targetInDays: number;
+      manTarget: number;
+      manHours: number;
+      skills: SkillDTO[];
     },
     loggedUser: UserDTO,
     oldProject: ProjectDTO
@@ -264,8 +279,8 @@ export class ProjectService {
       mCreatedAt: oldProject.mCreatedAt
         ? oldProject.mCreatedAt
         : projectData.manTarget
-          ? new Date()
-          : null,
+        ? new Date()
+        : null,
       mUpdatedAt: new Date(),
       status: ProjectStatusType.InProgress,
       skills: projectData.skills,
@@ -274,18 +289,22 @@ export class ProjectService {
     this.projectsColl.doc(oldProject.id).update(newProject);
     const updatedProject = this.getProjectById(oldProject.id);
     this.updateUsersProjects(
-      { id: (await updatedProject).id, ...(await updatedProject).data() } as ProjectDTO,
+      {
+        id: (await updatedProject).id,
+        ...(await updatedProject).data(),
+      } as ProjectDTO,
       loggedUser,
       oldProject
     );
     this.updateEmployeesProjects(
-      { id: (await updatedProject).id, ...(await updatedProject).data() } as ProjectDTO,
-      oldProject,
+      {
+        id: (await updatedProject).id,
+        ...(await updatedProject).data(),
+      } as ProjectDTO,
+      oldProject
     );
 
-    this.notificationService.success(
-      "Project was updated"
-    );
+    this.notificationService.success('Project was updated');
   }
 
   private projectHasSkills(skillsArray: FormArray): boolean {
@@ -296,13 +315,16 @@ export class ProjectService {
     return 1 <= employeesArray.controls.length;
   }
 
-  formToProjectData(form: FormControl, oldProject?: ProjectDTO): {
-    name: string,
-    description: string,
-    targetInDays: number,
-    manTarget: number,
-    manHours: number,
-    skills: SkillDTO[],
+  formToProjectData(
+    form: FormControl,
+    oldProject?: ProjectDTO
+  ): {
+    name: string;
+    description: string;
+    targetInDays: number;
+    manTarget: number;
+    manHours: number;
+    skills: SkillDTO[];
   } {
     const projectData = {
       name: form.get('name').value,
@@ -314,7 +336,7 @@ export class ProjectService {
     };
     const skillsArray = form.get('skills') as FormArray;
     if (this.projectHasSkills(skillsArray)) {
-      skillsArray.controls.forEach(skill => {
+      skillsArray.controls.forEach((skill) => {
         const skillData = {} as SkillDTO;
         skillData.name = skill.get('skill').value;
         skillData.targetInHours = skill.get('targetInHours').value;
@@ -341,7 +363,7 @@ export class ProjectService {
         skillData.employees = [];
         const employeesArray = skill.get('employees') as FormArray;
         if (this.skillHasEmployees(employeesArray)) {
-          employeesArray.controls.forEach(e => {
+          employeesArray.controls.forEach((e) => {
             const employeeData = {
               id: e.get('employee').value.id,
               firstName: e.get('employee').value.firstName,
@@ -359,7 +381,9 @@ export class ProjectService {
   }
 
   closeProject(project: ProjectDTO, loggedUser: UserDTO): void {
-    let employeeArray: { [employeeName: string]: { skill: string, hours: number }[] }[] = [];
+    let employeeArray: {
+      [employeeName: string]: { skill: string; hours: number }[];
+    }[] = [];
     const closedProject = {
       id: project.id,
       name: project.name,
@@ -437,8 +461,12 @@ export class ProjectService {
     }
   }
 
-  getProjectsEmployees(project: ProjectDTO): { [employeeName: string]: { skill: string, hours: number }[] }[] {
-    let employeeArray: { [employeeName: string]: { skill: string, hours: number }[] }[] = [];
+  getProjectsEmployees(
+    project: ProjectDTO
+  ): { [employeeName: string]: { skill: string; hours: number }[] }[] {
+    let employeeArray: {
+      [employeeName: string]: { skill: string; hours: number }[];
+    }[] = [];
 
     project.skills.forEach((skill) => {
       skill.employees.forEach((e) => {
