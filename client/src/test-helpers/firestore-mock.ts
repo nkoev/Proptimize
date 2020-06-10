@@ -10,6 +10,7 @@ export class FirestoreMock {
   public mockUpdate;
   public mockDoc;
   public mockValueChanges;
+  public mockSnapshotChanges;
   public mockOnSnapshot;
   public mockRef;
 
@@ -20,6 +21,7 @@ export class FirestoreMock {
   public _mockUpdateReturn;
   public _mockOnSnapshotSuccess;
   public _mockValueChangesReturn;
+  public _mockSnapshotChangesReturn;
   /* tslint:enable */
 
   constructor() {
@@ -38,6 +40,7 @@ export class FirestoreMock {
 
     // methods that return observables
     this.mockValueChanges = jest.fn(() => of(this._mockValueChangesReturn));
+    this.mockSnapshotChanges = jest.fn(() => of(this._mockSnapshotChangesReturn));
 
     // methods that accepts callbacks
     this.mockOnSnapshot = jest.fn((success, error) =>
@@ -49,6 +52,7 @@ export class FirestoreMock {
     this._mockGetReturn = null;
     this._mockOnSnapshotSuccess = null;
     this._mockValueChangesReturn = null;
+    this._mockSnapshotChangesReturn = [];
   }
 
   collection(c: string) {
@@ -57,6 +61,10 @@ export class FirestoreMock {
 
   valueChanges(...args) {
     return this.mockValueChanges(...args);
+  }
+
+  snapshotChanges(...args) {
+    return this.mockSnapshotChanges(...args);
   }
 
   where(...args) {
@@ -117,6 +125,10 @@ export class FirestoreMock {
 
   set mockValueChangesReturn(val) {
     this._mockValueChangesReturn = val;
+  }
+
+  set mockSnapshotChangesReturn(val) {
+    this._mockSnapshotChangesReturn = val;
   }
 
   // reset() {

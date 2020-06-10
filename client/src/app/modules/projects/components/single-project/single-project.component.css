@@ -143,6 +143,19 @@
     font-family: roboto;
 }
 
+ /* MEDIA */
+ @media (min-width: 768px) and (max-width: 1300px) {
+    .project-info {
+        width: 90%;
+    }
+    .employees-container {
+        width: 90%;
+    }
+    .chart-container {
+        width: 90%;
+    }
+ }
+
 /*  MEDIA */
 @media (max-width: 768px) { 
 
@@ -150,6 +163,7 @@
         min-height: 20vh;
         max-height: 29vh;
         width: 85%;
+        grid-template-columns: 7fr 3fr;
      }
      .name p {
         font-size: 1.2em;
@@ -159,11 +173,12 @@
         justify-content: flex-start;
     }
     .status p {
-        font-size: 0.7em;
+        font-size: 0.6em;
     }
     .status .icon {
-        width: 0.7em;
-        height: 0.7em;
+        width: 0.6em;
+        height: 0.6em;
+        background-size: cover;
     }
     
     .reporter {

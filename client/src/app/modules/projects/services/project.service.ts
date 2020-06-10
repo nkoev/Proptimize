@@ -27,9 +27,13 @@ export class ProjectService {
     private readonly employeeService: EmployeeService,
     private readonly userService: UserService,
     private readonly notificationService: NotificationService,
-  ) { }
+  ) {
+    this.projectsColl = this.afs.collection<ProjectDTO>('projects', (ref) =>
+      ref.orderBy('createdAt', 'desc')
+    );
+  }
 
-  private getProjectsData(): Observable<ProjectDTO[]> {
+  getAll(): Observable<ProjectDTO[]> {
     return this.projectsColl.snapshotChanges().pipe(
       map((changes) =>
         changes.map((a) => {
@@ -39,13 +43,6 @@ export class ProjectService {
         })
       )
     );
-  }
-
-  getAll(): Observable<ProjectDTO[]> {
-    this.projectsColl = this.afs.collection<ProjectDTO>('projects', (ref) =>
-      ref.orderBy('createdAt', 'desc')
-    );
-    return this.getProjectsData();
   }
 
   async getProjectById(projectId: string):
@@ -65,8 +62,8 @@ export class ProjectService {
 
   private updateUsersProjects(project: ProjectDTO, loggedUser: UserDTO, oldProject: ProjectDTO): void {
     const projectBefore = {
-      id: project.id,
-      name: project.name,
+      id: oldProject.id,
+      name: oldProject.name,
       dailyInput: [{ skill: 'Management', hours: oldProject.managementHours }],
     };
 
@@ -166,8 +163,8 @@ export class ProjectService {
       const eId = Object.keys(e)[0];
       const dailyInput = e[eId];
       const newProject = {
-        id: project.id,
-        name: project.name,
+        id: oldProject.id,
+        name: oldProject.name,
         dailyInput: dailyInput,
       };
       this.employeeService.removeProject(eId, newProject);
