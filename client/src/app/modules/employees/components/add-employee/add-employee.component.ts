@@ -1,5 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+  AbstractControl,
+} from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
 import { UserService } from '../../services/user.service';
 import { UserCreateDTO } from 'src/app/models/employees/user-create.dto';
@@ -8,17 +14,19 @@ import { DocumentReference, DocumentData } from '@google-cloud/firestore';
 import { NotificationService } from '../../../core/services/notification.service';
 import { EmployeeCreateDTO } from 'src/app/models/employees/employee-create.dto';
 import { UserDTO } from 'src/app/models/employees/user.dto';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-employee',
   templateUrl: './add-employee.component.html',
   styleUrls: ['./add-employee.component.css'],
 })
-export class AddEmployeeComponent implements OnInit {
+export class AddEmployeeComponent implements OnInit, OnDestroy {
   skillsList: string[];
   managersList: UserDTO[];
   employeeForm: FormGroup;
   inProgress = false;
+  subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -35,9 +43,30 @@ export class AddEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     this.employeeForm = this.fb.group({
-      firstName: [null, [Validators.required, Validators.maxLength(20)]],
-      lastName: [null, [Validators.required, Validators.maxLength(20)]],
-      position: [null, [Validators.required, Validators.maxLength(20)]],
+      firstName: [
+        null,
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.pattern('^[a-zA-Z][a-zA-Z\\- ]*'),
+        ],
+      ],
+      lastName: [
+        null,
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.pattern('^[a-zA-Z][a-zA-Z\\- ]*'),
+        ],
+      ],
+      position: [
+        null,
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.pattern('^[a-zA-Z][a-zA-Z\\- ]*'),
+        ],
+      ],
       managedBy: [null, Validators.required],
       isManager: false,
       isAdmin: false,
@@ -45,6 +74,20 @@ export class AddEmployeeComponent implements OnInit {
       email: null,
     });
     this.setIsManagerValidators();
+    const sub1 = this.firstName.valueChanges.subscribe(() => {
+      this.titleCase(this.firstName);
+    });
+    const sub2 = this.lastName.valueChanges.subscribe(() => {
+      this.titleCase(this.lastName);
+    });
+    const sub3 = this.position.valueChanges.subscribe(() => {
+      this.titleCase(this.position);
+    });
+    this.subscriptions.push(sub1, sub2, sub3);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   get firstName() {
@@ -84,7 +127,13 @@ export class AddEmployeeComponent implements OnInit {
     const controls = this.employeeForm.controls;
     for (const controlName in controls) {
       if (controls[controlName].errors?.required) {
-        this.notificator.warn(' Please, fill in all the required fields.');
+        this.notificator.warn('Please, fill in all the required fields.');
+        break;
+      }
+    }
+    for (const controlName in controls) {
+      if (controls[controlName].errors?.pattern) {
+        this.notificator.warn('Latin letters and "-" allowed only.');
         break;
       }
     }
@@ -134,9 +183,9 @@ export class AddEmployeeComponent implements OnInit {
 
   private toEmployeeDTO(form: FormGroup): EmployeeCreateDTO {
     const employee: EmployeeCreateDTO = {
-      firstName: form.value.firstName,
-      lastName: form.value.lastName,
-      position: form.value.position,
+      firstName: form.value.firstName.trim(),
+      lastName: form.value.lastName.trim(),
+      position: form.value.position.trim(),
       skills: form.value.skills,
       availableHours: 8,
       projects: [],
@@ -155,9 +204,9 @@ export class AddEmployeeComponent implements OnInit {
   private toUserDTO(form: FormGroup): UserCreateDTO {
     const user: UserCreateDTO = {
       email: form.value.email,
-      firstName: form.value.firstName,
-      lastName: form.value.lastName,
-      position: form.value.position,
+      firstName: form.value.firstName.trim(),
+      lastName: form.value.lastName.trim(),
+      position: form.value.position.trim(),
       isAdmin: form.value.isAdmin,
       availableHours: 8,
       projects: [],
@@ -191,5 +240,12 @@ export class AddEmployeeComponent implements OnInit {
       emailControl.updateValueAndValidity();
       skillsControl.updateValueAndValidity();
     });
+  }
+
+  private titleCase(control: AbstractControl) {
+    control.patchValue(
+      control.value.charAt(0).toUpperCase() + control.value.slice(1),
+      { emitEvent: false }
+    );
   }
 }
