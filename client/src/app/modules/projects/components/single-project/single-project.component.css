@@ -54,7 +54,7 @@
 .reporter p{
     font-weight: 400;
     margin: 0em 0em 0em 0.4em;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 .status {
     grid-area: status;
