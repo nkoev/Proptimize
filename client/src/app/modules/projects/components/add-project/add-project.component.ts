@@ -374,6 +374,15 @@ export class AddProjectComponent implements OnInit {
         this.selectedEmployeesList[idxSkill][idxEmployee]
       ) +
       this.hoursHelper
+      + (this.currentProject.skills?.reduce((acc, skill) => {
+        acc += skill.employees.reduce((acc2, emp) => {
+          if (emp.id === this.selectedEmployeesList[idxSkill][idxEmployee].id) {
+            acc2 = emp.hoursPerSkill;
+          }
+          return acc2;
+        }, 0)
+        return acc;
+      }, 0) || 0)
     );
   }
 
