@@ -6,7 +6,7 @@ admin.initializeApp();
 exports.register = functions
   .region('europe-west1')
   .https.onRequest((req, res) => {
-    res.set('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.set('Access-Control-Allow-Origin', '*');
     if (req.method === 'OPTIONS') {
       res.set('Access-Control-Allow-Methods', 'GET');
       res.set('Access-Control-Allow-Headers', 'Content-Type');
